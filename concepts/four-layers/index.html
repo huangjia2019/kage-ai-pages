@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four Layers: What Each Part of This Work Is Actually For — Jia Huang</title>
+    <meta name="description" content="Cases are reference material. Concepts are the cognitive foundation. Patterns are the common language. The dual-axis matrix is the container that holds them all. A note on the structure of this body of work.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/four-layers/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/four-layers/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/four-layers/">
+    <meta property="og:title" content="Four Layers: What Each Part of This Work Is Actually For">
+    <meta property="og:description" content="Cases, concepts, patterns, matrix — the four layers of this body of work, and the job each one does that the others cannot.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/four-layers/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/four-layers/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Four Layers
+            </p>
+
+            <h1>Four Layers: What Each Part of This Work Is Actually For</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                Cases are reference material. Concepts are the cognitive foundation. Patterns are the common language. The dual-axis matrix is the container that holds them all.
+            </p>
+
+            <p>
+                People sometimes ask me which essay to read first, or which book chapter is "the main one." The truthful answer is that none of them stands alone. The body of work has four layers, and each layer does a job the others cannot.
+            </p>
+            <p>
+                I am writing this down because I keep using these distinctions in my own head when deciding what to write next, and I have not put them in one place before.
+            </p>
+
+            <h2>The four layers</h2>
+
+            <p>
+                <strong>Cases are reference material.</strong> When I write about a regtech team that built a RAG pipeline under a fixed-cost ceiling, or a customer service agent that rerouted itself when a model deprecated mid-quarter, the case is <em>raw input</em>. It is what happened. It is not the thesis. A case answers the question: <em>what did engineers actually do, and what surprised them?</em> Cases age fast — last year's case may be unrunnable on next year's model — but their job is to keep every claim grounded in something that occurred.
+            </p>
+
+            <p>
+                <strong>Concepts are the cognitive foundation.</strong> A concept is a stable claim that should still be true in five years. <em>The model spends; the harness budgets.</em> <em>A pattern name without coordinates is a tag, not a design decision.</em> <em>When the model is fixed and cost is binding, pattern selection is the design.</em> These are not catalog items. They are the load-bearing claims about how agent systems are. If a concept turns out to be wrong, the whole structure above it deserves re-examination. The cost of getting concepts wrong is high, which is why I write fewer of them and revise them slowly.
+            </p>
+
+            <p>
+                <strong>Patterns are the common language.</strong> Prompt Chaining, Reflection, Hierarchical Delegation, Guardrail Sandwich — these are vocabulary. Their job is to let two engineers in two companies refer to the same design without spending an hour drawing it on a whiteboard. Patterns are not discoveries. Most of them existed before I named them; the contribution is the naming and the slotting, not the invention. Vocabulary that does not get adopted dies. Vocabulary that does becomes infrastructure for every conversation that happens after.
+            </p>
+
+            <p>
+                <strong>The matrix is the container.</strong> The dual-axis framework — cognitive function by execution topology — is what holds the other three. It is the table-of-contents that makes cases findable, concepts indexable, and patterns disambiguable. Without it, the work is a pile of essays. With it, the work is a navigable structure where any new pattern, case, or concept has a coordinate, and where the empty cells in the matrix tell you what to write next.
+            </p>
+
+            <h2>Why none can be skipped</h2>
+
+            <p>
+                I have watched what happens when one layer is missing.
+            </p>
+            <p>
+                A book of cases without concepts is a war-stories anthology — interesting but unreusable. The reader closes it with nothing they can carry to a new problem.
+            </p>
+            <p>
+                A book of concepts without cases is a philosophy of design — beautiful but unfalsifiable. The reader closes it convinced and unable to do anything Monday morning.
+            </p>
+            <p>
+                A book of patterns without a matrix is the current state of most agent literature — a flat list of named things, where two engineers can both use the term "Plan and Execute" and discover three months later they have built incompatible systems.
+            </p>
+            <p>
+                A matrix without patterns, concepts, or cases is a diagram. It shows up on conference slides and is forgotten by the next slide.
+            </p>
+            <p>
+                The four layers compose. Cases generate concepts. Concepts demand patterns. Patterns require coordinates. Coordinates form a matrix. The matrix in turn predicts which cases are missing, which concepts have not been named, and which patterns have no home.
+            </p>
+
+            <h2>How to use the work</h2>
+
+            <p>
+                If you are an engineer trying to ship a system this quarter, the cases are the entry point. Find one whose constraints match yours.
+            </p>
+            <p>
+                If you are an architect trying to make a decision that will outlive the current model, the concepts are the entry point. They are the part of the work that survives model churn.
+            </p>
+            <p>
+                If you are a team trying to communicate across roles or organizations, the patterns are the entry point. Give people the vocabulary first; the rest follows.
+            </p>
+            <p>
+                If you are trying to understand the field as a whole — or to find what is missing — the matrix is the entry point. The empty cells are where the next decade of work lives.
+            </p>
+
+            <h2>Where each layer lives</h2>
+
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Cases</strong> — chapter case studies in <em>Designing AI Agents</em> (Manning, 2026); the case track on this site as it fills.</li>
+                <li><strong>Concepts</strong> — <a href="/concepts/">/concepts/</a> on this site; each has a permanent URL.</li>
+                <li><strong>Patterns</strong> — the 33 white papers at <a href="https://adpsagent.com/patterns/">adpsagent.com/patterns/</a>; one chapter per pattern in the Manning book.</li>
+                <li><strong>Matrix</strong> — the dual-axis framework, formalized in <a href="https://arxiv.org/abs/2605.13850">arXiv:2605.13850</a>; interactive at <a href="/research/dual-axis/">/research/dual-axis/</a>.</li>
+            </ul>
+
+            <p style="margin-top: 2rem;">
+                I am writing this as a reference for myself as much as for any reader. Every time I sit down to plan a new chapter, talk, or essay, I ask: <em>which layer is this serving?</em> If I cannot answer that, the piece is not yet ready to be written.
+            </p>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Four Layers: What Each Part of This Work Is Actually For.
+                <a href="https://kage-ai.com/concepts/four-layers/">kage-ai.com/concepts/four-layers/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route — Execution Topology Aggregation — Jia Huang</title>
+    <meta name="description" content="Route: the column of the dual-axis matrix that asks 'how do we choose where this goes?' Five patterns, one structural primitive: conditional dispatch.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/topologies/route/">
+    <meta property="og:title" content="Route — Execution Topology Aggregation">
+    <meta property="og:description" content="The Route column: five patterns, one structural primitive — conditional dispatch.">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Execution topology aggregation
+                </p>
+                <h1>Route &mdash; the column</h1>
+                <span class="coord-badge"><strong>Execution topology 2 of 6</strong> &middot; five patterns across the cognitive function axis</span>
+                <p class="essay-meta">
+                    Same structural primitive &mdash; conditional dispatch &mdash; serving five different cognitive intents. The clearest demonstration that the two axes are orthogonal.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix &mdash; the whole column</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head">Context Eng.</div>
+                    <div class="mm-cell">Semantic Compaction</div>
+                    <div class="mm-cell mm-active">Context Triage</div>
+                    <div class="mm-cell">Multi-Modal Fusion</div>
+                    <div class="mm-cell">Progressive Discovery</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-empty">—</div>
+
+                    <div class="mm-cell mm-row-head">Memory</div>
+                    <div class="mm-cell">RAG Pipeline</div>
+                    <div class="mm-cell mm-active">Hierarchical Retention</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Progress Tracking</div>
+                    <div class="mm-cell">Failure Journals</div>
+                    <div class="mm-cell mm-empty">—</div>
+
+                    <div class="mm-cell mm-row-head">Reasoning</div>
+                    <div class="mm-cell">Chain-of-Thought</div>
+                    <div class="mm-cell mm-active">Complexity-Based Routing</div>
+                    <div class="mm-cell">Parallel Exploration</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Iterative Hypothesis</div>
+                    <div class="mm-cell mm-empty">—</div>
+
+                    <div class="mm-cell mm-row-head">Action</div>
+                    <div class="mm-cell">Prompt Chaining</div>
+                    <div class="mm-cell mm-active">Tool Dispatch</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Plan-and-Execute</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Guardrail Sandwich</div>
+
+                    <div class="mm-cell mm-row-head">Reflection</div>
+                    <div class="mm-cell">Generator-Critic</div>
+                    <div class="mm-cell mm-active">Skill Package</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Self-Heal Loop</div>
+                    <div class="mm-cell">Experience Replay</div>
+
+                    <div class="mm-cell mm-row-head">Governance</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-active">Approval Gate</div>
+                    <div class="mm-cell">Progressive Commitment</div>
+                    <div class="mm-cell">Observability Harness</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Blast Radius Control</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this column exists</h2>
+                <p>
+                    Six of the seven cognitive functions have a Route variant. That is not a coincidence &mdash;
+                    it is the dual-axis framework&rsquo;s strongest empirical claim. <strong>Conditional dispatch is
+                    the most reused structural primitive in agent architecture.</strong> Whatever the agent is
+                    trying to do &mdash; assemble context, look up memory, pick a model, choose a tool, recall
+                    a skill, decide whether to ask for permission &mdash; the wiring underneath looks the same:
+                    a classifier inspects the input, a rule maps the input to a destination, dispatch happens.
+                </p>
+                <p>
+                    The interest of this column is not the variation in <em>how</em> dispatch happens (which is
+                    minimal) but the variation in <em>what</em> dispatch achieves (which is enormous). The same
+                    wiring, plugged into six different cognitive contexts, yields six different patterns with
+                    six different failure modes. <strong>This is what &ldquo;the axes are orthogonal&rdquo; means
+                    in practice: same topology, different purpose, fundamentally different system.</strong>
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The five Route patterns &mdash; one column, five cognitive functions</h2>
+                <div class="aggregation-patterns">
+
+                    <div class="agg-pattern">
+                        <h3><a href="/research/dual-axis/patterns/context-triage/">Context Triage</a></h3>
+                        <div class="agg-coord">Perception × Route</div>
+                        <p>
+                            The classifier is a priority assignment rule (P0/P1/P2/P3); the destinations are
+                            different context budget slots; the dispatch is &ldquo;what enters the model right
+                            now.&rdquo; The dispatch happens <em>before</em> any reasoning. Failure mode is
+                            priority inflation; discipline is hard schemas with low cardinality.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3><a href="/research/dual-axis/patterns/hierarchical-retention/">Hierarchical Retention</a></h3>
+                        <div class="agg-coord">Memory × Route</div>
+                        <p>
+                            The classifier is the query type; the destinations are working / short-term /
+                            long-term / procedural memory tiers; the dispatch is &ldquo;which tier to query.&rdquo;
+                            Distinct from RAG because RAG retrieves from one undifferentiated store; this pattern
+                            chooses the store first. Failure mode is tier confusion; discipline is hard tier
+                            boundaries enforced outside the model.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3>Complexity-Based Routing</h3>
+                        <div class="agg-coord">Reasoning × Route <span style="color: var(--color-text-faint); font-style: italic;">(pattern page forthcoming)</span></div>
+                        <p>
+                            The classifier estimates question complexity; the destinations are different model
+                            tiers (Haiku for simple, Sonnet for medium, Opus for hard); the dispatch is
+                            &ldquo;which model handles this.&rdquo; Single highest-leverage cost optimisation
+                            in production agents. Failure mode is misclassified hard questions sent to small
+                            models; discipline is fallback escalation when the small model expresses uncertainty.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3>Tool Dispatch</h3>
+                        <div class="agg-coord">Action × Route <span style="color: var(--color-text-faint); font-style: italic;">(pattern page forthcoming)</span></div>
+                        <p>
+                            The classifier is the model&rsquo;s tool-call output; the destinations are typed
+                            tool handlers; the dispatch is &ldquo;which side effect happens.&rdquo; The most
+                            visible Route pattern in production &mdash; every Claude Code action ultimately
+                            routes through a Tool Dispatch. Failure mode is tool overload (too many tools
+                            confuse the model); discipline is minimal tool sets.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3>Skill Package</h3>
+                        <div class="agg-coord">Reflection × Route <span style="color: var(--color-text-faint); font-style: italic;">(pattern page forthcoming)</span></div>
+                        <p>
+                            The classifier is task type; the destinations are pre-built skill packages (compact
+                            SOPs derived from successful past flows); the dispatch is &ldquo;which playbook to
+                            load.&rdquo; This pattern is what turns one-off reflections into reusable agent
+                            capabilities. Failure mode is package drift (skills don&rsquo;t keep up with the
+                            underlying domain); discipline is explicit skill versioning + retirement.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3><a href="/research/dual-axis/patterns/approval-gate/">Approval Gate</a></h3>
+                        <div class="agg-coord">Governance × Route</div>
+                        <p>
+                            The classifier is the action category (read, write, delete); the destinations are
+                            auto-execute / confirm-then-execute / escalate-to-human; the dispatch is &ldquo;does
+                            this action need a human in the loop.&rdquo; The pattern that lets authority scale
+                            incrementally without scaling risk linearly. Failure mode is rubber-stamping;
+                            discipline is rate-limiting at the source.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>What stays constant across the column</h2>
+                <p>
+                    Every Route-shaped pattern shares four engineering invariants:
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>The classifier is a separate concern from the destinations.</strong> Whether the classifier is the LLM, a deterministic rule, or a small model, it is its own component. This separation is what makes any of these patterns auditable and reversible.</li>
+                    <li><strong>The destination set is closed.</strong> Three priority tiers, four memory layers, two model sizes, ten tools, three authority modes &mdash; the destinations are enumerated in advance. Route does not invent destinations; it picks among existing ones.</li>
+                    <li><strong>The route decision is logged.</strong> Every dispatch carries a record: which input, which classifier verdict, which destination, what time. Without the log, the pattern degrades into a black box.</li>
+                    <li><strong>The route rule is owned outside the model.</strong> The model may propose the dispatch; engineering or policy decides whether the model&rsquo;s proposal is followed. This is what distinguishes Route patterns from end-to-end neural routing.</li>
+                </ol>
+            </div>
+
+            <div class="pattern-section">
+                <h2>What varies across the column &mdash; the orthogonality demonstration</h2>
+                <p>
+                    Even though every Route pattern shares the four invariants above, the patterns are not
+                    interchangeable. Each is shaped by the cognitive function it serves:
+                </p>
+                <ul style="list-style: disc; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Context Triage</strong> runs <em>before</em> reasoning; failure means the wrong information enters.</li>
+                    <li><strong>Hierarchical Retention</strong> runs <em>during</em> reasoning; failure means the wrong tier is queried.</li>
+                    <li><strong>Complexity-Based Routing</strong> runs <em>at the model call</em>; failure means the wrong model is used.</li>
+                    <li><strong>Tool Dispatch</strong> runs <em>after</em> reasoning; failure means the wrong side effect.</li>
+                    <li><strong>Skill Package</strong> runs <em>at task start</em>; failure means the wrong playbook.</li>
+                    <li><strong>Approval Gate</strong> runs <em>before consequential action</em>; failure means unsupervised execution.</li>
+                </ul>
+                <p>
+                    Same primitive, six different temporal positions in the agent loop, six different consequences
+                    when wrong. <strong>You cannot substitute one for another &mdash; that is the orthogonality
+                    claim in operational form.</strong>
+                </p>
+                <p>
+                    For a team using the dual-axis framework as a checklist: count which Route cells you have
+                    implemented and which you have not. A serious production agent typically needs at least
+                    Context Triage + Tool Dispatch + Approval Gate (three of six). A long-running agent adds
+                    Hierarchical Retention. A cost-sensitive deployment adds Complexity-Based Routing. A team
+                    building reusable agent capability adds Skill Package. Missing cells are missing capabilities,
+                    not optional polish.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Cross-cutting reading on Route as a primitive</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">Building Effective Agents — Anthropic</a></span>
+                        <span class="res-meta">Anthropic · December 2024</span>
+                        <span class="res-blurb">The original taxonomy that names &ldquo;Routing&rdquo; as one of five workflow patterns. The dual-axis framework expands the column to six distinct Route-cell patterns.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2406.01285" target="_blank" rel="noopener">A Survey on LLM Router Design for Cost-Effective Inference</a></span>
+                        <span class="res-meta">arXiv:2406.01285 · June 2024</span>
+                        <span class="res-blurb">Catalogues the design space of LLM routing &mdash; from learned classifiers to rule-based dispatch. Direct ancestor reading for Complexity-Based Routing.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2310.00355" target="_blank" rel="noopener">RouteLLM: Learning to Route LLMs with Preference Data</a></span>
+                        <span class="res-meta">arXiv:2310.00355 · October 2023</span>
+                        <span class="res-blurb">The paper that established preference-trained routing as a viable production technique. Worth reading even if you implement the rule-based variant.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://blog.langchain.com/conditional-edges-langgraph/" target="_blank" rel="noopener">Conditional Edges in LangGraph — LangChain</a></span>
+                        <span class="res-meta">LangChain Blog · 2024-2025</span>
+                        <span class="res-blurb">Framework-side implementation of Route as a first-class graph primitive. Reading this shows how every Route pattern lowers onto the same graph primitive.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this column is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 2 §2.3 (Orthogonality of the two axes) plus per-chapter coverage of each Route-cell pattern.</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §3 (orthogonality argument) and the worked Route-column examples in §4.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/governance/">Governance row (orthogonal view) →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

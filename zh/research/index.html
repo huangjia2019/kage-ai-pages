@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究 — 黄佳</title>
+    <meta name="description" content="黄佳关于 Agent 架构、设计模式与 AI 系统中"在不确定性下的有界资源分配"工程化的论文与框架。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/">
+    <meta property="og:title" content="研究 — 黄佳">
+    <meta property="og:description" content="关于 Agent 架构与 AI 系统设计的论文与框架。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-research">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/training/">训练营</a>
+                <a href="/zh/#books">书</a>
+                <a href="/zh/#hero">关于</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/research/" class="lang-switch">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <div class="writing-index">
+            <h1>研究</h1>
+            <p class="lede">
+                关于 Agent 架构的论文与框架——
+                Manning 那本书在工程层面论证的 thesis，在这里以更形式化的方式呈现。
+                核心论点：<em>Agent 架构 = 不确定性下的有界资源分配</em>。
+                模型负责消费，harness 负责预算。
+            </p>
+
+            <h2 style="margin-top: 2.5rem;">框架</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/dual-axis/">双轴框架 · AI Agent 设计模式的二维分类</a>
+                    <p class="post-blurb">
+                        把 Agent 架构沿 <strong>认知功能（7 类）</strong> &times;
+                        <strong>执行拓扑（6 种）</strong> 两个维度分类。
+                        7&times;6 矩阵产生 27 个不同的 Agent 设计模式，其中 13 个由本工作首次命名。
+                        框架以 5 条经验性的"模式选择律"收口。
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/pattern-evolution/">模式进化 · 从 GoF、分布式到 Agent</a>
+                    <p class="post-blurb">
+                        <strong>48 个软件设计模式</strong>的交互式血脉地图——
+                        GoF 在 1994 年命名的 23 个对象模式 + 分布式系统社区在 2000s–2020s 积累的 25 个模式 →
+                        Agent 时代如何继承与升级。每个模式都是可点击的卡片，展开后呈现
+                        原问题、默认前提、Agent 时代的对应物。
+                        核心论点：模式没有过时，它们被抬高了一层。
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/harness-anatomy/">Harness 解剖 · 八大 agent 框架横切分析</a>
+                    <p class="post-blurb">
+                        把八个工业级 agent harness（Claude Code / Codex CLI / Aider / OpenCode /
+                        OpenClaw / Hermes Agent / DeerFlow / OpenHands）放在同一张图上看——沿
+                        <em>7 个认知功能</em>逐格打分，画出覆盖热力图。背后是一套
+                        固定的<strong>逆向五步法</strong>（Detect → Classify → Filter → Map → Verify），
+                        每一格都有源码文件 + 行号定锚。名单不封闭——新的 harness 可以同样喂进来。
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/paradigm-evolution/">范式演进 · 从结构化编程到 Agent 时代</a>
+                    <p class="post-blurb">
+                        比模式更大的单位：<strong>范式</strong>。六个时代、十五个大范式的可交互时间线——
+                        结构化编程 → OOP / 模式语言 / GoF → 分布式 / CAP / REST / DDD / 事件溯源 →
+                        微服务 / 云原生 / 响应式 → 数据密集型思维 → 大模型 / Agent 架构 / Harness 工程学。
+                        每张卡片可点开，展示<em>解决了什么、关键洞察、带来的思维转变</em>三段。
+                        只放真正在 CAP / 微服务这个级别上改变工程词汇的东西。
+                    </p>
+                </li>
+            </ul>
+
+            <h2 style="margin-top: 2.5rem;">阅读地图</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/classic-insights/">经典技术书与论文的定义性洞见</a>
+                    <p class="post-blurb">
+                        一个公开阅读地图：看那些真正改变领域判断方式的书和论文，
+                        它们各自回答了什么问题、提出了什么定义性洞见、反转了什么默认假设，
+                        以及为什么这些思想能够传播。它不是 Agent 框架页，而是一个训练自己识别
+                        “经典洞见”的入口。
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/zh/research/thinking-principles/">长期有生命力的人类思想原则</a>
+                    <p class="post-blurb">
+                        一张跨时代思想原则地图：苏格拉底式追问、第一性原理、无为、
+                        奥卡姆剃刀、方法论怀疑、可证伪性、系统思维、金字塔原理、
+                        刻意练习、暗时间等。每条都按“问题、原则、反转、练习问题”组织，
+                        方便真正拿来启发和使用。
+                    </p>
+                </li>
+            </ul>
+
+            <h2 style="margin-top: 2.5rem;">论文</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">2026 年 5 月 15 日</span>
+                    <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">
+                        A Two-Dimensional Framework for AI Agent Design Patterns:
+                        Cognitive Function &times; Execution Topology
+                    </a>
+                    <p class="post-blurb">
+                        Huang &amp; Zhou, 2026。arXiv 预印本
+                        <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a>（cs.AI）&middot;
+                        归档 DOI <a href="https://doi.org/10.5281/zenodo.19036557" target="_blank" rel="noopener">10.5281/zenodo.19036557</a>。
+                        合作者：周天翼（A*STAR CFAR）。
+                        我们论证：仅凭拓扑或仅凭认知，都不足以区分架构上真正不同的 Agent 系统。
+                        提出的二维分类法组织了 27 个模式，并产生 5 条经验性的模式选择律。
+                    </p>
+                </li>
+            </ul>
+
+            <p style="margin-top: 2.5rem;">
+                进一步的引用与延伸阅读，详见
+                <a href="/books/#designing-ai-agents">《Designing AI Agents》</a>
+                （Manning，MEAP 于 2026 年 5 月 26 日上线）。
+            </p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

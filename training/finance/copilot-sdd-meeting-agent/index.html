@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copilot + SDD Meeting Agent — Finance Agent Demo</title>
+    <meta name="description" content="A spec-driven development loop where one specification shapes prompts, code, validation and a follow-up email draft.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/finance/copilot-sdd-meeting-agent/">
+    <meta property="og:title" content="Copilot + SDD Meeting Agent — Finance Agent Demo">
+    <meta property="og:description" content="A spec-driven development loop where one specification shapes prompts, code, validation and a follow-up email draft.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/finance/copilot-sdd-meeting-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Finance Demo</p><h1>Copilot + SDD Meeting Agent</h1><p class="lede">A spec-driven development loop where one specification shapes prompts, code, validation and a follow-up email draft.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop3-copilot-demo</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/finance/">Back to finance</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop3-pattern-blueprint.png" alt="Copilot + SDD Meeting Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{
+  "title": "Interactive run · Copilot + SDD meeting agent",
+  "scenarios": [
+    {
+      "label": "Compliance review meeting",
+      "summary": "Transcript contains AML monitoring actions, owners, and deadlines.",
+      "steps": [
+        {
+          "name": "Load meeting-agent spec",
+          "pattern": "Spec as Contract",
+          "log": "Loaded schema: summary, key_points, action_items, follow-up email.",
+          "state": {
+            "spec": "meeting-agent-spec.md",
+            "summary_limit": "100 words",
+            "min_key_points": 2,
+            "actions_need_owner": true
+          },
+          "output": "Copilot and runtime prompt now share one contract."
+        },
+        {
+          "name": "Generate implementation plan",
+          "pattern": "Plan-and-Execute",
+          "log": "Planned functions: generate_minutes(), validate_minutes(), generate_email().",
+          "state": {
+            "modules": [
+              "meeting_agent.py",
+              "main.py"
+            ],
+            "functions": [
+              "generate_minutes",
+              "validate_minutes",
+              "generate_email"
+            ]
+          },
+          "output": "Project structure follows the spec instead of a loose prompt."
+        },
+        {
+          "name": "Run prompt chain",
+          "pattern": "Prompt Chaining",
+          "log": "Extracted summary, key points, decisions, and action items from transcript.",
+          "state": {
+            "participants": 4,
+            "key_points": 4,
+            "action_items": 5,
+            "draft_email": true
+          },
+          "output": "Meeting minutes JSON generated."
+        },
+        {
+          "name": "Validate output",
+          "pattern": "Generator-Critic",
+          "log": "Checked summary length, owner coverage, topic count, and concrete deadlines.",
+          "state": {
+            "summary_length": 33,
+            "assignee_coverage": "all assigned",
+            "concrete_deadlines": true,
+            "quality_gate": "PASS"
+          },
+          "output": "Quality check passes against the same SDD spec."
+        },
+        {
+          "name": "Package reusable skill",
+          "pattern": "Skill Package",
+          "log": "Grouped prompt, schema, examples, validation, and run path as a reusable workflow.",
+          "state": {
+            "package_parts": [
+              "prompt",
+              "schema",
+              "examples",
+              "validation",
+              "run path"
+            ],
+            "reuse": "team workflow"
+          },
+          "output": "The work can be reused instead of copied as one-off prompt text."
+        },
+        {
+          "name": "Progressively commit",
+          "pattern": "Progressive Commitment",
+          "log": "Mock path is stable; next promotion is model-backed run, then team rollout.",
+          "state": {
+            "phase": "mock stable",
+            "next": "model-backed run",
+            "blast_radius": "limited"
+          },
+          "output": "The workflow is ready for controlled promotion."
+        }
+      ],
+      "final": {
+        "verdict": "PASS",
+        "headline": "Structured minutes and follow-up email generated",
+        "cards": [
+          [
+            "Key points",
+            "4"
+          ],
+          [
+            "Action items",
+            "5 assigned"
+          ],
+          [
+            "Quality",
+            "All checks pass"
+          ],
+          [
+            "Patterns",
+            "Prompt Chain + Critic + Skill Package"
+          ]
+        ]
+      }
+    }
+  ]
+}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Spec Context</h3><p>The meeting-agent spec defines schema, quality rules, follow-up format, and validation constraints.</p><span class="pattern-chip">Spec as Contract</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Copilot Plan</h3><p>The implementation plan is generated from the spec, not from a vague one-shot prompt.</p><span class="pattern-chip">Plan-and-Execute</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Prompt Chain</h3><p>Extraction, validation, and follow-up email generation become separate controlled steps.</p><span class="pattern-chip">Prompt Chaining</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Validation</h3><p>The same spec checks required fields, owners, dates, length, and action-item completeness.</p><span class="pattern-chip">Generator-Critic</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Skill Package</h3><p>Prompt, schema, examples, and run path become a reusable work package.</p><span class="pattern-chip">Skill Package</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Progressive Delivery</h3><p>Move from mock path to model-backed path to team workflow only after checks are stable.</p><span class="pattern-chip">Progressive Commitment</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop3-copilot-terminal.png" alt="Terminal run: SDD spec, minutes JSON, quality checks, follow-up email draft."><figcaption>Terminal run: SDD spec, minutes JSON, quality checks, follow-up email draft.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Prompt Chaining</td><td>Break one broad generation task into inspectable steps.</td></tr>
+<tr><td>Plan-and-Execute</td><td>Use the spec to shape implementation before generating code.</td></tr>
+<tr><td>Generator-Critic</td><td>Validation is a separate role with explicit quality criteria.</td></tr>
+<tr><td>Skill Package</td><td>Bundle prompt, schema, examples, and run path for reuse.</td></tr>
+<tr><td>Progressive Commitment</td><td>Promote the workflow gradually as evidence accumulates.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Spec first changes the work</h3><p>Copilot becomes more useful when it reads a contract rather than a wish.</p></article>
+<article class="insight-card"><h3>Validation is not optional</h3><p>For finance workflows, downstream actions have owners and deadlines, so checks must be explicit.</p></article>
+<article class="insight-card"><h3>SDD connects design and delivery</h3><p>The same document can guide development, runtime behavior, and audit review.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop3-copilot-demo
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd src
+python main.py
+
+# optional visual walkthrough
+open ../visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop3-copilot-demo/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop3-pattern-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

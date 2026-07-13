@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Coordinates — Jia Huang</title>
+    <meta name="description" content="A pattern name without coordinates is a tag, not a design decision. The coordinate is what makes a choice testable.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/pattern-coordinates/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/pattern-coordinates/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/pattern-coordinates/">
+    <meta property="og:title" content="Pattern Coordinates">
+    <meta property="og:description" content="A pattern name without coordinates is a tag, not a design decision.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/pattern-coordinates/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/pattern-coordinates/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Pattern Coordinates
+            </p>
+
+            <h1>Pattern Coordinates</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                A pattern name without coordinates is a tag, not a design decision.
+            </p>
+
+            <h2>Definition</h2>
+            <p>
+                A pattern coordinate is the (cognitive function, execution topology) pair that
+                anchors a pattern to a specific cell in the design matrix. Without coordinates, a
+                pattern name is a label that lets people agree they are "using a pattern" while
+                disagreeing on the design. With coordinates, two engineers can find out within
+                one sentence whether they are talking about the same thing.
+            </p>
+
+            <h2>The problem it names</h2>
+            <p>
+                <em>[TODO: 咖哥 voice — 那个标志性的例子。两个工程师都说 "we used Plan-and-Execute",
+                结果一个做的是 Action × Chain(线性 plan 执行)、另一个做的是 Action × Orchestrate
+                (动态 replanning)—— 同一个名字,两个完全不同的系统,bug 也完全不同。
+                Pattern name 不够,坐标才够。]</em>
+            </p>
+
+            <h2>How it changes design decisions</h2>
+            <p>
+                Three operative consequences:
+            </p>
+            <ol style="margin: 0.5rem 0 1rem 1.5rem; list-style: decimal;">
+                <li><strong>Code review becomes specific.</strong> "This looks like Reflection × Loop, but the exit condition is missing — was that intentional?" beats "is this Reflection done right?"</li>
+                <li><strong>Pattern selection becomes a search.</strong> "I need something in Memory × Route" returns one candidate (Hierarchical Retention); "I need a Memory pattern" returns five.</li>
+                <li><strong>Architectural debt becomes nameable.</strong> "We have a Reasoning × Parallel pattern doing what should be a Reasoning × Loop" is a refactor proposal. "Our reasoning is messy" is not.</li>
+            </ol>
+
+            <h2>Lineage</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Software architecture as point-in-design-space</strong> (Shaw &amp; Garlan, 1990s) — designs live in a space, not as instances</li>
+                <li><strong>GoF patterns + classification</strong> — "Builder" alone is ambiguous; "Builder (creational, object)" anchors it</li>
+                <li><strong>Cloud architecture reference catalogs</strong> — every pattern entry has a context coordinate (scenario × deployment topology)</li>
+            </ul>
+
+            <h2>What it is NOT</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Not bureaucracy.</strong> The coordinate is two short tokens, not a form.</li>
+                <li><strong>Not "more taxonomy."</strong> A coordinate is a smaller commitment than another pattern name.</li>
+                <li><strong>Not a substitute for the pattern.</strong> The coordinate locates the pattern; the pattern still does the work.</li>
+            </ul>
+
+            <h2>Where it's developed further</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>Book treatment: <em>Designing AI Agents</em> (Manning, 2026) — introduced explicitly in Ch2, used throughout</li>
+                <li>The Pattern Selection Card methodology: turns problem statement into coordinate, coordinate into candidate patterns</li>
+                <li>Full coordinate catalog: <a href="https://adpsagent.com/patterns/">adpsagent.com/patterns/</a></li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Pattern Coordinates.
+                <a href="https://kage-ai.com/concepts/pattern-coordinates/">kage-ai.com/concepts/pattern-coordinates/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

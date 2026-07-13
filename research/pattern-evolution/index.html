@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Evolution: GoF → Distributed → Agent — Jia Huang</title>
+    <meta name="description" content="Interactive lineage of software design patterns. 23 GoF object patterns (1994) and 25 distributed-systems patterns (2010s) traced into the Agent era. Click any pattern to see its original problem, default assumption, and Agent-era counterpart.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/pattern-evolution/">
+    <meta property="og:title" content="Pattern Evolution: GoF → Distributed → Agent">
+    <meta property="og:description" content="48 software design patterns traced from object-oriented and distributed-systems eras into the Agent era. Interactive lineage map.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/pattern-evolution/">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="evolution.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/pattern-evolution/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <h1 class="evo-title">Pattern Evolution: GoF → Distributed → Agent</h1>
+
+            <p class="lede">
+                Software design patterns did not start with Agents. The Gang of Four named 23 object patterns in 1994.
+                The distributed-systems community accumulated another 25 over the next twenty years. Both bodies
+                of work assumed something the Agent era no longer assumes: that all important decisions could be
+                made by a human architect at design time.
+            </p>
+
+            <p>
+                This page traces the lineage. The same problems — who creates what, who notifies whom,
+                what happens when something fails, who decides which strategy applies — recur in the Agent era,
+                but the answer shifts from "design-time choice" to "runtime decision under uncertainty."
+                The patterns did not become obsolete. They were lifted one layer.
+            </p>
+
+            <p class="evo-meta">
+                <strong>How to read this page</strong>: each pattern below is a clickable cell. Click to expand
+                the four-section lineage — original problem, default assumption, Agent-era counterpart, and
+                the one-line collapse. Detailed cards are marked with a filled dot (<span class="evo-status-dot detailed"></span>);
+                cards still being written show a hollow dot (<span class="evo-status-dot pending"></span>).
+            </p>
+
+            <!-- =============================================================
+                 Section 1 — GoF (23 patterns, 3 categories)
+                 ============================================================= -->
+            <section class="evo-section" id="gof">
+                <header class="evo-section-header">
+                    <h2>I. Gang of Four — Object Design Patterns (1994)</h2>
+                    <p class="evo-section-sub">
+                        23 patterns across 3 categories. The shared assumption: a deterministic object world
+                        where types, creation, notification, and strategy are decided by a human architect
+                        at design time. The Agent era keeps the vocabulary but moves the decisions to runtime.
+                    </p>
+                </header>
+                <div id="gof-matrix" class="evo-matrix"></div>
+            </section>
+
+            <!-- =============================================================
+                 Section 2 — Distributed (25 patterns, 5 groups)
+                 ============================================================= -->
+            <section class="evo-section" id="distributed">
+                <header class="evo-section-header">
+                    <h2>II. Distributed Systems — Service Patterns (2000s–2020s)</h2>
+                    <p class="evo-section-sub">
+                        25 patterns in 5 groups. The shared assumption: services are unreliable, networks lie,
+                        state drifts, and coordination must be made explicit. The Agent era inherits the same
+                        problems with one substitution: the unreliable component is no longer the service —
+                        it is the model itself.
+                    </p>
+                </header>
+                <div id="dist-matrix" class="evo-matrix"></div>
+            </section>
+
+            <!-- =============================================================
+                 Closing — the shift in one sentence
+                 ============================================================= -->
+            <section class="evo-closing">
+                <h2>The shift in one sentence</h2>
+                <blockquote class="evo-collapse">
+                    Distributed patterns solve <em>how unreliable services collaborate reliably</em>.
+                    Agent patterns solve <em>how an uncertain model acts reliably</em>.
+                    Same engineering instincts. New unreliable component. One layer up.
+                </blockquote>
+                <p>
+                    This page is the visual companion to the lineage chapter of <em>Designing AI Agents</em>
+                    (Manning, 2026). The full chapter walks each cell to its working code and its place in
+                    the <a href="/research/dual-axis/">two-dimensional framework</a>.
+                </p>
+            </section>
+
+            <!-- =============================================================
+                 Detail panel — opens when a cell is clicked
+                 ============================================================= -->
+            <aside id="evo-detail" class="evo-detail" hidden>
+                <button class="evo-detail-close" aria-label="Close">×</button>
+                <div class="evo-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script src="evolution.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.PatternEvolution.init({ lang: 'en', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

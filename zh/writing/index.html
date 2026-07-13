@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章 — 黄佳</title>
+    <meta name="description" content="黄佳（咖哥）的中文文章系列。SDD 实战、Agent 工程手记，以及后续陆续展开的实战栏目。">
+    <link rel="canonical" href="https://kage-ai.com/zh/writing/">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+      .series-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+      .series-card {
+        border: 1px solid #e8e0d2;
+        border-radius: 8px;
+        padding: 1.5rem;
+        background: #fffdf9;
+        transition: box-shadow 0.15s, transform 0.15s;
+      }
+      .series-card:hover { box-shadow: 0 4px 12px rgba(168, 90, 30, 0.08); transform: translateY(-2px); }
+      .series-card.upcoming {
+        background: #faf6ef;
+        border-style: dashed;
+        color: #888;
+      }
+      .series-card h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+      .series-card h2 a { color: #a85a1e; text-decoration: none; }
+      .series-card h2 a:hover { text-decoration: underline; }
+      .series-meta { font-size: 0.85rem; color: #999; margin: 0 0 0.75rem; }
+      .series-card p.series-blurb { margin: 0.5rem 0 0; line-height: 1.55; font-size: 0.95rem; }
+      .series-card .series-tag {
+        display: inline-block;
+        font-size: 0.75rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 3px;
+        background: #f5e6d3;
+        color: #a85a1e;
+        margin-right: 0.5rem;
+      }
+      .series-card.upcoming .series-tag { background: #ece5d7; color: #888; }
+    </style>
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/training/">训练营</a>
+                <a href="/zh/interviews/">访谈</a>
+                <a href="/zh/">中文首页</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <div class="writing-index">
+            <h1>文章</h1>
+            <p class="lede">
+                按系列组织的中文实战文章。
+                每个系列都对应一段具体的工程动作 —— 不是综述，不是预测，是真做过、跟着能跑通的过程。
+            </p>
+
+            <div class="series-grid">
+
+                <article class="series-card">
+                    <h2><a href="/zh/writing/sdd/">SDD 实战</a></h2>
+                    <p class="series-meta">
+                        <span class="series-tag">进行中</span>
+                        7 篇 &middot; 配套代码库 <a href="https://github.com/huangjia2019/sdd-in-action" target="_blank" rel="noopener">sdd-in-action</a>
+                    </p>
+                    <p class="series-blurb">
+                        规范驱动开发（Specification-Driven Development）实战。
+                        从手写第一份 spec，到 OpenSpec、BMAD、Superpowers 协同实操。
+                        每一篇都能跟着跑通。
+                    </p>
+                </article>
+
+                <article class="series-card upcoming">
+                    <h2>Agent 工程手记</h2>
+                    <p class="series-meta">
+                        <span class="series-tag">筹备中</span>
+                    </p>
+                    <p class="series-blurb">
+                        围绕 Designing AI Agents 一书的工程实践笔记。Harness、Sub-Agents、Memory、Tool Use 在真实项目里的应用记录。
+                    </p>
+                </article>
+
+                <article class="series-card upcoming">
+                    <h2>更多系列</h2>
+                    <p class="series-meta">
+                        <span class="series-tag">陆续展开</span>
+                    </p>
+                    <p class="series-blurb">
+                        以后会按主题陆续开新栏目。每个系列都是一段具体的工程动作 —— 真做过、跟着能跑通的过程。
+                    </p>
+                </article>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

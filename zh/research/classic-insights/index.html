@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>经典技术书与论文的定义性洞见 — 黄佳</title>
+    <meta name="description" content="一个公开阅读地图：经典技术书与论文各自回答了什么问题、提出了什么定义性洞见、反转了什么默认假设，以及为什么这些思想能够传播。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/classic-insights/">
+    <meta property="og:title" content="经典技术书与论文的定义性洞见">
+    <meta property="og:description" content="训练自己识别真正能改变领域判断方式的技术思想。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/classic-insights/">
+    <meta property="og:locale" content="zh_CN">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../research/classic-insights/insights.css">
+</head>
+<body class="page-research page-classic-insights">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/#books">书</a>
+                <a href="/zh/#hero">关于</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/research/classic-insights/" class="lang-switch">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <p class="eyebrow">阅读地图</p>
+            <h1 class="classic-title">经典技术书与论文的定义性洞见</h1>
+
+            <p class="lede">
+                有些作品成为经典，是因为它讲清楚了一门技术。更少数作品成为经典，
+                是因为它改变了一个领域的判断方式。这一页记录的是第二类作品。
+            </p>
+
+            <p>
+                这不是排名，也不是私人研究稿外泄。它是一个入口和一个测试：
+                一本技术书或一篇论文真正重要的时候，它到底命名了什么问题、反转了什么默认假设、
+                又让什么决策变得更清楚？
+            </p>
+
+            <p class="classic-meta">
+                <strong>怎么读这一页</strong>：先看“反转”这一列。如果这个反转会改变你设计、管理、
+                调试或评估系统的默认选择，那这本书或这篇论文通常值得继续读。链接优先指向官方页面、
+                作者页面、免费在线版或出版社页面。
+            </p>
+
+            <div id="classic-principles" class="classic-principles" aria-label="真正能传播的洞见有什么特征"></div>
+
+            <section aria-labelledby="classic-table-title">
+                <h2 id="classic-table-title" style="font-family: var(--font-serif); font-size: 1.45rem; margin-bottom: 0.5rem;">洞见表</h2>
+                <p class="lede" style="margin-bottom: 0.8rem;">
+                    这里把书和论文放在一起看，是故意的。改变一个领域的思想，不在乎它第一次出现时是精装书，
+                    还是会议论文 PDF。
+                </p>
+
+                <div class="classic-controls">
+                    <div class="classic-control">
+                        <label for="classic-search">搜索</label>
+                        <input id="classic-search" type="search" placeholder="书名、作者、洞见、问题...">
+                    </div>
+                    <div class="classic-control">
+                        <label for="classic-category">类别</label>
+                        <select id="classic-category"></select>
+                    </div>
+                    <div class="classic-control">
+                        <label for="classic-type">类型</label>
+                        <select id="classic-type"></select>
+                    </div>
+                </div>
+
+                <p id="classic-count" class="classic-count"></p>
+                <div id="classic-table-root"></div>
+            </section>
+
+            <section class="classic-closing">
+                <h2>一个有用的判断</h2>
+                <p>
+                    只是正确的书，会总结一个领域已经知道的东西。真正的经典，会把一个反复出现的处境，
+                    压缩成一个可以转述的判断。学会它之后，同样的事实，不会再自动导向同样的默认决策。
+                </p>
+            </section>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <script src="../../../research/classic-insights/insights.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ClassicInsights.init({
+                lang: 'zh',
+                dataUrl: '../../../research/classic-insights/data.json'
+            });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

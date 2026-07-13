@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动化代码审查 Agent — 质量工程 Agent 案例</title>
+    <meta name="description" content="一个质量工程审查 Agent：先分诊 PR 文件，再加载团队规范，按复杂度路由审查深度，最后输出带门控的评论。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/quality/code-review-agent/">
+    <meta property="og:title" content="自动化代码审查 Agent — 质量工程 Agent 案例">
+    <meta property="og:description" content="一个质量工程审查 Agent：先分诊 PR 文件，再加载团队规范，按复杂度路由审查深度，最后输出带门控的评论。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/quality/code-review-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">质量工程 Demo</p><h1>自动化代码审查 Agent</h1><p class="lede">一个质量工程审查 Agent：先分诊 PR 文件，再加载团队规范，按复杂度路由审查深度，最后输出带门控的评论。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop1-code-review</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/quality/">返回质量工程案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop1-code-review-blueprint.png" alt="自动化代码审查 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Automated Code Review Agent", "subtitle": "PR diff -> triage -> memory-backed review -> routed comments", "steps": [["Load PR object", "Context Triage", "Classify changed files by quality impact."], ["Attach standards", "Hierarchical Retention", "Pin team rules before reviewing local diff."], ["Route review depth", "Complexity Routing", "Send lint-like issues to fast rules and risk issues to deeper reasoning."], ["Generate comments", "Prompt Chaining", "Emit concise review comments with file, severity, and rationale."], ["Apply approval gate", "Approval Gate", "Block only when risk crosses the release threshold."], ["Expose evidence", "Observability Harness", "Show why each file received its route and score."]], "scenarios": [{"name": "Payment service PR", "headline": "3 blocking comments, 1 advisory, release gate requires human review", "verdict": "REVIEW_REQUIRED", "cards": {"Risk": "High", "Files": "4", "Gate": "Human review", "Cost": "Low"}, "log": ["triage: tests/test_checkout.py -> P0 because tests define release safety", "memory: loaded 3 team rules from review-standards.md", "route: payment.py -> deep review because money movement changed", "gate: high-risk payment path cannot auto-approve"]}, {"name": "Documentation-only PR", "headline": "0 blockers, 2 style comments, auto-pass allowed", "verdict": "AUTO_PASS", "cards": {"Risk": "Low", "Files": "2", "Gate": "Auto-pass", "Cost": "Very low"}, "log": ["triage: docs-only change bypasses deep reasoning", "memory: style guide applied to headings and examples", "route: fast path selected", "gate: no production code touched"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>加载 PR 对象</h3><p>先按质量影响给变更文件分层，再进入推理。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>附加团队规范</h3><p>把编码规则和项目约定固定进上下文。</p><span class="pattern-chip">分层记忆</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>路由审查深度</h3><p>Lint 类问题走快路径，风险变更走深度审查。</p><span class="pattern-chip">复杂度路由</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>生成评论</h3><p>输出包含文件、级别和理由的简洁 review comment。</p><span class="pattern-chip">提示链</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>应用质量门</h3><p>只有当质量或发布风险越过阈值时才阻断。</p><span class="pattern-chip">审批门控</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>暴露证据链</h3><p>展示文件路由、规则来源、评分和门控理由。</p><span class="pattern-chip">可观测性 Harness</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop1-code-review-terminal.png" alt="命令行输出：PR 分诊、审查路由、评论和发布门控。"><figcaption>命令行输出：PR 分诊、审查路由、评论和发布门控。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>上下文分诊</td><td>大 PR 需要先做文件优先级，而不是直接审。</td></tr>
+<tr><td>分层记忆</td><td>团队规范应当是稳定上下文，不该每次临时拼 prompt。</td></tr>
+<tr><td>复杂度路由</td><td>不同审查问题需要不同模型深度。</td></tr>
+<tr><td>审批门控</td><td>系统可以积极评论，但要谨慎阻断。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>注意力是第一道质量控制</h3><p>很多代码审查 Agent 不是推理差，而是错误文件先进了上下文。</p></article>
+<article class="insight-card"><h3>记忆让风格变成政策</h3><p>团队规范要像 pinned memory 一样工作，否则每个 PR 都从零开始。</p></article>
+<article class="insight-card"><h3>门控定义自治边界</h3><p>Review Agent 不拥有 merge 权限，也可以非常有价值。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop1-code-review
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop1-code-review/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop1-code-review-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

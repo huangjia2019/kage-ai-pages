@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What 19 Papers Taught Me About Where Agent Engineering Is Really Going — Jia Huang</title>
+    <meta name="description" content="I pulled every significant agent paper, blog, and doc from the past three years — Anthropic, OpenAI, Berkeley, Simon Willison, Lilian Weng, Eugene Yan, and a dozen more. Nineteen sources later, the field had converged in directions most practitioners had not yet noticed.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/writing/19-papers-taught-me.html">
+    <meta property="og:title" content="What 19 Papers Taught Me About Where Agent Engineering Is Really Going">
+    <meta property="og:description" content="I pulled every significant agent paper, blog, and doc from the past three years — Anthropic, OpenAI, Berkeley, Simon Willison, Lilian Weng, Eugene Yan, and a dozen more. Nineteen sources later, the field had converged in directions most practitioners had not yet noticed.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/writing/19-papers-taught-me.html">
+    <meta property="article:published_time" content="2026-03-30">
+    <meta property="article:author" content="Jia Huang">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <h1>What 19 Papers Taught Me About Where Agent Engineering Is Really Going</h1>
+                <p class="essay-meta">
+                    <time datetime="2026-03-30">March 30, 2026</time>
+                    &middot; by <a href="/about/">Jia Huang</a>
+                    &middot; <a href="https://agentpatterns.substack.com/p/what-19-papers-taught-me" target="_blank" rel="noopener">Originally on Substack</a>
+                </p>
+            </header>
+
+<p><em>This is the inaugural post of Agent Design Patterns. If you build agent systems (or soon will), this newsletter brings structure to the chaos.</em></p>
+<hr />
+<p>The reference library behind a book on agent design patterns kept growing for two years. Anthropic, OpenAI, Berkeley, Simon Willison, Swyx, Lilian Weng, Eugene Yan, Chip Huyen, Martin Fowler&rsquo;s site, a dozen more. At some point it became clear the organizing had to stop and the writing had to start.</p>
+<p>Nineteen sources later, a pattern had emerged that was not in any single source. The field is converging, and in directions most practitioners have not yet noticed.</p>
+<p>Here is what the literature is saying, read in one sitting.</p>
+<h2>1. The competition has shifted, permanently, from models to systems</h2>
+<p>This is the single most repeated finding, supported by three independent data points that collectively defeat the &ldquo;just wait for a better model&rdquo; strategy:</p>
+<p><strong>Andrew Ng (March 2024):</strong> GPT-3.5 with an agentic workflow scored 95.1% on HumanEval. GPT-4 zero-shot scored 67%. A weaker model with a good system beat a stronger model without one, by 28 percentage points.</p>
+<p><strong>AlphaCodium (2024):</strong> GPT-4 accuracy went from 19% to 44% through workflow decomposition alone. No model upgrade. No fine-tuning. Just better system design.</p>
+<p><strong>LangChain Deep Agents (March 2026):</strong> Same model, same benchmark, different harness. Terminal Bench score jumped 13.7 points, enough to move from Top 30 to Top 5. The only variable was the harness.</p>
+<p>Three teams. Different benchmarks. Different years. The conclusion is consistent: system design returns now exceed model scaling returns. In advisory conversations, a recurring pattern is months of waiting for a better model when a two-day harness redesign would have closed the gap. Even after GPT-5 arrives, a well-designed harness will stack additional gains on top of it.</p>
+<p>Swyx put this most plainly: <em>&ldquo;Harnesses can survive even reasoning paradigm changes.&rdquo;</em></p>
+<h2>2. Harness Engineering became a discipline in 90 days</h2>
+<p>In December 2025, &ldquo;harness engineering&rdquo; was not a phrase anyone used. By March 2026 it appeared in:</p>
+<ul>
+<li><strong>Anthropic</strong> (January): <em>&ldquo;Effective Harnesses for Long-Running Agents.&rdquo;</em> Defined the two-phase architecture (Initializer + Coding Agent).</li>
+<li><strong>OpenAI</strong> (February): <em>&ldquo;Harness Engineering.&rdquo;</em> Built a million-line internal product with zero manually-written code, in 1/10th the development time.</li>
+<li><strong>Martin Fowler&rsquo;s site</strong> (February): Birgitta Böckeler&rsquo;s independent critique. Distilled three core harness components (Context Engineering, Architectural Constraints, Entropy Management).</li>
+<li><strong>Simon Willison</strong> (February): full guide on <em>&ldquo;Agentic Engineering Patterns.&rdquo;</em> The best practical tutorial in the field.</li>
+<li><strong>arXiv</strong> (March): first formal academic definition. Scaffolding (before the first prompt) versus harness (everything after).</li>
+</ul>
+<p>When OpenAI, Anthropic, academia, and independent practitioners converge on the same concept within 90 days, it is not hype. It is discovery.</p>
+<p>All four describe the same elephant from different angles. Anthropic emphasizes architecture: two-phase design, feature lists. OpenAI emphasizes operations: three components, automated PR workflows. Simon Willison emphasizes implementation: &ldquo;runs tools in a loop to achieve a goal.&rdquo; Martin Fowler&rsquo;s site emphasizes enterprise reality: legacy challenges and verification gaps.</p>
+<p>Same concept, four angles. Nobody has unified them yet. That is exactly what a framework is for.</p>
+<h2>3. Authority is the most underrated dimension in agent design</h2>
+<p>Swyx&rsquo;s IMPACT framework (Intent, Memory, Planning, Authority, Control Flow, Tools) makes a striking claim: Authority is <em>&ldquo;the most overlooked element&rdquo;</em> in agent systems.</p>
+<p>Read against the other 18 sources, the claim holds.</p>
+<p>The literature is saturated with discussions of tool calling, reasoning chains, and memory architectures. Almost nobody discusses: <em>who authorized the agent to do this? To what extent? What happens when it exceeds its authority?</em></p>
+<p>Chip Huyen&rsquo;s taxonomy clarifies why this matters. She distinguishes three types of tools: Knowledge Augmentation (reading), Capability Extension (computing), and Write Actions (modifying the environment by executing SQL, sending emails, transferring money). Most agent frameworks treat these with identical permission models. That is like giving a junior employee the same database access as the DBA because &ldquo;they both use SQL.&rdquo;</p>
+<p>This blind spot is the single biggest barrier to enterprise adoption. It is also why Governance occupies a full chapter in the book under preparation, as the seventh cognitive dimension, not a footnote.</p>
+<h2>4. The verification gap is the field&rsquo;s open wound</h2>
+<p>Birgitta Böckeler, writing on Martin Fowler&rsquo;s site, delivered the sharpest critique of any source in the set. Her assessment of OpenAI&rsquo;s Harness Engineering post: it lacks <em>&ldquo;verification of functionality and behaviour.&rdquo;</em></p>
+<p>OpenAI showed how to make agents write <em>good code</em> (linters pass, architecture is consistent). They did not show how to verify that the code does <em>the right thing</em>. Quality is not correctness.</p>
+<p>The gap echoes across the literature:</p>
+<ul>
+<li>Eugene Yan et al. (2024): hallucination baseline rates sit at 5–10%, hard to push below 2%.</li>
+<li>Kamoi et al. (TACL 2025): LLM self-evaluation has systematic biases.</li>
+<li>A recurring agent failure mode: phantom issues, where the agent reflects on its work, identifies problems that do not exist, and &ldquo;fixes&rdquo; them, making the code worse.</li>
+</ul>
+<p>Automated verification of agent output, not just quality but correctness, will be the core battlefield for the next 18 months. Whoever solves <em>&ldquo;did the agent do the right thing?&rdquo;</em> at scale will define the next generation of harness architecture.</p>
+<h2>5. Two metaphors are becoming industry vocabulary</h2>
+<p>Good metaphors spread faster than good definitions. Two are winning right now.</p>
+<p><strong>&ldquo;Shift engineers&rdquo;</strong> (Anthropic): each new context window is a new engineer arriving for a shift with no memory of what the previous engineer did. One sentence, and everyone understands why a harness is needed: LLMs have no persistent memory.</p>
+<p><strong>&ldquo;Three eras&rdquo;</strong> (Epsilla): Prompt Engineering is writing the perfect email. Context Engineering is attaching all the right files. Harness Engineering is designing the entire email system. Three levels of abstraction, one analogy.</p>
+<p>These metaphors matter because they become the vocabulary that non-technical stakeholders use to make budget decisions. When a CTO can say &ldquo;we need to move from era 2 to era 3,&rdquo; the architecture argument is already half-won.</p>
+<h2>6. Agent engineering is eating software engineering</h2>
+<p>This may be the deepest signal in the entire set, and it comes from Simon Willison.</p>
+<p>His <em>Agentic Engineering Patterns</em> guide is structured exactly like a software engineering textbook: Principles → Working with Agents → Testing and QA → Understanding Code. But the subject is not &ldquo;how to write software.&rdquo; It is &ldquo;how to develop software with agents.&rdquo;</p>
+<p>Martin Fowler&rsquo;s site reinforces this: harnesses may become the next generation of <em>service templates</em>, standardized project structures that define how every AI project is organized, just as microservice templates define how every service is organized today.</p>
+<p>The implication: within two to three years, &ldquo;can you work with coding agents?&rdquo; will be as basic as &ldquo;can you use Git?&rdquo; Not a specialty. A prerequisite.</p>
+<h2>7. The gap nobody has filled</h2>
+<p>Every source in this set answers <em>how</em>: how to build agents, design harnesses, manage context. Almost nobody answers <em>when</em> and <em>which</em>: when to use which pattern, when to add complexity, when to stop.</p>
+<p>Anthropic gives five workflow patterns. Swyx gives six IMPACT elements. Chip Huyen gives four control flow types. Andrew Ng gives four agentic design patterns. All useful. None composable. None with selection criteria.</p>
+<p>That is the gap the framework in <em><a href="https://hubs.la/Q04hCsrS0">Designing AI Agents</a></em> (Manning) is built to fill: a methodology for choosing between patterns, not another catalog of them. From <em>&ldquo;I have a problem&rdquo;</em> to <em>&ldquo;I need this pattern, configured this way, with these governance constraints.&rdquo;</em> This newsletter explores the ideas behind it, one thread per week, free, no paywall.</p>
+<p>If you build agent systems, or plan to, subscribe. The chaos is about to get some structure.</p>
+<hr />
+<p><em>Next: The Five Chaos Problems in Agent Design. Why &ldquo;agent&rdquo; has become the most overloaded word in software since &ldquo;cloud.&rdquo;</em></p>
+<p><em><a href="https://hubs.la/Q04hCsrS0">Designing AI Agents</a> (Manning).</em></p>
+<hr />
+<h2>Appendix: The 19 Sources</h2>
+<p>For those who want to go deeper, here are the sources in recommended reading order:</p>
+<p><strong>Start here (2 hours):</strong>
+1. Andrew Ng — <a href="https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/">Agentic Design Patterns</a> (2024)
+2. Lilian Weng — <a href="https://lilianweng.github.io/posts/2023-06-23-agent/">LLM Powered Autonomous Agents</a> (2023)
+3. Anthropic — <a href="https://www.anthropic.com/engineering/building-effective-agents">Building Effective Agents</a> (2024)</p>
+<p><strong>Harness deep dive (2 hours):</strong>
+4. Anthropic — <a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective Harnesses for Long-Running Agents</a> (2025)
+5. OpenAI — <a href="https://openai.com/index/harness-engineering/">Harness Engineering</a> (2026)
+6. Böckeler / Martin Fowler — <a href="https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html">Harness Engineering</a> (2026)
+7. Inngest — <a href="https://www.inngest.com/blog/your-agent-needs-a-harness-not-a-framework">Your Agent Needs a Harness, Not a Framework</a>
+8. Simon Willison — <a href="https://simonwillison.net/guides/agentic-engineering-patterns/">Agentic Engineering Patterns</a> (2026)</p>
+<p><strong>Engineering practice (3 hours):</strong>
+9. Eugene Yan et al. — <a href="https://applied-llms.org/">What We Learned from a Year of Building with LLMs</a> (2024)
+10. Eugene Yan — <a href="https://eugeneyan.com/writing/llm-patterns/">Patterns for Building LLM-Based Systems</a> (2023)
+11. Chip Huyen — <a href="https://huyenchip.com/2025/01/07/agents.html">AI Agents</a> (2025)
+12. BAIR — <a href="https://bair.berkeley.edu/blog/2024/02/18/compound-ai-systems/">The Shift from Models to Compound AI Systems</a> (2024)</p>
+<p><strong>Reasoning foundations (1.5 hours):</strong>
+13. Wei et al. — <a href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting</a> (NeurIPS 2022)
+14. Yao et al. — <a href="https://arxiv.org/abs/2210.03629">ReAct</a> (ICLR 2023)
+15. Shinn et al. — <a href="https://arxiv.org/abs/2303.11366">Reflexion</a> (NeurIPS 2023)</p>
+<p><strong>Architecture theory (1 hour):</strong>
+16. Sumers et al. — <a href="https://arxiv.org/abs/2309.02427">CoALA</a> (2023)
+17. arXiv 2603.05344 — Building Effective AI Coding Agents (2026)</p>
+<p><strong>Industry perspective (30 min):</strong>
+18. Swyx / Latent Space — <a href="https://www.latent.space/p/agent">Agent Engineering</a>
+19. Epsilla — <a href="https://www.epsilla.com/blogs/harness-engineering-evolution-prompt-context-autonomous-agents">The Three Eras</a> (2026)</p>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

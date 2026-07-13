@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监管文档分析 Agent — 金融 Agent 案例</title>
+    <meta name="description" content="一个规约驱动的合规 Agent：比较 MAS notice 修订、检查证据质量，并生成带引用的影响报告。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/finance/regulatory-document-agent/">
+    <meta property="og:title" content="监管文档分析 Agent — 金融 Agent 案例">
+    <meta property="og:description" content="一个规约驱动的合规 Agent：比较 MAS notice 修订、检查证据质量，并生成带引用的影响报告。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/finance/regulatory-document-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">金融 Demo</p><h1>监管文档分析 Agent</h1><p class="lede">一个规约驱动的合规 Agent：比较 MAS notice 修订、检查证据质量，并生成带引用的影响报告。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop1-compliance</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/finance/">返回金融案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop1-pattern-blueprint.png" alt="监管文档分析 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{
+  "title": "Interactive run · regulatory impact analysis",
+  "scenarios": [
+    {
+      "label": "MAS AML/KYC amendment",
+      "summary": "Lower CDD threshold, shorter STR window, internal SOP impact.",
+      "steps": [
+        {
+          "name": "Load SDD contract",
+          "pattern": "Spec as Contract",
+          "log": "Loaded compliance-spec.md: inputs, output schema, citation rule, confidence threshold.",
+          "state": {
+            "spec": "compliance-spec.md",
+            "required_fields": [
+              "changes",
+              "impact",
+              "actions",
+              "quality"
+            ],
+            "citation_required": true,
+            "confidence_threshold": 0.8
+          },
+          "output": "Contract accepted. The agent cannot emit uncited findings."
+        },
+        {
+          "name": "Parse evidence",
+          "pattern": "Context Triage",
+          "log": "Parsed MAS amendment, baseline notice, and internal AML/KYC SOP as separate evidence streams.",
+          "state": {
+            "new_doc_chars": 949,
+            "baseline_chars": 429,
+            "internal_policy": "company-sop-aml.txt",
+            "scope": "AML/KYC"
+          },
+          "output": "Evidence map created: new notice, baseline notice, internal SOP."
+        },
+        {
+          "name": "Extract semantic diff",
+          "pattern": "Semantic Compaction",
+          "log": "Compressed long clauses into two material changes with clause anchors.",
+          "state": {
+            "changes_found": 2,
+            "changed_topics": [
+              "CDD threshold",
+              "STR reporting window"
+            ],
+            "clauses": [
+              "4.2",
+              "7.1"
+            ]
+          },
+          "output": "Two impact rows generated from changed clauses."
+        },
+        {
+          "name": "Ground with policy",
+          "pattern": "RAG Pipeline",
+          "log": "Matched changes to AML SOP controls and implementation teams.",
+          "state": {
+            "policy_matches": 3,
+            "teams": [
+              "Compliance Operations",
+              "Engineering + Compliance"
+            ],
+            "source_refs": 2
+          },
+          "output": "Internal policy context attached to each impact row."
+        },
+        {
+          "name": "Generate report",
+          "pattern": "Prompt Chaining",
+          "log": "Created structured impact report with actions, owners, dates, and rationale.",
+          "state": {
+            "report_id": "CR-2026-0517-DEMO",
+            "overall_impact": "high",
+            "action_items": 2,
+            "review_required": false
+          },
+          "output": "Report ready: high impact, two action items, no open citation gaps."
+        },
+        {
+          "name": "Apply quality gate",
+          "pattern": "Approval Gate",
+          "log": "Citation completeness 2/2, all confidence values above threshold, high-impact actions covered.",
+          "state": {
+            "citation_completeness": "2/2",
+            "confidence": ">=0.86",
+            "gate": "PASS",
+            "observability": [
+              "citations",
+              "confidence",
+              "actions",
+              "checks"
+            ]
+          },
+          "output": "PASS: the report is reviewable and can move to compliance review workflow."
+        }
+      ],
+      "final": {
+        "verdict": "PASS",
+        "headline": "Compliance impact report generated",
+        "cards": [
+          [
+            "Changes",
+            "2 material changes"
+          ],
+          [
+            "Impact",
+            "High"
+          ],
+          [
+            "Actions",
+            "Revise AML SOP; pilot RAG-backed review"
+          ],
+          [
+            "Patterns",
+            "SDD + RAG + Approval Gate"
+          ]
+        ]
+      }
+    }
+  ]
+}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>SDD 规约</h3><p>规约先定义输入证据、输出 schema、引用要求、置信度阈值和质量检查。</p><span class="pattern-chip">规约即契约</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>文档接入</h3><p>把修订版通知、历史基线和内部 AML/KYC SOP 作为不同证据源接入。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>语义差异</h3><p>把长监管文本压缩成变化条款、义务、影响行和行动候选。</p><span class="pattern-chip">语义压缩</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>政策 RAG</h3><p>用内部政策上下文支撑解释，并保留来源引用。</p><span class="pattern-chip">RAG 管道</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>影响报告</h3><p>输出结构化合规报告：严重度、负责人、截止日期和判断理由。</p><span class="pattern-chip">提示链</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>质量门</h3><p>引用不足、置信度低或高影响行动缺失时触发复核。</p><span class="pattern-chip">审批门控</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop1-compliance-terminal.png" alt="命令行输出：解析、分析、质量门和合规报告。"><figcaption>命令行输出：解析、分析、质量门和合规报告。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>上下文分诊</td><td>先区分变化条款、基线文本和内部政策，再进入深层推理。</td></tr>
+<tr><td>语义压缩</td><td>把长文档压缩成义务、影响和行动，同时不丢掉证据链。</td></tr>
+<tr><td>RAG 管道</td><td>让结论落到检索到的政策和来源锚点上。</td></tr>
+<tr><td>审批门控</td><td>用置信度和影响半径决定 Agent 是否必须停止并升级。</td></tr>
+<tr><td>可观测性 Harness</td><td>把引用、置信度、质量检查和行动项显式暴露出来。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>证据就是产品</h3><p>真正有价值的不是一段摘要，而是从条款到影响再到行动的链路。</p></article>
+<article class="insight-card"><h3>质量门决定自治边界</h3><p>Agent 要知道什么时候可以继续，什么时候必须交给人复核。</p></article>
+<article class="insight-card"><h3>SDD 让合规可执行</h3><p>规约同时约束 prompt、代码、输出和评估。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop1-compliance
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd src
+python main.py
+
+# optional visual walkthrough
+open ../visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop1-compliance/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop1-pattern-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

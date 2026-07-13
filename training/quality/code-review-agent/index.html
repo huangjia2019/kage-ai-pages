@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Code Review Agent — Quality Engineering Agent Demo</title>
+    <meta name="description" content="A QE review agent that triages PR files, attaches team standards, routes review depth, and emits gated comments.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/quality/code-review-agent/">
+    <meta property="og:title" content="Automated Code Review Agent — Quality Engineering Agent Demo">
+    <meta property="og:description" content="A QE review agent that triages PR files, attaches team standards, routes review depth, and emits gated comments.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/quality/code-review-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Quality Engineering Demo</p><h1>Automated Code Review Agent</h1><p class="lede">A QE review agent that triages PR files, attaches team standards, routes review depth, and emits gated comments.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop1-code-review</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/quality/">Back to quality engineering</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop1-code-review-blueprint.png" alt="Automated Code Review Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Automated Code Review Agent", "subtitle": "PR diff -> triage -> memory-backed review -> routed comments", "steps": [["Load PR object", "Context Triage", "Classify changed files by quality impact."], ["Attach standards", "Hierarchical Retention", "Pin team rules before reviewing local diff."], ["Route review depth", "Complexity Routing", "Send lint-like issues to fast rules and risk issues to deeper reasoning."], ["Generate comments", "Prompt Chaining", "Emit concise review comments with file, severity, and rationale."], ["Apply approval gate", "Approval Gate", "Block only when risk crosses the release threshold."], ["Expose evidence", "Observability Harness", "Show why each file received its route and score."]], "scenarios": [{"name": "Payment service PR", "headline": "3 blocking comments, 1 advisory, release gate requires human review", "verdict": "REVIEW_REQUIRED", "cards": {"Risk": "High", "Files": "4", "Gate": "Human review", "Cost": "Low"}, "log": ["triage: tests/test_checkout.py -> P0 because tests define release safety", "memory: loaded 3 team rules from review-standards.md", "route: payment.py -> deep review because money movement changed", "gate: high-risk payment path cannot auto-approve"]}, {"name": "Documentation-only PR", "headline": "0 blockers, 2 style comments, auto-pass allowed", "verdict": "AUTO_PASS", "cards": {"Risk": "Low", "Files": "2", "Gate": "Auto-pass", "Cost": "Very low"}, "log": ["triage: docs-only change bypasses deep reasoning", "memory: style guide applied to headings and examples", "route: fast path selected", "gate: no production code touched"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Load PR object</h3><p>Classify changed files by quality impact before reasoning.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Attach standards</h3><p>Pin team coding rules and project conventions.</p><span class="pattern-chip">Hierarchical Retention</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Route depth</h3><p>Fast path for lint-like issues, deeper path for risk-bearing changes.</p><span class="pattern-chip">Complexity Routing</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Generate comments</h3><p>Emit concise review comments with file, severity and rationale.</p><span class="pattern-chip">Prompt Chaining</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Apply gate</h3><p>Block only when quality or release risk crosses the threshold.</p><span class="pattern-chip">Approval Gate</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Expose trace</h3><p>Show file route, rule source, score and gate reason.</p><span class="pattern-chip">Observability Harness</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop1-code-review-terminal.png" alt="Terminal output: PR triage, review routing, comments, and release gate."><figcaption>Terminal output: PR triage, review routing, comments, and release gate.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Context Triage</td><td>Large PRs need file priority before review judgment.</td></tr>
+<tr><td>Hierarchical Retention</td><td>Team standards should be stable context, not repeated prompt text.</td></tr>
+<tr><td>Complexity Routing</td><td>Different review questions deserve different model depth.</td></tr>
+<tr><td>Approval Gate</td><td>The system comments freely but blocks cautiously.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Attention is the first quality control</h3><p>Most bad code review agents fail before reasoning, because the wrong files enter the context.</p></article>
+<article class="insight-card"><h3>Memory turns style into policy</h3><p>A team style guide should behave like pinned memory, otherwise every PR starts from zero.</p></article>
+<article class="insight-card"><h3>The gate defines autonomy</h3><p>A review agent can be useful without owning merge authority.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop1-code-review
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop1-code-review/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop1-code-review-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Ancestors of Agent Design Patterns — Jia Huang</title>
+    <meta name="description" content="A hoverable map from 28 AI Agent design patterns to their software-engineering ancestors: caching, queues, pipes, workflows, RBAC, sagas, observability, MapReduce, and more.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/pattern-ancestors/">
+    <meta property="og:title" content="Engineering Ancestors of Agent Design Patterns">
+    <meta property="og:description" content="Hover over each Agent pattern to see what it does and which software-engineering idea it inherits.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/pattern-ancestors/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-research page-pattern-ancestors">
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/pattern-ancestors/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay ancestor-hero">
+            <header>
+                <p class="eyebrow">Agent pattern lineage</p>
+                <h1>Engineering ancestors of Agent design patterns.</h1>
+                <p class="lede">
+                    Agent patterns look new because the model is new. Architecturally, many of them inherit
+                    older software ideas: caches, queues, pipes, workflow engines, event logs, RBAC, sagas,
+                    bulkheads, observability and MapReduce. Hover over a pattern to see the bridge.
+                </p>
+            </header>
+        </article>
+
+        <section id="lineage-table" class="block">
+            <p class="eyebrow">Full mapping</p>
+            <h2>Pattern → engineering ancestor → original engineering problem</h2>
+            <div id="lineage-table-wrap" class="lineage-table-wrap"></div>
+        </section>
+
+        <section class="block">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">28 patterns</p>
+                    <h2>Hover map</h2>
+                </div>
+                <p class="ancestor-more"><a href="#ancestor-catalog">More engineering ancestors &darr;</a></p>
+            </div>
+            <button id="ancestor-panel-show" class="matrix-panel-show ancestor-panel-show" type="button" aria-controls="ancestor-detail-panel" hidden>Show detail panel</button>
+            <div id="ancestor-layout" class="ancestor-layout">
+                <div id="pattern-ancestor-grid" class="pattern-ancestor-grid" aria-label="Agent patterns"></div>
+                <aside id="ancestor-detail-panel" class="ancestor-detail-panel" aria-live="polite">
+                    <button id="ancestor-panel-close" class="matrix-panel-close ancestor-panel-close" type="button" aria-controls="ancestor-detail-panel" aria-label="Hide detail panel">Hide</button>
+                    <p class="eyebrow" id="detail-meta">Perception · Chain</p>
+                    <h2 id="detail-name">Semantic Compaction</h2>
+                    <p id="detail-intro">Choose a pattern on the left.</p>
+                    <h3>Engineering ancestor</h3>
+                    <p id="detail-ancestor"></p>
+                    <h3>Original engineering problem</h3>
+                    <p id="detail-problem"></p>
+                    <h3>Design insight</h3>
+                    <p id="detail-insight"></p>
+                    <div id="detail-tags" class="ancestor-tag-row"></div>
+                    <p class="ancestor-more"><a href="#ancestor-catalog">More: full ancestor catalog</a></p>
+                </aside>
+            </div>
+        </section>
+
+        <section id="distributed-lineage" class="block">
+            <p class="eyebrow">Distributed-systems era</p>
+            <h2>Canonical distributed patterns and their Agent descendants</h2>
+            <p class="lede">
+                GoF assumed a single process. The distributed era replaced that with a different operating assumption:
+                failure is the default, not the exception. The patterns below are the ones that made it into
+                production handbooks, vendor APIs and platform engineering. Each one has at least one Agent-era
+                descendant — sometimes a direct port, sometimes a reframing.
+            </p>
+            <div id="distributed-table-wrap" class="lineage-table-wrap"></div>
+        </section>
+
+        <section id="ancestor-catalog" class="block">
+            <p class="eyebrow">More</p>
+            <h2>Ancestor catalog</h2>
+            <p class="lede">
+                This is the larger vocabulary behind the hover cards. The point is not to claim one-to-one
+                inheritance. The point is to help an Agent architect ask: which old engineering problem is this
+                new Agent problem secretly replaying?
+            </p>
+            <div id="ancestor-catalog-grid" class="ancestor-catalog-grid"></div>
+        </section>
+
+        <section class="block">
+            <h2>Sources and further reading</h2>
+            <ol class="source-grid">
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Cache-Aside pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Pipes and Filters pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Priority Queue pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Competing Consumers pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/saga" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Saga distributed transactions pattern</a></li>
+                <li><a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="noopener">Martin Fowler: Circuit Breaker</a></li>
+                <li><a href="https://www.martinfowler.com/eaaDev/EventSourcing.html" target="_blank" rel="noopener">Martin Fowler: Event Sourcing</a></li>
+                <li><a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">OpenTelemetry documentation</a></li>
+                <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html" target="_blank" rel="noopener">Apache Airflow documentation: DAGs</a></li>
+                <li><a href="https://docs.temporal.io/" target="_blank" rel="noopener">Temporal documentation</a></li>
+                <li><a href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/" target="_blank" rel="noopener">Google Research: MapReduce</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/routine-vacuuming.html" target="_blank" rel="noopener">PostgreSQL documentation: Routine Vacuuming</a></li>
+                <li><a href="https://www.nist.gov/publications/role-based-access-controls" target="_blank" rel="noopener">NIST: Role-Based Access Controls</a></li>
+                <li><a href="https://www.ibm.com/think/topics/etl" target="_blank" rel="noopener">IBM: What is ETL?</a></li>
+                <li><a href="https://lucene.apache.org/core/" target="_blank" rel="noopener">Apache Lucene Core</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/reference/core/beans/introduction.html" target="_blank" rel="noopener">Spring Framework: IoC Container</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/reference/core/aop.html" target="_blank" rel="noopener">Spring Framework: Aspect Oriented Programming</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/docs/6.1.7/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html" target="_blank" rel="noopener">Spring Framework: HandlerInterceptor</a></li>
+                <li><a href="https://www.iso.org/standard/62085.html" target="_blank" rel="noopener">ISO 9001:2015 Quality management systems</a></li>
+                <li><a href="https://kernel.org/doc/html/v6.0/scheduler/sched-design-CFS.html" target="_blank" rel="noopener">Linux Kernel documentation: CFS Scheduler</a></li>
+                <li><a href="https://docs.kernel.org/mm/page_tables.html" target="_blank" rel="noopener">Linux Kernel documentation: Page Tables</a></li>
+                <li><a href="https://www.oracle.com/java/technologies/javase/hotspot-garbage-collection.html" target="_blank" rel="noopener">Oracle: Java HotSpot Garbage Collection</a></li>
+                <li><a href="https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html" target="_blank" rel="noopener">Stanford IR Book: Relevance feedback and query expansion</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/wal-intro.html" target="_blank" rel="noopener">PostgreSQL documentation: Write-Ahead Logging</a></li>
+                <li><a href="https://sre.google/sre-book/postmortem-culture/" target="_blank" rel="noopener">Google SRE Book: Postmortem Culture</a></li>
+                <li><a href="https://aws.amazon.com/documentation-overview/elasticloadbalancing/" target="_blank" rel="noopener">AWS: Elastic Load Balancing documentation</a></li>
+                <li><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank" rel="noopener">Martin Fowler: Test-Driven Development</a></li>
+                <li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews" target="_blank" rel="noopener">GitHub Docs: Pull request reviews</a></li>
+                <li><a href="https://spark.apache.org/docs/latest/index.html" target="_blank" rel="noopener">Apache Spark documentation</a></li>
+                <li><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=152164" target="_blank" rel="noopener">NIST SP 800-115: Technical Guide to Information Security Testing and Assessment</a></li>
+                <li><a href="https://www.atlassian.com/software/confluence/templates/devops-runbook" target="_blank" rel="noopener">Atlassian: DevOps runbook template</a></li>
+                <li><a href="https://www.sec.gov/rule-release/33-8212" target="_blank" rel="noopener">SEC: Internal Control over Financial Reporting rules</a></li>
+                <li><a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach-banking-sector.html" target="_blank" rel="noopener">FATF: Risk-Based Approach for the Banking Sector</a></li>
+                <li><a href="https://kubernetes.io/docs/concepts/architecture/self-healing/" target="_blank" rel="noopener">Kubernetes: Self-Healing</a></li>
+                <li><a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/" target="_blank" rel="noopener">Kubernetes: Namespaces</a></li>
+                <li><a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">Netflix Hystrix</a></li>
+                <li><a href="https://github.com/prometheus/blackbox_exporter" target="_blank" rel="noopener">Prometheus Blackbox Exporter</a></li>
+                <li><a href="https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf" target="_blank" rel="noopener">Pirolli and Card: Information Foraging</a></li>
+                <li><a href="https://refactoring.guru/design-patterns/chain-of-responsibility/python/example" target="_blank" rel="noopener">Refactoring.Guru: Chain of Responsibility</a></li>
+                <li><a href="https://refactoring.guru/design-patterns/command" target="_blank" rel="noopener">Refactoring.Guru: Command pattern</a></li>
+            </ol>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const ancestorLinks = {
+            "Mark-compact garbage collection and database vacuuming": "https://www.postgresql.org/docs/current/routine-vacuuming.html",
+            "Priority queues, dispatchers and cost-aware routing": "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue",
+            "ETL, data integration and feature fusion": "https://www.ibm.com/think/topics/etl",
+            "Information foraging and progressive drill-down": "https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf",
+            "Information retrieval and data pipelines": "https://www.ibm.com/think/topics/etl",
+            "Cache hierarchy and cache-aside": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside",
+            "Workflow state, checkpoints and durable execution": "https://docs.temporal.io/",
+            "Incident postmortems and event logs": "https://www.martinfowler.com/eaaDev/EventSourcing.html",
+            "Chain of Responsibility and structured derivation": "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example",
+            "Cost-based query planning and request routing": "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue",
+            "Speculative execution, ensembles and MapReduce": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/",
+            "Scientific method, debugging loops and TDD": "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html",
+            "Unix pipelines and Pipes-and-Filters": "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters",
+            "Command pattern, plugin registries and brokers": "https://refactoring.guru/design-patterns/command",
+            "DAG schedulers and workflow orchestration": "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html",
+            "Input validation, sandboxing and policy enforcement points": "https://www.nist.gov/publications/role-based-access-controls",
+            "Peer review, compiler diagnostics and lint-test feedback": "https://opentelemetry.io/docs/",
+            "Plugins, packages and operational runbooks": "https://refactoring.guru/design-patterns/command",
+            "Control loops, retries and circuit breakers": "https://martinfowler.com/bliki/CircuitBreaker.html",
+            "Case-based reasoning and replayable incident knowledge": "https://www.martinfowler.com/eaaDev/EventSourcing.html",
+            "Chain of Responsibility and workflow handoff": "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example",
+            "Scatter-gather, fork-join and MapReduce": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/",
+            "Red-team review and independent verification": "https://opentelemetry.io/docs/",
+            "Manager-worker, supervisors and competing consumers": "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers",
+            "RBAC, change control and human-in-the-loop review": "https://www.nist.gov/publications/role-based-access-controls",
+            "Two-phase commit, sagas and staged rollout": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga",
+            "APM, distributed tracing and OpenTelemetry": "https://opentelemetry.io/docs/",
+            "Bulkheads, circuit breakers and least privilege": "https://martinfowler.com/bliki/CircuitBreaker.html"
+        };
+
+        const lineageRows = [
+            ["Context Triage", "Context × Route", "Priority Queue · LRU", "OS process scheduling · cache replacement", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+            ["Semantic Compaction", "Context × Chain", "Mark-and-Sweep GC", "JVM memory compaction", "https://www.postgresql.org/docs/current/routine-vacuuming.html"],
+            ["Progressive Discovery", "Context × Orchestrate", "Information Foraging", "Search-engine query refinement", "https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf"],
+            ["Multi-Modal Fusion", "Context × Parallel", "ETL · MapReduce", "Data-warehouse multi-source aggregation", "https://www.ibm.com/think/topics/etl"],
+            ["Hierarchical Retention", "Memory × Route", "CPU cache hierarchy (L1/L2/L3)", "Virtual memory paging", "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"],
+            ["RAG Pipeline", "Memory × Chain", "Inverted index · full-text retrieval", "Search engines such as Lucene", "https://lucene.apache.org/core/"],
+            ["Progress Tracking", "Memory × Orchestrate", "WAL · Event Sourcing", "Database transaction log", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["Failure Journals", "Memory × Loop", "Postmortem · fault tree", "SRE / learning organization", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["Chain-of-Thought", "Reasoning × Chain", "Recursive algorithms · divide and conquer", "Stepwise mathematical proof", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+            ["Complexity-Based Routing", "Reasoning × Route", "Load balancing · tiered pricing", "CDN / elastic compute", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+            ["Parallel Exploration", "Reasoning × Parallel", "BFS · MapReduce", "Self-consistency / Monte Carlo", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+            ["Iterative Hypothesis", "Reasoning × Loop", "Popper falsification", "Scientific method / TDD", "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"],
+            ["Tool Dispatch", "Action × Route", "Spring IoC · Dependency Injection", "Dependency injection / service discovery", "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html"],
+            ["Plan-and-Execute", "Action × Orchestrate", "Project management · Gantt chart", "WBS / Saga", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["Prompt Chaining", "Action × Chain", "Unix pipe · ETL", "Pipeline engineering", "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters"],
+            ["Guardrail Sandwich", "Action × Hierarchy", "AOP · aspect-oriented programming", "Interceptor / filter chain", "https://docs.spring.io/spring-framework/reference/core/aop.html"],
+            ["Generator-Critic", "Reflection × Chain", "Canary deployment · editorial loop", "Code review / PR workflow", "https://opentelemetry.io/docs/"],
+            ["Skill Package", "Reflection × Route", "SOP · standardized operations", "ISO 9001 / teaching knowledge base", "https://www.iso.org/standard/62085.html"],
+            ["Experience Replay", "Reflection × Hierarchy", "Reinforcement-learning experience replay · WAL", "Case library / retrospective", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["Self-Heal Loop", "Reflection × Loop", "TDD · CI/CD self-healing", "Test-driven repair / Kubernetes self-healing", "https://kubernetes.io/docs/concepts/architecture/self-healing/"],
+            ["Hierarchical Delegation", "Collaboration × Hierarchy", "Microservices · organization hierarchy", "Company OKR / manager-IC split", "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers"],
+            ["Fan-Out / Gather", "Collaboration × Parallel", "MapReduce · Spark", "Big-data ETL", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+            ["Adversarial Review", "Collaboration × Loop", "Peer review · Red Team", "Academic review / penetration testing", "https://opentelemetry.io/docs/"],
+            ["Handoff Chain", "Collaboration × Chain", "Tiered customer support", "ITIL / Runbook", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+            ["Approval Gate", "Governance × Route", "RBAC · change approval", "GRC / SOX / dual financial sign-off", "https://www.nist.gov/publications/role-based-access-controls"],
+            ["Blast Radius Control", "Governance × Hierarchy", "Circuit breaker · sandbox", "Hystrix / Kubernetes namespace", "https://github.com/Netflix/Hystrix"],
+            ["Progressive Commitment", "Governance × Parallel", "Permission evolution · KYC tiers", "Financial real-name verification tiers", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["Observability Harness", "Governance × Orchestrate", "OpenTelemetry · APM", "Datadog / black-box monitoring", "https://opentelemetry.io/docs/"]
+        ];
+        const problemLinks = {
+            "OS process scheduling · cache replacement": "https://kernel.org/doc/html/v6.0/scheduler/sched-design-CFS.html",
+            "JVM memory compaction": "https://www.oracle.com/java/technologies/javase/hotspot-garbage-collection.html",
+            "Search-engine query refinement": "https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html",
+            "Data-warehouse multi-source aggregation": "https://www.ibm.com/think/topics/etl",
+            "Virtual memory paging": "https://docs.kernel.org/mm/page_tables.html",
+            "Search engines such as Lucene": "https://lucene.apache.org/core/",
+            "Database transaction log": "https://www.postgresql.org/docs/current/wal-intro.html",
+            "SRE / learning organization": "https://sre.google/sre-book/postmortem-culture/",
+            "Stepwise mathematical proof": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+            "CDN / elastic compute": "https://aws.amazon.com/documentation-overview/elasticloadbalancing/",
+            "Self-consistency / Monte Carlo": "https://www.ibm.com/think/topics/monte-carlo-simulation",
+            "Scientific method / TDD": "https://martinfowler.com/bliki/TestDrivenDevelopment.html",
+            "Dependency injection / service discovery": "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html",
+            "WBS / Saga": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga",
+            "Pipeline engineering": "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters",
+            "Interceptor / filter chain": "https://docs.spring.io/spring-framework/docs/6.1.7/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html",
+            "Code review / PR workflow": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+            "ISO 9001 / teaching knowledge base": "https://www.iso.org/standard/62085.html",
+            "Case library / retrospective": "https://sre.google/sre-book/postmortem-culture/",
+            "Test-driven repair / Kubernetes self-healing": "https://kubernetes.io/docs/concepts/architecture/self-healing/",
+            "Company OKR / manager-IC split": "https://martinfowler.com/articles/distributed-objects-microservices.html",
+            "Big-data ETL": "https://spark.apache.org/docs/latest/index.html",
+            "Academic review / penetration testing": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=152164",
+            "ITIL / Runbook": "https://www.atlassian.com/software/confluence/templates/devops-runbook",
+            "GRC / SOX / dual financial sign-off": "https://www.sec.gov/rule-release/33-8212",
+            "Hystrix / Kubernetes namespace": "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+            "Financial real-name verification tiers": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach-banking-sector.html",
+            "Datadog / black-box monitoring": "https://github.com/prometheus/blackbox_exporter"
+        };
+
+        const patterns = [
+            {
+                name: "Semantic Compaction",
+                meta: "Perception · Chain",
+                ancestor: "Mark-compact garbage collection and database vacuuming",
+                intro: "Turns a long, noisy context into a shorter representation that still preserves the commitments, entities and evidence needed for the next model call.",
+                ancestorIntro: "Memory managers compact live objects; PostgreSQL VACUUM reclaims reusable space after rows become obsolete. The Agent version reclaims attention budget instead of disk space.",
+                insight: "The useful question is not how much text can fit. It is which semantic objects must remain live after compression.",
+                tags: ["compaction", "attention budget", "traceability"]
+            },
+            {
+                name: "Context Triage",
+                meta: "Perception · Route",
+                ancestor: "Priority queues, dispatchers and cost-aware routing",
+                intro: "Classifies incoming evidence by urgency, relevance, uncertainty and risk before deciding what enters the model window.",
+                ancestorIntro: "Priority queues and request routers make scarcity explicit: not every item deserves the same latency, worker or resource class.",
+                insight: "Most bad Agent answers begin before reasoning starts: the wrong evidence entered the context first.",
+                tags: ["priority", "routing", "scarcity"]
+            },
+            {
+                name: "Multi-Modal Fusion",
+                meta: "Perception · Parallel",
+                ancestor: "ETL, data integration and feature fusion",
+                intro: "Collects text, images, tables, audio or structured data in parallel and merges them into a coherent state for reasoning.",
+                ancestorIntro: "ETL combines, cleans and organizes data from multiple sources. Multi-modal fusion does the same for model-ready perception.",
+                insight: "Fusion is not just concatenation. Each channel needs a normal form, confidence score and conflict rule.",
+                tags: ["ETL", "normalization", "evidence fusion"]
+            },
+            {
+                name: "Progressive Discovery",
+                meta: "Perception · Orchestrate",
+                ancestor: "Information foraging and progressive drill-down",
+                intro: "Starts broad, follows promising information scent, then narrows the search path as evidence accumulates.",
+                ancestorIntro: "Information foraging theory models search as a trade-off between expected information value and navigation cost.",
+                insight: "Good Agent exploration behaves less like reading everything and more like an analyst following scent under budget.",
+                tags: ["foraging", "drill-down", "search"]
+            },
+            {
+                name: "RAG Pipeline",
+                meta: "Memory · Chain",
+                ancestor: "Information retrieval and data pipelines",
+                intro: "Retrieves external knowledge, ranks or filters it, then injects grounded evidence into generation.",
+                ancestorIntro: "Classic IR separates indexing, retrieval, ranking and presentation. RAG turns that pipeline into a runtime memory surface for the model.",
+                insight: "The decisive design choice is where to put judgment: retrieval, reranking, prompt assembly, or post-checking.",
+                tags: ["retrieval", "ranking", "grounding"]
+            },
+            {
+                name: "Hierarchical Retention",
+                meta: "Memory · Route",
+                ancestor: "Cache hierarchy and cache-aside",
+                intro: "Routes facts into working memory, short-term notes, long-term stores or procedural memory according to reuse value.",
+                ancestorIntro: "Cache-aside reads from cache first, falls back to the source, then populates the cache. Memory hierarchy adds levels with different cost and freshness.",
+                insight: "Agent memory fails when every memory is treated as equally durable, equally trusted and equally cheap.",
+                tags: ["cache", "tiering", "freshness"]
+            },
+            {
+                name: "Progress Tracking",
+                meta: "Memory · Orchestrate",
+                ancestor: "Workflow state, checkpoints and durable execution",
+                intro: "Keeps an explicit task ledger so long-running work can pause, resume, inspect progress and avoid repeating completed steps.",
+                ancestorIntro: "Workflow engines and durable execution platforms preserve execution state so work can continue after interruption or failure.",
+                insight: "A todo file is not clerical overhead. In an Agent harness, it is the visible working memory of the run.",
+                tags: ["checkpoint", "workflow state", "resume"]
+            },
+            {
+                name: "Failure Journals",
+                meta: "Memory · Loop",
+                ancestor: "Incident postmortems and event logs",
+                intro: "Records failures, root causes, attempted fixes and prevention rules so future runs can improve instead of repeating the same mistake.",
+                ancestorIntro: "Event logs preserve how state changed; incident reviews preserve how judgment failed. Failure journals bring both into Agent memory.",
+                insight: "The system becomes more competent only if the lesson is stored in a form the next run can actually retrieve and apply.",
+                tags: ["postmortem", "event log", "learning"]
+            },
+            {
+                name: "Chain-of-Thought",
+                meta: "Reasoning · Chain",
+                ancestor: "Chain of Responsibility and structured derivation",
+                intro: "Makes intermediate reasoning steps explicit enough for the system to structure, inspect or hand over the decision path.",
+                ancestorIntro: "Chain of Responsibility passes a request along handlers; structured derivation passes a problem through named mental operators.",
+                insight: "The value is not exposing private prose. The value is giving reasoning a shape that can be constrained and checked.",
+                tags: ["sequence", "derivation", "checkability"]
+            },
+            {
+                name: "Complexity-Based Routing",
+                meta: "Reasoning · Route",
+                ancestor: "Cost-based query planning and request routing",
+                intro: "Sends easy tasks to cheap paths and difficult or risky tasks to stronger models, richer tools or human review.",
+                ancestorIntro: "Query planners and routers choose execution paths based on expected cost, selectivity and capacity.",
+                insight: "Model selection is architecture, not procurement. The routing policy is where cost, latency and quality become explicit.",
+                tags: ["model routing", "cost", "latency"]
+            },
+            {
+                name: "Parallel Exploration",
+                meta: "Reasoning · Parallel",
+                ancestor: "Speculative execution, ensembles and MapReduce",
+                intro: "Runs several reasoning paths at once, then compares, votes, merges or selects the most robust answer.",
+                ancestorIntro: "MapReduce showed how to spread independent work across machines and gather the result. Speculative execution spends extra compute to reduce uncertainty.",
+                insight: "Parallelism is useful when disagreement is diagnostic, not when it simply multiplies the same blind spot.",
+                tags: ["fan-out", "self-consistency", "MapReduce"]
+            },
+            {
+                name: "Iterative Hypothesis",
+                meta: "Reasoning · Loop",
+                ancestor: "Scientific method, debugging loops and TDD",
+                intro: "Forms a hypothesis, tests it against evidence, revises the explanation and repeats until the confidence threshold is met.",
+                ancestorIntro: "Debugging and test-driven development both cycle through guess, experiment, feedback and revision.",
+                insight: "The loop works only when each iteration changes the belief state, not merely rephrases the same guess.",
+                tags: ["test", "revise", "belief state"]
+            },
+            {
+                name: "Prompt Chaining",
+                meta: "Action · Chain",
+                ancestor: "Unix pipelines and Pipes-and-Filters",
+                intro: "Decomposes a task into ordered prompts where each step transforms an artifact for the next step.",
+                ancestorIntro: "Pipes-and-Filters decomposes processing into reusable filters connected by pipes. Prompt chaining makes each model call a filter.",
+                insight: "A good chain has typed intermediate artifacts; otherwise the next prompt inherits vague text instead of usable state.",
+                tags: ["pipeline", "filter", "artifact"]
+            },
+            {
+                name: "Tool Dispatch",
+                meta: "Action · Route",
+                ancestor: "Command pattern, plugin registries and brokers",
+                intro: "Chooses a tool by intent, schema and policy, then calls it through a controlled interface.",
+                ancestorIntro: "Command turns a request into an executable object; plugin registries expose capabilities without hard-coding every implementation.",
+                insight: "Tool use becomes reliable when the action surface is typed, observable and policy-checked.",
+                tags: ["command", "registry", "schema"]
+            },
+            {
+                name: "Plan-and-Execute",
+                meta: "Action · Orchestrate",
+                ancestor: "DAG schedulers and workflow orchestration",
+                intro: "Builds a plan first, then executes steps while updating state, dependencies and exceptions.",
+                ancestorIntro: "Airflow DAGs and workflow engines make dependencies explicit so orchestration can be tested, resumed and visualized.",
+                insight: "Plans are useful when they are executable control structures, not decorative outlines before action.",
+                tags: ["DAG", "workflow", "orchestration"]
+            },
+            {
+                name: "Guardrail Sandwich",
+                meta: "Action · Hierarchy",
+                ancestor: "Input validation, sandboxing and policy enforcement points",
+                intro: "Wraps a risky action with pre-checks, constrained execution and post-checks before results are released.",
+                ancestorIntro: "Security architecture has long used validation, containment and enforcement points around untrusted operations.",
+                insight: "The guardrail is strongest when it surrounds the action path, not when it appears as a final disclaimer.",
+                tags: ["validation", "sandbox", "policy"]
+            },
+            {
+                name: "Generator-Critic",
+                meta: "Reflection · Chain",
+                ancestor: "Peer review, compiler diagnostics and lint-test feedback",
+                intro: "Separates drafting from critique so one role produces and another role checks for quality, gaps and violations.",
+                ancestorIntro: "Engineering review systems improve output by making feedback a first-class stage rather than an afterthought.",
+                insight: "The critic must have criteria and authority; otherwise it becomes another generator with a judgmental tone.",
+                tags: ["review", "diagnostics", "quality gate"]
+            },
+            {
+                name: "Skill Package",
+                meta: "Reflection · Route",
+                ancestor: "Plugins, packages and operational runbooks",
+                intro: "Turns a successful repeated workflow into a reusable package of instructions, tools, constraints and examples.",
+                ancestorIntro: "Package managers distribute code; runbooks distribute operational procedure. Skill packages distribute repeatable Agent behavior.",
+                insight: "A skill is useful when it captures the decision policy, not just the happy-path steps.",
+                tags: ["package", "runbook", "reuse"]
+            },
+            {
+                name: "Self-Heal Loop",
+                meta: "Reflection · Loop",
+                ancestor: "Control loops, retries and circuit breakers",
+                intro: "Detects failure, attempts repair, reruns validation and stops when recovery is unlikely or unsafe.",
+                ancestorIntro: "Circuit breakers stop cascading failure after thresholds; control loops adjust behavior from feedback.",
+                insight: "Self-healing needs a stop condition. Infinite repair is just failure with better vocabulary.",
+                tags: ["retry", "threshold", "recovery"]
+            },
+            {
+                name: "Experience Replay",
+                meta: "Reflection · Hierarchy",
+                ancestor: "Case-based reasoning and replayable incident knowledge",
+                intro: "Revisits previous traces, decisions and outcomes to extract reusable heuristics for similar future tasks.",
+                ancestorIntro: "Replay systems preserve enough history to reconstruct behavior; case-based reasoning solves new problems by retrieving old cases.",
+                insight: "Replay becomes powerful when traces are structured as examples, counterexamples and boundary conditions.",
+                tags: ["trace", "case memory", "retrospective"]
+            },
+            {
+                name: "Handoff Chain",
+                meta: "Collaboration · Chain",
+                ancestor: "Chain of Responsibility and workflow handoff",
+                intro: "Passes work between specialized agents in a fixed sequence, with each agent adding state or making a decision.",
+                ancestorIntro: "Workflow handoff and Chain of Responsibility both manage sequential responsibility without giving one component every concern.",
+                insight: "The risk is context loss at the boundary; the design work is the handoff contract.",
+                tags: ["handoff", "contract", "sequence"]
+            },
+            {
+                name: "Fan-Out / Gather",
+                meta: "Collaboration · Parallel",
+                ancestor: "Scatter-gather, fork-join and MapReduce",
+                intro: "Splits a task into parallel subtasks, then merges results through voting, synthesis or conflict resolution.",
+                ancestorIntro: "Scatter-gather and MapReduce separate independent local work from a later aggregation step.",
+                insight: "The gather step is the architecture. Without a merge rule, fan-out just creates more text to read.",
+                tags: ["scatter-gather", "merge", "parallel"]
+            },
+            {
+                name: "Adversarial Review",
+                meta: "Collaboration · Loop",
+                ancestor: "Red-team review and independent verification",
+                intro: "Assigns another agent to attack assumptions, search for counterevidence and pressure-test the proposed output.",
+                ancestorIntro: "Security red teams and independent verification deliberately introduce opposition to expose hidden defects.",
+                insight: "Adversarial review is valuable only when disagreement can block or change the answer.",
+                tags: ["red team", "challenge", "verification"]
+            },
+            {
+                name: "Hierarchical Delegation",
+                meta: "Collaboration · Hierarchy",
+                ancestor: "Manager-worker, supervisors and competing consumers",
+                intro: "A coordinator decomposes work, delegates to specialist workers, integrates results and controls escalation.",
+                ancestorIntro: "Manager-worker systems and competing consumers distribute work while preserving coordination and ownership.",
+                insight: "Delegation scales work, but only if ownership, reporting format and merge authority are explicit.",
+                tags: ["manager-worker", "supervision", "ownership"]
+            },
+            {
+                name: "Approval Gate",
+                meta: "Governance · Route",
+                ancestor: "RBAC, change control and human-in-the-loop review",
+                intro: "Routes actions through automatic approval, human review or rejection based on authority, risk and evidence quality.",
+                ancestorIntro: "RBAC mediates access through roles; change-control gates require approval before high-impact changes proceed.",
+                insight: "The gate is not a brake. It is how the system states who has authority under which risk condition.",
+                tags: ["RBAC", "authority", "human review"]
+            },
+            {
+                name: "Progressive Commitment",
+                meta: "Governance · Parallel",
+                ancestor: "Two-phase commit, sagas and staged rollout",
+                intro: "Lets the system earn permission in stages: propose, simulate, dry-run, partially execute, then commit.",
+                ancestorIntro: "Sagas coordinate local transactions with compensation; staged rollout expands commitment only after evidence improves.",
+                insight: "For high-risk Agent action, the design question is not yes/no. It is what smaller commitment can be made first.",
+                tags: ["saga", "staged rollout", "compensation"]
+            },
+            {
+                name: "Observability Harness",
+                meta: "Governance · Orchestrate",
+                ancestor: "APM, distributed tracing and OpenTelemetry",
+                intro: "Captures traces, tool calls, prompts, outputs, latency, cost, policy checks and drift signals around Agent runs.",
+                ancestorIntro: "OpenTelemetry standardizes telemetry such as traces, metrics and logs. The Agent harness extends that idea to reasoning and action traces.",
+                insight: "If an Agent cannot be inspected after it acts, it cannot be responsibly improved before it acts again.",
+                tags: ["traces", "metrics", "logs"]
+            },
+            {
+                name: "Blast Radius Control",
+                meta: "Governance · Hierarchy",
+                ancestor: "Bulkheads, circuit breakers and least privilege",
+                intro: "Limits how far a bad decision, failed tool call or compromised permission can spread.",
+                ancestorIntro: "Bulkheads isolate failure domains; circuit breakers stop calls after failure thresholds; least privilege limits authority by default.",
+                insight: "Autonomy should be granted in compartments. A capable Agent without compartments is a large failure domain.",
+                tags: ["bulkhead", "least privilege", "containment"]
+            }
+        ];
+
+        const catalog = [
+            ["Cache hierarchy / Cache-Aside", "Treats memory as tiers with different cost, freshness and latency. Useful for Hierarchical Retention and RAG memory design."],
+            ["Priority Queue", "Makes resource scarcity explicit by ordering work according to urgency, value or risk. The ancestor of Context Triage and escalation routing."],
+            ["Pipes and Filters", "Splits processing into reusable transformations connected by typed artifacts. The ancestor of Prompt Chaining and many SDD pipelines."],
+            ["Command Pattern", "Encapsulates a request as an executable object. Tool Dispatch is the Agent-era version with schemas, permissions and telemetry."],
+            ["Chain of Responsibility", "Passes responsibility along handlers until one can act. It explains Handoff Chain and some reasoning-chain structures."],
+            ["Workflow DAG", "Models dependencies as a graph. Plan-and-Execute becomes more reliable when it borrows DAG discipline."],
+            ["Durable Execution", "Persists workflow progress across failures. Progress Tracking borrows this idea even when implemented as a simple ledger."],
+            ["Event Sourcing", "Stores state changes as events that can be replayed. Useful for Failure Journals, auditability and recoverable Agent runs."],
+            ["Saga / Compensation", "Breaks distributed work into local commitments plus compensating actions. Progressive Commitment adapts this to risky Agent actions."],
+            ["RBAC", "Mediates authority through roles. Approval Gate inherits this concern and adds evidence-quality conditions."],
+            ["Bulkhead", "Isolates failure domains. Blast Radius Control applies it to permissions, tools, data scopes and deployment stages."],
+            ["Circuit Breaker", "Trips after repeated failure and blocks further calls. Self-Heal Loop and Blast Radius Control both need this stop condition."],
+            ["OpenTelemetry", "A common vocabulary for traces, metrics and logs. Observability Harness extends that vocabulary to prompts, tools and model decisions."],
+            ["MapReduce", "Separates parallel map work from reduce aggregation. Fan-Out / Gather and Parallel Exploration reuse this shape."],
+            ["Competing Consumers", "Multiple workers consume from a shared queue. Hierarchical Delegation borrows the scaling idea but adds explicit ownership."],
+            ["ETL", "Extracts, transforms and loads data from multiple sources. Multi-Modal Fusion adapts this discipline to model input surfaces."],
+            ["Information Foraging", "Treats search as value under cost. Progressive Discovery uses it to decide what to inspect next."],
+            ["Postmortem / Runbook", "Turns operational experience into reusable procedure. Failure Journals and Skill Packages are the Agent equivalent."],
+            ["Compiler / Linter Feedback", "Separates generation from diagnostic feedback. Generator-Critic borrows this production/critique split."],
+            ["Sandbox / Policy Enforcement Point", "Wraps untrusted execution with checks and limits. Guardrail Sandwich makes those checks a visible architecture layer."]
+        ];
+
+        const distributedRows = [
+            // [Distributed pattern, Original problem, Agent descendant, Industrial example, link]
+            ["Two-Phase Commit (Gray 1978)", "Atomic commit across multiple nodes", "Approval Gate (atomic human sign-off on irreversible actions)", "Database XA transactions", "https://en.wikipedia.org/wiki/Two-phase_commit_protocol"],
+            ["Saga (Garcia-Molina, SIGMOD 1987)", "Long-running transactions without two-phase commit", "Plan-and-Execute · Progressive Commitment", "Temporal · AWS Step Functions", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["Retry with Exponential Backoff (Jacobson, TCP 1988)", "Transient failure recovery without thundering herd", "Self-Heal Loop · Iterative Hypothesis", "gRPC · AWS SDK retry policy", "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"],
+            ["Paxos / Raft Consensus (Lamport 1998 / Ongaro 2014)", "Agreement on shared state under partial failure", "Adversarial Review · multi-agent voting (loose analogy)", "etcd · Consul · TiKV", "https://raft.github.io/"],
+            ["Strangler Fig (Martin Fowler 2004)", "Incremental replacement of legacy systems", "Migration pattern · not mapped to a specific Agent pattern in the 28", "Microservices migration playbooks", "https://martinfowler.com/bliki/StranglerFigApplication.html"],
+            ["Event Sourcing (~2005, popularized by Fowler)", "Auditable replayable state changes", "Failure Journals · Experience Replay", "Kafka + EventStoreDB", "https://martinfowler.com/eaaDev/EventSourcing.html"],
+            ["Circuit Breaker (Nygard, Release It! 2007)", "Stop cascading failure during partial outage", "Self-Heal Loop (stop condition) · Blast Radius Control", "Hystrix · Resilience4j · Sentinel", "https://martinfowler.com/bliki/CircuitBreaker.html"],
+            ["Bulkhead Isolation (Nygard 2007)", "Contain failure inside one compartment", "Blast Radius Control · Sub-agent isolation", "Thread-pool isolation in Hystrix", "https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead"],
+            ["Idempotency-Key (Stripe / AWS API convention, ~2010s)", "Safe retry of non-idempotent writes", "Approval Gate (human-in-the-loop on irreversible actions)", "Stripe payment API · AWS APIs", "https://stripe.com/docs/api/idempotent_requests"],
+            ["Rate Limiter / Token Bucket", "Resource exhaustion under load · noisy-neighbor protection", "Context Triage · Tool Dispatch (per-tool budget)", "Envoy · Cloudflare · API Gateway", "https://learn.microsoft.com/en-us/azure/architecture/patterns/rate-limiting-pattern"],
+            ["CQRS (Greg Young, ~2010)", "Separating read and write models for scalability", "Talker-Reasoner split (informal mapping)", "Axon Framework · EventStoreDB", "https://martinfowler.com/bliki/CQRS.html"],
+            ["Sharding / Partitioning", "Horizontal scaling beyond a single node", "Hierarchical Delegation · Fan-Out / Gather", "Cassandra · MongoDB · TiDB", "https://www.mongodb.com/docs/manual/sharding/"],
+            ["Reconciliation Loop (Kubernetes 2014)", "Declarative convergence: desired state ↔ observed state", "Iterative Hypothesis · the PRA loop itself", "Kubernetes controllers · Operators", "https://kubernetes.io/docs/concepts/architecture/controller/"],
+            ["Outbox Pattern (~2017)", "Atomic publish in a distributed transaction", "Progressive Commitment (commit then emit)", "Debezium · Eventuate", "https://microservices.io/patterns/data/transactional-outbox.html"],
+            ["Sidecar / Service Mesh (Istio · Linkerd, ~2017)", "Cross-cutting concerns out of business code", "Guardrail Sandwich · Observability Harness", "Istio · Linkerd · Envoy", "https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar"]
+        ];
+
+        const grid = document.getElementById("pattern-ancestor-grid");
+        const catalogGrid = document.getElementById("ancestor-catalog-grid");
+        const lineageTableWrap = document.getElementById("lineage-table-wrap");
+        const distributedTableWrap = document.getElementById("distributed-table-wrap");
+        const ancestorLayout = document.getElementById("ancestor-layout");
+        const closeAncestorPanel = document.getElementById("ancestor-panel-close");
+        const showAncestorPanel = document.getElementById("ancestor-panel-show");
+        const detailPanel = document.getElementById("ancestor-detail-panel");
+        const detail = {
+            meta: document.getElementById("detail-meta"),
+            name: document.getElementById("detail-name"),
+            intro: document.getElementById("detail-intro"),
+            ancestor: document.getElementById("detail-ancestor"),
+            problem: document.getElementById("detail-problem"),
+            insight: document.getElementById("detail-insight"),
+            tags: document.getElementById("detail-tags")
+        };
+
+        function setAncestorPanelClosed(isClosed) {
+            ancestorLayout.classList.toggle("ancestor-panel-closed", isClosed);
+            detailPanel.hidden = isClosed;
+            detailPanel.setAttribute("aria-hidden", String(isClosed));
+            showAncestorPanel.hidden = !isClosed;
+            showAncestorPanel.setAttribute("aria-expanded", String(!isClosed));
+            closeAncestorPanel.setAttribute("aria-expanded", String(!isClosed));
+        }
+
+        function linkAncestor(label) {
+            const href = ancestorLinks[label];
+            if (!href) return label;
+            return `<a href='${href}' target='_blank' rel='noopener'>${label}</a>`;
+        }
+
+        function showPattern(index) {
+            const item = patterns[index];
+            const row = lineageRows.find(([name]) => name === item.name || (item.name === "Complexity-Based Routing" && name === "Complexity-Based Routing"));
+            detail.meta.textContent = item.meta;
+            detail.name.textContent = item.name;
+            detail.intro.textContent = item.intro;
+            detail.ancestor.innerHTML = row ? `<a href='${row[4]}' target='_blank' rel='noopener'>${row[2]}</a>. ${item.ancestorIntro}` : linkAncestor(item.ancestor) + ". " + item.ancestorIntro;
+            if (row && problemLinks[row[3]]) {
+                detail.problem.innerHTML = `<a href='${problemLinks[row[3]]}' target='_blank' rel='noopener'>${row[3]}</a>`;
+            } else {
+                detail.problem.textContent = row ? row[3] : "See the full lineage table.";
+            }
+            detail.insight.textContent = item.insight;
+            detail.tags.innerHTML = item.tags.map(tag => `<span class="ancestor-tag">${tag}</span>`).join("");
+            document.querySelectorAll(".ancestor-pattern-card").forEach((card, cardIndex) => {
+                card.classList.toggle("active", cardIndex === index);
+            });
+        }
+
+        patterns.forEach((item, index) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "ancestor-pattern-card";
+            button.innerHTML = `<span class="pattern-name">${item.name}</span><span class="pattern-meta">${item.meta}</span><span class="pattern-ancestor">${item.ancestor}</span>`;
+            button.addEventListener("mouseenter", () => showPattern(index));
+            button.addEventListener("focus", () => showPattern(index));
+            button.addEventListener("click", () => showPattern(index));
+            grid.appendChild(button);
+        });
+
+        closeAncestorPanel.addEventListener("click", event => {
+            event.preventDefault();
+            setAncestorPanelClosed(true);
+            showAncestorPanel.focus();
+        });
+        showAncestorPanel.addEventListener("click", event => {
+            event.preventDefault();
+            setAncestorPanelClosed(false);
+            detailPanel.focus();
+        });
+        detailPanel.setAttribute("tabindex", "-1");
+        setAncestorPanelClosed(false);
+
+        lineageTableWrap.innerHTML = `
+            <table class="lineage-table">
+                <thead>
+                    <tr>
+                        <th>Agent pattern</th>
+                        <th>Dual-axis position</th>
+                        <th>Engineering ancestor</th>
+                        <th>Original engineering problem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${lineageRows.map(([name, position, ancestor, problem, href]) => `
+                        <tr>
+                            <td>${name}</td>
+                            <td class="position">${position}</td>
+                            <td><a href='${href}' target='_blank' rel='noopener'>${ancestor}</a></td>
+                            <td>${problemLinks[problem] ? `<a href='${problemLinks[problem]}' target='_blank' rel='noopener'>${problem}</a>` : problem}</td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        `;
+
+        distributedTableWrap.innerHTML = `
+            <table class="lineage-table">
+                <thead>
+                    <tr>
+                        <th>Distributed pattern</th>
+                        <th>Original engineering problem</th>
+                        <th>Agent descendant</th>
+                        <th>Industrial example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${distributedRows.map(([name, problem, descendant, example, href]) => `
+                        <tr>
+                            <td><a href='${href}' target='_blank' rel='noopener'>${name}</a></td>
+                            <td>${problem}</td>
+                            <td>${descendant}</td>
+                            <td>${example}</td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        `;
+
+        catalog.forEach(([title, body]) => {
+            const card = document.createElement("article");
+            card.className = "ancestor-catalog-card";
+            const link = Object.entries(ancestorLinks).find(([key]) => key.toLowerCase().includes(title.toLowerCase().split(" / ")[0].split(" ")[0]));
+            card.innerHTML = `<h3>${link ? `<a href='${link[1]}' target='_blank' rel='noopener'>${title}</a>` : title}</h3><p>${body}</p>`;
+            catalogGrid.appendChild(card);
+        });
+
+        showPattern(0);
+    </script>
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

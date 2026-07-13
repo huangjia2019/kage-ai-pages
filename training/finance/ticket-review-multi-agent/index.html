@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Ticket Review — Finance Agent Demo</title>
+    <meta name="description" content="A review pipeline where parser, quality inspector and knowledge matcher collaborate through structured state.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/finance/ticket-review-multi-agent/">
+    <meta property="og:title" content="Multi-Agent Ticket Review — Finance Agent Demo">
+    <meta property="og:description" content="A review pipeline where parser, quality inspector and knowledge matcher collaborate through structured state.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/finance/ticket-review-multi-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Finance Demo</p><h1>Multi-Agent Ticket Review</h1><p class="lede">A review pipeline where parser, quality inspector and knowledge matcher collaborate through structured state.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop2-ticket-review</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/finance/">Back to finance</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop2-pattern-blueprint.png" alt="Multi-Agent Ticket Review blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{
+  "title": "Interactive run · multi-agent ticket review",
+  "scenarios": [
+    {
+      "label": "Good ticket",
+      "summary": "Complete reproduction steps and no historical duplicate.",
+      "final": {
+        "verdict": "APPROVED",
+        "headline": "Ticket can move automatically",
+        "cards": [
+          [
+            "Score",
+            "95"
+          ],
+          [
+            "Route",
+            "Auto-approved"
+          ],
+          [
+            "Labels",
+            "none"
+          ],
+          [
+            "Review",
+            "No human review"
+          ]
+        ]
+      },
+      "steps": [
+        {
+          "name": "Raw Ticket",
+          "pattern": "Context Triage",
+          "log": "Ticket text, priority, component, and environment are captured as the work object.",
+          "state": {
+            "ticket_quality": "Good ticket",
+            "risk_hint": "low",
+            "raw_input": "support ticket text"
+          },
+          "output": "Complete reproduction steps and no historical duplicate."
+        },
+        {
+          "name": "Parser Agent",
+          "pattern": "Tool Dispatch",
+          "log": "Parser turns prose into structured JSON fields.",
+          "state": {
+            "structured_fields": [
+              "title",
+              "priority",
+              "component",
+              "environment",
+              "steps"
+            ],
+            "json_contract": true
+          },
+          "output": "Parser report emitted as JSON."
+        },
+        {
+          "name": "Quality Agent",
+          "pattern": "Adversarial Review",
+          "log": "Quality role challenges completeness, priority, reproduction steps, and evidence.",
+          "state": {
+            "quality_score": 95,
+            "missing_fields": []
+          },
+          "output": "Quality score: 95."
+        },
+        {
+          "name": "Knowledge Agent",
+          "pattern": "RAG Pipeline",
+          "log": "Knowledge role searches historical tickets and known incident patterns.",
+          "state": {
+            "historical_matches": [],
+            "duplicate_risk": false
+          },
+          "output": "Knowledge report attached historical evidence."
+        },
+        {
+          "name": "Merge Node",
+          "pattern": "Fan-out/Gather",
+          "log": "Parallel findings merge into one decision state.",
+          "state": {
+            "merged_score": 95,
+            "duplicate": false,
+            "route": "auto_approved"
+          },
+          "output": "Merge node selected route: auto_approved."
+        },
+        {
+          "name": "Human Review",
+          "pattern": "Approval Gate",
+          "log": "Risk tier decides auto-pass, revision, or human review.",
+          "state": {
+            "gate": "APPROVED",
+            "risk_tier": "low",
+            "review_required": false
+          },
+          "output": "Ticket can move automatically"
+        }
+      ]
+    },
+    {
+      "label": "Poor ticket",
+      "summary": "Missing reproduction steps, environment, and expected behavior.",
+      "final": {
+        "verdict": "NEEDS_HUMAN_REVIEW",
+        "headline": "Ticket needs clarification",
+        "cards": [
+          [
+            "Score",
+            "35"
+          ],
+          [
+            "Route",
+            "Human review"
+          ],
+          [
+            "Labels",
+            "needs-reproduction_steps"
+          ],
+          [
+            "Review",
+            "Required"
+          ]
+        ]
+      },
+      "steps": [
+        {
+          "name": "Raw Ticket",
+          "pattern": "Context Triage",
+          "log": "Ticket text, priority, component, and environment are captured as the work object.",
+          "state": {
+            "ticket_quality": "Poor ticket",
+            "risk_hint": "high",
+            "raw_input": "support ticket text"
+          },
+          "output": "Missing reproduction steps, environment, and expected behavior."
+        },
+        {
+          "name": "Parser Agent",
+          "pattern": "Tool Dispatch",
+          "log": "Parser turns prose into structured JSON fields.",
+          "state": {
+            "structured_fields": [
+              "title",
+              "priority",
+              "component",
+              "environment",
+              "steps"
+            ],
+            "json_contract": true
+          },
+          "output": "Parser report emitted as JSON."
+        },
+        {
+          "name": "Quality Agent",
+          "pattern": "Adversarial Review",
+          "log": "Quality role challenges completeness, priority, reproduction steps, and evidence.",
+          "state": {
+            "quality_score": 35,
+            "missing_fields": [
+              "reproduction_steps",
+              "environment",
+              "expected_behavior"
+            ]
+          },
+          "output": "Quality score: 35."
+        },
+        {
+          "name": "Knowledge Agent",
+          "pattern": "RAG Pipeline",
+          "log": "Knowledge role searches historical tickets and known incident patterns.",
+          "state": {
+            "historical_matches": [],
+            "duplicate_risk": false
+          },
+          "output": "Knowledge report attached historical evidence."
+        },
+        {
+          "name": "Merge Node",
+          "pattern": "Fan-out/Gather",
+          "log": "Parallel findings merge into one decision state.",
+          "state": {
+            "merged_score": 35,
+            "duplicate": false,
+            "route": "human_review"
+          },
+          "output": "Merge node selected route: human_review."
+        },
+        {
+          "name": "Human Review",
+          "pattern": "Approval Gate",
+          "log": "Risk tier decides auto-pass, revision, or human review.",
+          "state": {
+            "gate": "NEEDS_HUMAN_REVIEW",
+            "risk_tier": "high",
+            "review_required": true
+          },
+          "output": "Ticket needs clarification"
+        }
+      ]
+    },
+    {
+      "label": "Potential duplicate",
+      "summary": "Good structure, but similar to TICKET-1045 and marked P1.",
+      "final": {
+        "verdict": "NEEDS_HUMAN_REVIEW",
+        "headline": "Duplicate risk blocks auto-close",
+        "cards": [
+          [
+            "Score",
+            "85"
+          ],
+          [
+            "Route",
+            "Human review"
+          ],
+          [
+            "Labels",
+            "potential-duplicate"
+          ],
+          [
+            "Review",
+            "Required"
+          ]
+        ]
+      },
+      "steps": [
+        {
+          "name": "Raw Ticket",
+          "pattern": "Context Triage",
+          "log": "Ticket text, priority, component, and environment are captured as the work object.",
+          "state": {
+            "ticket_quality": "Potential duplicate",
+            "risk_hint": "medium",
+            "raw_input": "support ticket text"
+          },
+          "output": "Good structure, but similar to TICKET-1045 and marked P1."
+        },
+        {
+          "name": "Parser Agent",
+          "pattern": "Tool Dispatch",
+          "log": "Parser turns prose into structured JSON fields.",
+          "state": {
+            "structured_fields": [
+              "title",
+              "priority",
+              "component",
+              "environment",
+              "steps"
+            ],
+            "json_contract": true
+          },
+          "output": "Parser report emitted as JSON."
+        },
+        {
+          "name": "Quality Agent",
+          "pattern": "Adversarial Review",
+          "log": "Quality role challenges completeness, priority, reproduction steps, and evidence.",
+          "state": {
+            "quality_score": 85,
+            "missing_fields": []
+          },
+          "output": "Quality score: 85."
+        },
+        {
+          "name": "Knowledge Agent",
+          "pattern": "RAG Pipeline",
+          "log": "Knowledge role searches historical tickets and known incident patterns.",
+          "state": {
+            "historical_matches": [
+              "TICKET-1045"
+            ],
+            "duplicate_risk": true
+          },
+          "output": "Knowledge report attached historical evidence."
+        },
+        {
+          "name": "Merge Node",
+          "pattern": "Fan-out/Gather",
+          "log": "Parallel findings merge into one decision state.",
+          "state": {
+            "merged_score": 85,
+            "duplicate": true,
+            "route": "human_review"
+          },
+          "output": "Merge node selected route: human_review."
+        },
+        {
+          "name": "Human Review",
+          "pattern": "Approval Gate",
+          "log": "Risk tier decides auto-pass, revision, or human review.",
+          "state": {
+            "gate": "NEEDS_HUMAN_REVIEW",
+            "risk_tier": "medium",
+            "review_required": true
+          },
+          "output": "Duplicate risk blocks auto-close"
+        }
+      ]
+    }
+  ]
+}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Raw Ticket</h3><p>The input remains a messy operational object: text, priority, component, environment, and user signal.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Parser Agent</h3><p>The parser converts prose into structured JSON so the rest of the graph can reason on fields.</p><span class="pattern-chip">Tool Dispatch</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Quality Agent</h3><p>The quality role checks reproduction steps, environment, expected behavior, and evidence completeness.</p><span class="pattern-chip">Adversarial Review</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Knowledge Agent</h3><p>The knowledge role searches related tickets and detects duplicates or known incidents.</p><span class="pattern-chip">RAG Pipeline</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Merge Node</h3><p>Parallel findings are gathered into one decision state with score, risks, and routing reason.</p><span class="pattern-chip">Fan-out/Gather</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Human Review</h3><p>Weak, duplicate, or high-priority cases are escalated instead of auto-closed.</p><span class="pattern-chip">Approval Gate</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop2-ticket-review-terminal.png" alt="Three sample tickets: approved, needs human review, potential duplicate."><figcaption>Three sample tickets: approved, needs human review, potential duplicate.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Handoff Chain</td><td>Each agent owns one responsibility and passes a structured report.</td></tr>
+<tr><td>Fan-out/Gather</td><td>Quality and knowledge checks can run in parallel and merge later.</td></tr>
+<tr><td>Adversarial Review</td><td>A second role challenges ticket completeness and priority claims.</td></tr>
+<tr><td>RAG Pipeline</td><td>Historical ticket knowledge is retrieved as evidence, not guessed.</td></tr>
+<tr><td>Approval Gate</td><td>Risk tier determines auto-pass, revision, or human review.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Topology before agents</h3><p>Do not add agents first; decide whether work should be sequential, parallel, or review-gated.</p></article>
+<article class="insight-card"><h3>JSON is the interface</h3><p>The key collaboration surface is structured state, not free-form conversation.</p></article>
+<article class="insight-card"><h3>Risk routing is the product</h3><p>The system is useful because it decides what can move and what needs attention.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop2-ticket-review
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd src
+python main.py
+
+# optional visual walkthrough
+open ../visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop2-ticket-review/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop2-pattern-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

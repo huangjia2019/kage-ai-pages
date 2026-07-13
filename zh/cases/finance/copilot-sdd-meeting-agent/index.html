@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copilot + SDD 会议纪要 Agent — 金融 Agent 案例</title>
+    <meta name="description" content="一个规约驱动开发闭环：同一份规格约束提示、代码、验证和后续邮件草稿。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/finance/copilot-sdd-meeting-agent/">
+    <meta property="og:title" content="Copilot + SDD 会议纪要 Agent — 金融 Agent 案例">
+    <meta property="og:description" content="一个规约驱动开发闭环：同一份规格约束提示、代码、验证和后续邮件草稿。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/finance/copilot-sdd-meeting-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">金融 Demo</p><h1>Copilot + SDD 会议纪要 Agent</h1><p class="lede">一个规约驱动开发闭环：同一份规格约束提示、代码、验证和后续邮件草稿。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop3-copilot-demo</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/finance/">返回金融案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop3-pattern-blueprint.png" alt="Copilot + SDD 会议纪要 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{
+  "title": "Interactive run · Copilot + SDD meeting agent",
+  "scenarios": [
+    {
+      "label": "Compliance review meeting",
+      "summary": "Transcript contains AML monitoring actions, owners, and deadlines.",
+      "steps": [
+        {
+          "name": "Load meeting-agent spec",
+          "pattern": "Spec as Contract",
+          "log": "Loaded schema: summary, key_points, action_items, follow-up email.",
+          "state": {
+            "spec": "meeting-agent-spec.md",
+            "summary_limit": "100 words",
+            "min_key_points": 2,
+            "actions_need_owner": true
+          },
+          "output": "Copilot and runtime prompt now share one contract."
+        },
+        {
+          "name": "Generate implementation plan",
+          "pattern": "Plan-and-Execute",
+          "log": "Planned functions: generate_minutes(), validate_minutes(), generate_email().",
+          "state": {
+            "modules": [
+              "meeting_agent.py",
+              "main.py"
+            ],
+            "functions": [
+              "generate_minutes",
+              "validate_minutes",
+              "generate_email"
+            ]
+          },
+          "output": "Project structure follows the spec instead of a loose prompt."
+        },
+        {
+          "name": "Run prompt chain",
+          "pattern": "Prompt Chaining",
+          "log": "Extracted summary, key points, decisions, and action items from transcript.",
+          "state": {
+            "participants": 4,
+            "key_points": 4,
+            "action_items": 5,
+            "draft_email": true
+          },
+          "output": "Meeting minutes JSON generated."
+        },
+        {
+          "name": "Validate output",
+          "pattern": "Generator-Critic",
+          "log": "Checked summary length, owner coverage, topic count, and concrete deadlines.",
+          "state": {
+            "summary_length": 33,
+            "assignee_coverage": "all assigned",
+            "concrete_deadlines": true,
+            "quality_gate": "PASS"
+          },
+          "output": "Quality check passes against the same SDD spec."
+        },
+        {
+          "name": "Package reusable skill",
+          "pattern": "Skill Package",
+          "log": "Grouped prompt, schema, examples, validation, and run path as a reusable workflow.",
+          "state": {
+            "package_parts": [
+              "prompt",
+              "schema",
+              "examples",
+              "validation",
+              "run path"
+            ],
+            "reuse": "team workflow"
+          },
+          "output": "The work can be reused instead of copied as one-off prompt text."
+        },
+        {
+          "name": "Progressively commit",
+          "pattern": "Progressive Commitment",
+          "log": "Mock path is stable; next promotion is model-backed run, then team rollout.",
+          "state": {
+            "phase": "mock stable",
+            "next": "model-backed run",
+            "blast_radius": "limited"
+          },
+          "output": "The workflow is ready for controlled promotion."
+        }
+      ],
+      "final": {
+        "verdict": "PASS",
+        "headline": "Structured minutes and follow-up email generated",
+        "cards": [
+          [
+            "Key points",
+            "4"
+          ],
+          [
+            "Action items",
+            "5 assigned"
+          ],
+          [
+            "Quality",
+            "All checks pass"
+          ],
+          [
+            "Patterns",
+            "Prompt Chain + Critic + Skill Package"
+          ]
+        ]
+      }
+    }
+  ]
+}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>规约上下文</h3><p>meeting-agent spec 定义 schema、质量规则、跟进格式和验证约束。</p><span class="pattern-chip">规约即契约</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Copilot 计划</h3><p>实现计划来自规约，而不是一句模糊的一次性提示。</p><span class="pattern-chip">规划-执行</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>提示链</h3><p>抽取、验证、跟进邮件生成被拆成不同可检查步骤。</p><span class="pattern-chip">提示链</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>质量验证</h3><p>同一份规约检查必填字段、负责人、日期、长度和行动项完整性。</p><span class="pattern-chip">生成器-评论家</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Skill Package</h3><p>Prompt、schema、示例和运行路径形成可复用工作包。</p><span class="pattern-chip">技能包</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>渐进交付</h3><p>先 mock，再模型路径，再团队工作流；检查稳定后再推进。</p><span class="pattern-chip">渐进承诺</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop3-copilot-terminal.png" alt="命令行输出：SDD 规约、会议纪要 JSON、质量检查和跟进邮件草稿。"><figcaption>命令行输出：SDD 规约、会议纪要 JSON、质量检查和跟进邮件草稿。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>提示链</td><td>把一个宽泛生成任务拆成可检查步骤。</td></tr>
+<tr><td>规划-执行</td><td>用规约先塑造实现，再生成代码。</td></tr>
+<tr><td>生成器-评论家</td><td>质量验证是独立角色，有明确验收标准。</td></tr>
+<tr><td>技能包</td><td>把 prompt、schema、示例和运行路径打包复用。</td></tr>
+<tr><td>渐进承诺</td><td>随着证据增加，再逐步提升自动化程度。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>先规约会改变工作方式</h3><p>当 Copilot 读的是契约而不是愿望，它才更可靠。</p></article>
+<article class="insight-card"><h3>验证不是可选项</h3><p>金融工作流的行动项有负责人和截止日期，因此检查必须显式存在。</p></article>
+<article class="insight-card"><h3>SDD 连接设计和交付</h3><p>同一份文档可以指导开发、运行时行为和审计复核。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop3-copilot-demo
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd src
+python main.py
+
+# optional visual walkthrough
+open ../visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop3-copilot-demo/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop3-pattern-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

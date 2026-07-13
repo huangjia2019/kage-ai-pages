@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上下文分诊 Context Triage — 模式参考 — 黄佳</title>
+    <meta name="description" content="上下文分诊：双轴框架中"上下文工程 × 路由"位上的模式。有限预算下的优先级路由：为什么存在、解决什么 agent 设计问题、最新工程博客与 arXiv 论文。">
+    <meta name="author" content="黄佳 (Jia Huang)">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/dual-axis/patterns/context-triage/">
+    <meta property="og:title" content="上下文分诊 — 模式参考">
+    <meta property="og:description" content="有限上下文预算下的优先级路由。双轴框架中"上下文工程 × 路由"位上的模式。">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/dual-axis/patterns/context-triage/">
+    <link rel="stylesheet" href="../../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/#books">书籍</a>
+                <a href="/zh/#courses">课程</a>
+                <a href="/zh/#planet">星球</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/research/dual-axis/patterns/context-triage/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← 双轴框架（暂仅英文）</a>
+                    &nbsp;·&nbsp;
+                    模式参考
+                </p>
+                <h1>上下文分诊 · Context Triage</h1>
+                <span class="coord-badge"><strong>上下文工程</strong> × <strong>路由</strong></span>
+                <p class="essay-meta">
+                    模型门口的优先级队列：谁先进、谁等待、谁被丢弃 &mdash; 所有这些决定都发生在任何推理开始之前。
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">在矩阵中的位置</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">上下文工程</div>
+                    <div class="mm-cell">语义压缩</div>
+                    <div class="mm-cell mm-active">上下文分诊</div>
+                    <div class="mm-cell">多模态融合</div>
+                    <div class="mm-cell">渐进发现</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-empty">—</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>为什么需要这个模式</h2>
+                <p>
+                    生产环境里的 agent 没法把所有东西都看一遍。上下文窗口是一笔固定预算 &mdash; Claude&nbsp;3.7
+                    是 200K，Gemini 是 1M，但永远是有限的，边际成本永远是高的。当一个 PR 有五万行代码、合规审查包里有
+                    43 份文档、故障排查时每秒涌入 100 行日志，模型不可能全看。<strong>必须有人来决定什么进、什么不进
+                    &mdash; 这个&ldquo;人&rdquo;就是分诊层，它坐在模型门口，而不是在模型里面。</strong>
+                </p>
+                <p>
+                    这是 demo agent 和生产 agent 之间的分水岭。Demo agent 跑得动，是因为输入由工程师手工挑选；生产
+                    agent 面对的是用户随手丢进来的任意内容。没有显式路由，模型只有一种机制可用 &mdash; 从窗口末尾静默
+                    截断，丢掉的恰好是最近的上下文，而&ldquo;最近&rdquo;是最不该丢的位置。
+                </p>
+                <p>
+                    设想一个为区域银行做的贷款评审 agent。一笔新的商业贷款申请进来，附带 43 份文档 &mdash; 财务报表、
+                    估值报告、契约条款、环评文件 &mdash; 总量远超模型 200K 的上下文窗口。没有分诊层，harness 只能选
+                    截断。最新的估值报告掉在窗口外，模型基于过期数据批准了贷款，两周后这笔贷款违约。模型没做错任何事
+                    &mdash; 它回答了被丢给它的 prompt。是 harness 没有优先级逻辑。这类失败不会上新闻，它会出现在一份
+                    银行外面没人读得到的事故复盘里 &mdash; 正是因此，&ldquo;上下文分诊&rdquo;在 2026 年成了一等关切。
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>它解决的 agent 设计问题</h2>
+                <p>
+                    上下文分诊回答了每个生产 agent 都会遇到的四个问题：
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>当下什么最重要？</strong> &mdash; 在摄入时显式打优先级标签（P0/P1/P2/P3）。</li>
+                    <li><strong>预算放得下什么？</strong> &mdash; 一个知道 token 预算的规划器，按预算修剪。</li>
+                    <li><strong>什么被丢在地上？</strong> &mdash; 显式、可记录、可审计、可回滚。</li>
+                    <li><strong>什么可以晚一点拿？</strong> &mdash; 给 P3 留 handle，模型需要时再去取。</li>
+                </ol>
+                <p>
+                    结构上的关键决定：是在模型看到之前路由输入，而且路由规则本身由工程团队（harness）拥有，不是由模型决定。
+                    这是分诊跟邻近概念的真正区别 &mdash; 它不是摘要、不是压缩、不是基于 embedding 的检索，而是
+                    <em>在硬预算下做路由</em>，由工程师可审计、可版本化、不需要任何训练就能调整的代码完成。
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>深度思考方向</h2>
+                <p>
+                    上下文分诊难就难在：优先级标签不是天上掉下来的，agent 必须自己决定，而这个决定决定了下游所有阶段
+                    的天花板。如果一个 P0 标签错了，再多推理也救不回来 &mdash; 相关信息从一开始就不在房间里。
+                </p>
+                <p>
+                    有三种失败反复出现。<strong>优先级膨胀</strong>：当 P0 的标准模糊，每个团队都会"以防万一"地加东西，
+                    几个月后所有东西都是 P0，队列退化成 FIFO。打败它的纪律是硬性 schema、低基数 &mdash; 比如 P0 最多 5 个
+                    名额，多了拒绝 &mdash; 而不是软启发式。<strong>handle 失效</strong>：一个 P3 指向的快照在摄入之后已经
+                    变了，agent 后来去取，拿到的是过期状态。纪律是给 handle 显式设 TTL、取的时候重新验证。
+                    <strong>分诊抖动</strong>：优先级每轮都改，模型看到的是一个动态目标，置信度崩溃。纪律是会话内分诊
+                    决定保持粘性，除非下游有明确信号才作废。
+                </p>
+                <p>
+                    更深一层的架构洞察：上下文分诊就是 agent 形态下重生的<em>操作系统调度器</em>。OS 调度器在有限 CPU
+                    预算下解决&ldquo;哪个进程拿到 CPU？&rdquo;&mdash; 用优先级队列、老化、抢占这些原语。agent 版本在有限上下文
+                    预算下解决&ldquo;哪些信息进入模型？&rdquo;&mdash; 用的是同一套原语。写过内核调度器的工程师五分钟就能
+                    上手；只在 OS 之上写过代码的工程师必须从头学一遍。<strong>模式迁移过来了，只是介质变了。</strong>
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>工程博客精选</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">Effective Context Engineering for AI Agents &mdash; Anthropic</a></span>
+                        <span class="res-meta">Anthropic Engineering · 2024-2025</span>
+                        <span class="res-blurb">把"上下文是有限且被争抢的资源"这件事最正式的官宣，奠定了整个领域目前使用的&ldquo;预算+修剪&rdquo;术语。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">LLM Powered Autonomous Agents &mdash; Lilian Weng</a></span>
+                        <span class="res-meta">OpenAI · 2023 年 6 月</span>
+                        <span class="res-blurb">四组件公式（LLM + Memory + Planning + Tool Use）。把上下文摄入当作既定条件 &mdash; 这篇文章留下的空白，恰恰就是分诊存在的位置。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://manus.ai/research/context-engineering" target="_blank" rel="noopener">Context Engineering for Production Agents &mdash; Manus 团队</a></span>
+                        <span class="res-meta">Manus Research · 2024-2025</span>
+                        <span class="res-blurb">把 KV-Cache 命中率作为主控成本指标。说明分诊决定直接喂给了缓存复用，而不只是上下文窗口适配。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://simonwillison.net/2025/Jun/27/context-engineering/" target="_blank" rel="noopener">Context engineering &mdash; Simon Willison</a></span>
+                        <span class="res-meta">simonwillison.net · 2025 年 6 月</span>
+                        <span class="res-blurb">从从业者视角说明"prompt engineering"是错词 &mdash; 大部分工作是挑哪些上下文进去，而不是怎么措辞。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.philschmid.de/context-engineering" target="_blank" rel="noopener">From Prompts to Context &mdash; Phil Schmid</a></span>
+                        <span class="res-meta">philschmid.de · 2025</span>
+                        <span class="res-blurb">把 Anthropic、Karpathy 与 Shopify Tobi Lütke 的相关表态梳理串起来，论证术语已正式从 prompt engineering 改名为 context engineering。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://blog.langchain.com/context-engineering-for-agents/" target="_blank" rel="noopener">Context Engineering for Agents &mdash; LangChain</a></span>
+                        <span class="res-meta">LangChain Blog · 2025</span>
+                        <span class="res-blurb">框架侧主张：agent 需要把显式上下文路由当作图里的一等节点，而不是隐藏在检索后面的隐式步骤。</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>论文进展（arXiv 基础篇）</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2507.13334" target="_blank" rel="noopener">A Survey of Context Engineering for Large Language Models</a></span>
+                        <span class="res-meta">arXiv:2507.13334 · 2025 年 7 月</span>
+                        <span class="res-blurb">把上下文工程分解成三个基础组件（检索、处理、管理）与四个实现类。该方向第一篇系统性综述。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2511.08151" target="_blank" rel="noopener">Context Engineering 2.0: The Context of Context Engineering</a></span>
+                        <span class="res-meta">arXiv:2511.08151 · 2025 年 11 月</span>
+                        <span class="res-blurb">把上下文工程重新定位成一个 20 年 HCI 传统（Dey 2001）在 agent 时代的转生。历史叙事很扎实。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2502.10996" target="_blank" rel="noopener">A Survey of Context Engineering Strategies</a></span>
+                        <span class="res-meta">arXiv:2502.10996 · 2025 年 2 月</span>
+                        <span class="res-blurb">罗列检索、生成、剪枝三类策略。剪枝那一节是论文侧最接近分诊模式的祖先。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2404.07143" target="_blank" rel="noopener">Infini-attention: Efficient Infinite Context Transformers</a></span>
+                        <span class="res-meta">arXiv:2404.07143 · 2024 年 4 月</span>
+                        <span class="res-blurb">Google 在 attention 一侧的"压缩式记忆"变体。模型侧对分诊的补充：即使有无限上下文，门口路由仍然有价值。</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2506.20194" target="_blank" rel="noopener">Pareto-Frontier Context Engineering for Production Agents</a></span>
+                        <span class="res-meta">arXiv:2506.20194 · 2025 年 6 月</span>
+                        <span class="res-blurb">把不同上下文策略下的成本/质量 Pareto 前沿量化出来。工程师在设计评审时给分诊预算辩护时很好用。</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>2026 前沿 &mdash; 深度解读</h2>
+                <div class="frontier-intro">
+                    上面五篇是基础，下面五篇是 2025 年 10 月到 2026 年 6 月这九个月发生的事 &mdash; 每一篇都改变了今年
+                    设计分诊层的具体选择。每篇下面写的是：论文引入的新想法、它从生产分诊层里消除的具体失败模式、你应当
+                    因此调整的具体设计动作、以及一个量化收益的数字。流程图都是手画的，架构一眼就能看清。
+                </div>
+
+                <article class="deep-read">
+                    <span class="dr-num">深读 1 &middot; 基础架构</span>
+                    <h3><a href="https://arxiv.org/abs/2510.04618" target="_blank" rel="noopener">Agentic Context Engineering (ACE)：让上下文自我进化</a></h3>
+                    <div class="dr-meta">arXiv:2510.04618 &middot; Zhang、Hu、Upasani 等 &middot; ICLR&nbsp;2026（32 页）</div>
+                    <p class="dr-take">
+                        <strong>它改了什么。</strong> 今天大部分生产 agent 在上下文摄入的那一刻就给每段内容打优先级
+                        &mdash; 一份文档是 P0、一行日志是 P2、一份过期的规范是 P3 &mdash; 然后整个会话都把这个标签当事实
+                        用。前 30 轮这套做法跑得动；下 30 轮就开始崩，因为 agent 此时已经学到了东西：当初的 P0 把它带偏
+                        了，当初的 P3 反而是关键。ACE 引入了一个独立、持续存在的对象 &mdash; 论文叫它&ldquo;策略手册&rdquo;
+                        (playbook) &mdash; agent 每一轮结束时根据刚刚发生的事重写这个手册，下一轮再把改过的手册作为上
+                        下文的一部分摄入。这样一来，agent 对&ldquo;什么重要&rdquo;的判断不再被锁死在最初的摄入时刻。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么对分诊有意义。</strong> 这个领域一直在犯的根本错误，是把&ldquo;摄入时打的优先
+                        级&rdquo;当成&ldquo;整个会话都成立的优先级&rdquo;。优先级其实是一个活的假设，会随着 agent 学到
+                        更多而衰减。一个从不修订标签的分诊层，等于在让模型继续相信一个小时前的猜测 &mdash; 而那个猜测当
+                        初根本无法预料到现在的输入。到第二小时，这就是 agent 开始对&ldquo;显而易见的事实&rdquo;产生幻
+                        觉的最常见原因：相关上下文技术上还在窗口里，但优先级压得太低，模型已经不去注意它了。
+                    </p>
+                    <p class="dr-take">
+                        <strong>你应该怎么做才不一样。</strong> 别再把优先级存在 hashmap 里。改用一个 append-only 的日志
+                        ，键是 (token-id, 轮次, 修订证据)。每一次优先级变更都是一条新记录，附带&ldquo;为什么改&rdquo;
+                        &mdash; 是哪一次观察暴露了上一个标签是错的。每轮结束时的反思步骤就是写这个日志最自然的位置。
+                        这样有两个好处：复盘时修订是可审计的，一次质量回退可以追到当时做出决策的那一轮；agent 自己也
+                        可以回过头读自己的历史，问&ldquo;我当时为什么把这个事实降级了？&rdquo;。这是 agent 在会话内自我
+                        改进的结构性前提 &mdash; 没有这一条，对话内 agent 学不到任何东西。
+                    </p>
+                    <p class="dr-take">
+                        <strong>头条数据。</strong> Agent benchmark 提升 10.6%，金融 benchmark 提升 8.6%。让认真考虑采购
+                        的客户停下来看的那个结果在 AppWorld：跑 ACE 的开源 backbone agent 在整体得分上和顶级闭源生产
+                        系统打平，在更难的评测分片上反超它们。机制不是更大的模型，不是更多 token，而是一个被允许
+                        &ldquo;改主意&rdquo;的分诊层。
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ACE 流程图">
+                            <rect x="35" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="110" y="55" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="14" fill="#1a1a2e">生成 Generate</text>
+                            <text x="110" y="73" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10.5" fill="#5a5a5a">草拟行动</text>
+
+                            <rect x="215" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="290" y="55" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="14" fill="#1a1a2e">反思 Reflect</text>
+                            <text x="290" y="73" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10.5" fill="#5a5a5a">评判结果</text>
+
+                            <rect x="395" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="470" y="55" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="14" fill="#1a1a2e">校订 Curate</text>
+                            <text x="470" y="73" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10.5" fill="#5a5a5a">增量更新</text>
+
+                            <rect x="575" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="650" y="55" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="14" fill="#1a1a2e">策略手册</text>
+                            <text x="650" y="73" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10.5" fill="#5a5a5a">进化中的策略</text>
+
+                            <line x1="185" y1="57.5" x2="208" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="208,53.5 215,57.5 208,61.5" fill="#a85a1e"/>
+                            <line x1="365" y1="57.5" x2="388" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="388,53.5 395,57.5 388,61.5" fill="#a85a1e"/>
+                            <line x1="545" y1="57.5" x2="568" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="568,53.5 575,57.5 568,61.5" fill="#a85a1e"/>
+
+                            <path d="M650,85 Q650,100 470,100 Q110,100 110,85" fill="none" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="106,89 113,89 110,82" fill="#a85a1e"/>
+                            <text x="380" y="98" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#888" font-style="italic">下一轮 &mdash; 手册重新成为上下文</text>
+                        </svg>
+                        <div class="flow-caption">图 &mdash; ACE 的 生成·反思·校订 循环，策略手册回写到下一轮上下文。</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">深读 2 &middot; 计划感知剪枝</span>
+                    <h3><a href="https://arxiv.org/abs/2512.16970" target="_blank" rel="noopener">PAACE：计划感知的自动化 agent 上下文工程</a></h3>
+                    <div class="dr-meta">arXiv:2512.16970 &middot; 2025 年 12 月 18 日 &middot; PAACE-Syn + PAACE-FT</div>
+                    <p class="dr-take">
+                        <strong>它改了什么。</strong> 在 PAACE 之前，一段上下文拿到的优先级只取决于事实本身：&ldquo;这是
+                        个 Stripe 交易 ID，给它打分。&rdquo;PAACE 加了第二个维度 &mdash; agent 当前的计划步。同一个 Stripe
+                        交易 ID，如果 agent 下一步是&ldquo;诊断这次具体的支付失败&rdquo;，它会被打成 P0；如果下一步是
+                        &ldquo;总结上周基础设施延迟趋势&rdquo;，它会被打成 P3。事实没变，变的是 agent 接下来要拿它做什么
+                        。PAACE 把这种依赖显式表达出来 &mdash; 训练了一个小的蒸馏打分器，输入是 (事实, 当前计划步) 这个
+                        元组，agent 的完整计划作为支撑上下文。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么对分诊有意义。</strong> 没有计划感知，每个分诊层都会退化到同一个防御性策略：把
+                        &ldquo;接下来 10 步任何一步都可能用到&rdquo;的东西全留着。这就是悄无声息吃掉 token 预算的策略。
+                        一个涉及 10 个子系统、50 步的计划，会在前 5 步内积累所有 10 个子系统的上下文，分诊层却没办法说
+                        &ldquo;我们现在已经稳定在子系统 A 了，子系统 B 到 J 可以降级了&rdquo;。结果是 agent 把死重一直背
+                        到会话结束。PAACE 是第一篇给分诊层提供这种&ldquo;减重信号&rdquo;的论文。
+                    </p>
+                    <p class="dr-take">
+                        <strong>你应该怎么做才不一样。</strong> 训练（或蒸馏）一个小路由器，输入键是 (事实, 计划步)，
+                        不是 (事实) 本身。PAACE-FT 是开源配方。把这个小路由器放在每一轮跑，而不是只在会话边界跑。
+                        一个关键细节：路由器必须把 agent 的当前计划作为<em>显式</em>输入，而不是塞进 system prompt 里
+                        的软提示 &mdash; 计划与优先级之间的依赖太强，不能交给 in-context learning 自己悟。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么这件事在经济上重要。</strong> &ldquo;每轮重新分诊&rdquo;以前贵到做不到 &mdash; 每轮
+                        要调一次前沿模型，成本反而把正事挤掉了。PAACE-FT 把这个成本压到差不多一次 embedding 查询的量级。
+                        这是&ldquo;每轮重新分诊&rdquo;从奢望变成默认架构选项的分水岭。对长跑的 agent 来说，正是这个成本
+                        临界点的跨过，让计划感知的分诊第一次在经济上撑得住。
+                    </p>
+                    <p class="dr-take">
+                        <strong>头条数据。</strong> 蒸馏出来的压缩器在 1/10 推理成本下保留教师模型 97% 的准确率。在
+                        AppWorld、OfficeBench 和 8 目标多跳 QA 基准上测试，准确率和 F1 都比对比里的每一个 baseline 高，
+                        同时用的 agent 步数更少、峰值 token 更低。
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PAACE 流程图">
+                            <rect x="19" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="84" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">计划结构</text>
+                            <text x="84" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">解析下 k 步任务</text>
+
+                            <rect x="167" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="232" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">相关性打分</text>
+                            <text x="232" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">逐 token 效用</text>
+
+                            <rect x="315" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">重写+摘要</text>
+                            <text x="380" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">保函数性</text>
+
+                            <rect x="463" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="528" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">剪枝</text>
+                            <text x="528" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">丢低效用</text>
+
+                            <rect x="611" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="676" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">联调指令</text>
+                            <text x="676" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">调精指令</text>
+
+                            <line x1="149" y1="57.5" x2="160" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="160,53.5 167,57.5 160,61.5" fill="#a85a1e"/>
+                            <line x1="297" y1="57.5" x2="308" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="308,53.5 315,57.5 308,61.5" fill="#a85a1e"/>
+                            <line x1="445" y1="57.5" x2="456" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="456,53.5 463,57.5 456,61.5" fill="#a85a1e"/>
+                            <line x1="593" y1="57.5" x2="604" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="604,53.5 611,57.5 604,61.5" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">图 &mdash; PAACE 五段压缩，条件依赖于计划的下 k 步任务。</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">深读 3 &middot; 编码 agent 分诊</span>
+                    <h3><a href="https://arxiv.org/abs/2601.16746" target="_blank" rel="noopener">SWE-Pruner：编码 agent 的自适应上下文剪枝</a></h3>
+                    <div class="dr-meta">arXiv:2601.16746 &middot; Wang 等 &middot; 2026 年 1 月 23 日</div>
+                    <p class="dr-take">
+                        <strong>它改了什么。</strong> SWE-Pruner 给编码 agent 专门引入了一个分诊层 &mdash; 一个 0.6B 参数
+                        的神经模型（论文叫它&ldquo;速读器&rdquo;skimmer），坐在前沿模型前面，逐行读源代码，决定哪些行能
+                        真正进入前沿模型的视野。速读器小到可以每轮都跑，延迟成本几乎不可见。关键一点：速读器把 agent
+                        当前的目标作为显式输入 &mdash; 比如&ldquo;找出这个空指针错误的原因&rdquo; &mdash; 用这个目标给每
+                        一行打分。跟目标没有合理关联的行，在前沿模型把它们加载进上下文之前就被丢掉了。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么对分诊有意义。</strong> 这篇论文把大部分团队隐约感觉到但没量化的经济事实摆出来了：
+                        前沿编码模型大头的 token 预算花在&ldquo;读&rdquo;上 &mdash; 看那些它最终并不会改动的代码。如果读
+                        主导账单，那么放在模型前面的分诊层就不是边际优化，而是整个系统里最大的成本控制杠杆。大部分团队
+                        在这一块投入不足，是因为他们假设模型在拿那些上下文&ldquo;做有用的事&rdquo;。数据告诉你它通常没在
+                        做有用的事。模型是在防御性地读 &mdash; 因为它别无选择，每一次读都是&ldquo;万一这个有用&rdquo;。
+                        一个建得好的分诊层，恰恰就是给模型一个理由&ldquo;不必再防御性地读&rdquo;。
+                    </p>
+                    <p class="dr-take">
+                        <strong>你应该怎么做才不一样。</strong> 别再把分诊当成一次性的重预处理。把它做得像 tokenization
+                        一样便宜，每轮都跑 &mdash; 每当 agent 的目标收窄一次，分诊层就应该重新打一次分。0.6B 速读器就是
+                        参考设计：小到可以为你的领域微调，小到可以在 CPU 上跑，结构上又简单到任务定义一变你就能换掉。
+                        目标提示要当作一等输入显式传给速读器 &mdash; 不要把它埋在 agent 的 system prompt 里让速读器自己
+                        去挖。
+                    </p>
+                    <p class="dr-take">
+                        <strong>头条数据。</strong> 在 SWE-Bench Verified（编码 agent 的标准基准）上，SWE-Pruner 把
+                        token 用量削减 23&ndash;54%，同时保持或提升成功率。在 LongCodeQA 上达到 14.84&times; 压缩。能改变
+                        你产品路线图的那个数字：一个少读 14.84 倍代码的编码 agent 表现并不变差 &mdash; 在生产规模上，这个
+                        比例往往就是&ldquo;每个客户都亏&rdquo;和&ldquo;开始盈利&rdquo;之间的距离。
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SWE-Pruner 流程图">
+                            <rect x="19" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="84" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">任务+目标</text>
+                            <text x="84" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">如&ldquo;修 bug&rdquo;</text>
+
+                            <rect x="167" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="232" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">0.6B 速读器</text>
+                            <text x="232" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">轻量神经模型</text>
+
+                            <rect x="315" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">行级打分</text>
+                            <text x="380" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">逐行效用</text>
+
+                            <rect x="463" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="528" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">留 / 弃</text>
+                            <text x="528" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">保留结构</text>
+
+                            <rect x="611" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="676" y="54" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">瘦身上下文</text>
+                            <text x="676" y="71" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">送给主模型</text>
+
+                            <line x1="149" y1="57.5" x2="160" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="160,53.5 167,57.5 160,61.5" fill="#a85a1e"/>
+                            <line x1="297" y1="57.5" x2="308" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="308,53.5 315,57.5 308,61.5" fill="#a85a1e"/>
+                            <line x1="445" y1="57.5" x2="456" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="456,53.5 463,57.5 456,61.5" fill="#a85a1e"/>
+                            <line x1="593" y1="57.5" x2="604" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="604,53.5 611,57.5 604,61.5" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">图 &mdash; SWE-Pruner 把 0.6B 速读器放在前沿模型门口当&ldquo;门卫&rdquo;。</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">深读 4 &middot; KV 缓存级分诊</span>
+                    <h3><a href="https://arxiv.org/abs/2602.22603" target="_blank" rel="noopener">SideQuest：长程 agent 推理的模型驱动 KV 缓存管理</a></h3>
+                    <div class="dr-meta">arXiv:2602.22603 &middot; Kariyappa &amp; Suh &middot; 2026 年 2 月</div>
+                    <p class="dr-take">
+                        <strong>它改了什么。</strong> 在 2026 年之前，几乎所有分诊决策都发生在 prompt 组装时 &mdash; 在
+                        模型开始推理之前。SideQuest 把这个决策搬进推理本身。第二条线程 &mdash; 论文叫它&ldquo;副线
+                        程&rdquo;side thread &mdash; 跟主推理循环并行跑，持续给 KV 缓存里的 token 打效用分，<em>等</em>
+                        agent 看到推理怎么展开之后，再把低效用的 token 驱逐掉。主推理线程永远不被副线程阻塞 &mdash; 驱逐
+                        在后台发生，压缩后的缓存再回灌到推理的下一步。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么对分诊有意义。</strong> Prompt 时刻的分诊有一个结构性的盲区：在你组装 prompt 的那
+                        一刻，你根本不知道哪段上下文最后会承重、哪段只是装饰。那个信息只存在于推理过程中段。
+                        &ldquo;第 7 步那个观察其实关键&rdquo;最早只能在第 8 步知道 &mdash; 而到了第 8 步，一次性摄入过滤
+                        器早就锁死了它的选择，没办法修订。SideQuest 的洞察是：长程 agent 里分诊正确的位置，和 CPU 分支
+                        预测器待的位置是一样的 &mdash; 在推理路径里，盯着正在发生的事，有权在推理进行过程中修订缓存。
+                    </p>
+                    <p class="dr-take">
+                        <strong>你应该怎么做才不一样。</strong> 架构分成两种清晰的情况。如果你控制推理栈 &mdash; 也就是
+                        说你跑的是 vLLM、SGLang、TensorRT-LLM 或类似的可改造服务框架 &mdash; SideQuest 的&ldquo;飞行中
+                        驱逐&rdquo;现在做得到，对任何超过 50 步的 agent 来说，这大概率就是该选的架构。如果你不控制推理
+                        （大多数直接用 Anthropic 或 OpenAI API 的团队），教训不一样但同样重要：把硬约束逼回 prompt
+                        窗口，在你<em>能</em>做分诊的地方做分诊。不要因为 API 不暴露 KV 缓存就假装它是无界的。
+                    </p>
+                    <p class="dr-take">
+                        <strong>更深一层。</strong> 分诊不再是&ldquo;模型跑之前做的事&rdquo;，而是&ldquo;模型跑的过程中
+                        持续做的事&rdquo;。这是一个要求更高的架构，对短程 agent 不划算。但对今天定义前沿的长程 agent
+                        &mdash; 跨小时的编码会话、跨天的研究 agent、跨周的合规审查 &mdash; 这是唯一能在深度上撑得住的
+                        架构。
+                    </p>
+                    <p class="dr-take">
+                        <strong>头条数据。</strong> SideQuest 在长程 agent 任务上把峰值 token 用量削减 65%，准确率几乎
+                        不掉。能让你的路线图委员会停一下的那个数字：整个系统只用了 215 个训练样本。任何有适度微调预算
+                        的团队都够得着。
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SideQuest 并行流程图">
+                            <rect x="20" y="20" width="720" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="40" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">主推理循环 &mdash; step n &nbsp;&middot;&nbsp; step n+1 &nbsp;&middot;&nbsp; step n+2 &nbsp;&middot;&nbsp; &hellip;</text>
+                            <text x="380" y="56" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">长程 agent 任务 &mdash; 若不干预，KV 缓存单调膨胀</text>
+
+                            <line x1="380" y1="62" x2="380" y2="95" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="376,95 384,95 380,102" fill="#a85a1e"/>
+                            <text x="395" y="82" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#888" font-style="italic">窥视</text>
+
+                            <rect x="20" y="105" width="225" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="132" y="125" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">副线程：模型驱动判断</text>
+                            <text x="132" y="141" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">并行打分 KV 效用</text>
+
+                            <rect x="280" y="105" width="200" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="125" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">驱逐 / 保留</text>
+                            <text x="380" y="141" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">逐 token 决策</text>
+
+                            <rect x="515" y="105" width="225" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="627" y="125" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">压缩后的 KV 缓存</text>
+                            <text x="627" y="141" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">回注主循环</text>
+
+                            <line x1="245" y1="126" x2="273" y2="126" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="273,122 280,126 273,130" fill="#a85a1e"/>
+                            <line x1="480" y1="126" x2="508" y2="126" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="508,122 515,126 508,130" fill="#a85a1e"/>
+
+                            <path d="M627,105 Q627,75 627,62" fill="none" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="623,68 631,68 627,60" fill="#a85a1e"/>
+                            <text x="640" y="85" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#888" font-style="italic">注入</text>
+                        </svg>
+                        <div class="flow-caption">图 &mdash; SideQuest 副线程让分诊不占关键路径，同时压缩 KV 缓存。</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">深读 5 &middot; 分诊即模型分层路由</span>
+                    <h3><a href="https://arxiv.org/abs/2604.07494" target="_blank" rel="noopener">Triage：基于代码质量信号把 SE 任务路由到成本合适的 LLM 分层</a></h3>
+                    <div class="dr-meta">arXiv:2604.07494 &middot; 2026 年 4 月 &middot; SWE-bench Lite（300 任务）</div>
+                    <p class="dr-take">
+                        <strong>它改了什么。</strong> 2026 年 4 月这篇直接以&ldquo;Triage&rdquo;命名的论文把模式向一个
+                        重要方向推广了。在它之前，&ldquo;上下文分诊&rdquo;的意思是决定哪些 token 进入一个给定的模型。这
+                        篇论文问的是更前一个问题：<em>哪个模型来处理这个任务？</em> 用一个对到来任务做的廉价信号 &mdash;
+                        论文里用代码健康度指标，但框架可以推广到任何廉价代理 &mdash; 把每个任务路由到三个模型层之一：
+                        轻量（Haiku 形态）、标准（Sonnet 形态）、重型（Opus 形态）。每一层的输出都过<em>同一道</em>验证
+                        门。验证门是安全机制：正因为有它，&ldquo;省钱但安全&rdquo;的路由才成为可能 &mdash; 错误的路由会
+                        在验证时被抓住，而不是落到客户面前才暴露。
+                    </p>
+                    <p class="dr-take">
+                        <strong>为什么对分诊有意义。</strong> 每一个跑认真 agent 的团队最后都会发现同一个月度账单模式：
+                        80% 的成本来自 20% 的调用 &mdash; 具体说，是那些重型模型调用。系统里每一块省钱空间都在&ldquo;把
+                        那 20% 的某一部分往下推一档&rdquo;。难题一直是&ldquo;怎么把一次调用往下推，又不会悄悄降质？&rdquo;
+                        诱惑是事前 gate &mdash; 预测任务难度，按预测路由。问题是预测不完美，而一个被路低了的难任务不会
+                        <em>显眼地</em>出错；它会变得微妙地出错，回退一直藏到落到客户面前才暴露。Triage 这篇论文的贡献
+                        是这套纪律：<em>事后</em>验证，不是<em>事前</em> gate。让便宜的那一层先试，验证步骤抓住&ldquo;
+                        便宜那层不够用&rdquo;的情况。
+                    </p>
+                    <p class="dr-take">
+                        <strong>你应该怎么做才不一样。</strong> 把 agent 建成两层同心圆的分诊。外层：基于廉价信号做模型
+                        分层路由（本文）。内层：在选中的那一层里做上下文分诊（前四篇）。两层分别上报指标，让你能各自
+                        独立调试 &mdash; 否则一次路由回退和一次上下文剪枝回退从外面看长得一样。汇报给领导的时候 &mdash;
+                        你一定要汇报，因为省下来的钱不小 &mdash; PPT 上要放论文里的两个可证伪条件：轻层通过率必须大于
+                        层间成本比（意思是便宜那层对的次数足够多，路由在经济上才划得来），代码健康度的效应大小至少
+                        <code>p&#770; &ge; 0.56</code>（意思是这个信号真的能区分容易任务和困难任务）。这是 CFO 能签字
+                        的两个条件。
+                    </p>
+                    <p class="dr-take">
+                        <strong>更深一步。</strong> 分诊不再是上下文过滤器，而是<em>异构模型之间的预算分配器</em>。一旦
+                        你看到这一步，同样的模式就可以套到 embedding 模型、检索索引、图像生成器 &mdash; 任何有多档成本/
+                        质量分层的系统。模式迁移过来了，介质没变。
+                    </p>
+                    <p class="dr-take">
+                        <strong>头条数据。</strong> 在 SWE-bench Lite（300 任务）上评测。三种路由策略正面对比：启发式
+                        阈值、训练 ML 分类器、完美 hindsight oracle。Oracle gap 是这篇论文能发出来的原因 &mdash; 它告诉
+                        你一个真实路由器建好之后，桌上还剩多少省钱空间，给你一个明确的目标数字，随着路由变好而逐步逼近。
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triage 分层路由图">
+                            <rect x="15" y="65" width="95" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="62" y="86" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">SE 任务</text>
+                            <text x="62" y="101" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">工单+代码库</text>
+
+                            <rect x="130" y="65" width="135" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="197" y="86" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">代码健康度</text>
+                            <text x="197" y="101" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">廉价信号</text>
+
+                            <rect x="285" y="65" width="125" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="347" y="86" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">分层分类器</text>
+                            <text x="347" y="101" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">启发式 / ML</text>
+
+                            <rect x="438" y="14" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="34" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="12" fill="#1a1a2e">轻量层</text>
+
+                            <rect x="438" y="72" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="92" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="12" fill="#1a1a2e">标准层</text>
+
+                            <rect x="438" y="130" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="150" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="12" fill="#1a1a2e">重型层</text>
+
+                            <rect x="615" y="65" width="130" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="680" y="86" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="13" fill="#1a1a2e">同一验证门</text>
+                            <text x="680" y="101" text-anchor="middle" font-family="Georgia,'Microsoft YaHei',serif" font-size="10" fill="#5a5a5a">一视同仁</text>
+
+                            <line x1="110" y1="87.5" x2="123" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="123,83.5 130,87.5 123,91.5" fill="#a85a1e"/>
+                            <line x1="265" y1="87.5" x2="278" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="278,83.5 285,87.5 278,91.5" fill="#a85a1e"/>
+
+                            <path d="M410,80 Q425,80 425,30 L431,30" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,26 438,30 431,34" fill="#a85a1e"/>
+                            <line x1="410" y1="87.5" x2="431" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,83.5 438,87.5 431,91.5" fill="#a85a1e"/>
+                            <path d="M410,95 Q425,95 425,145 L431,145" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,141 438,145 431,149" fill="#a85a1e"/>
+
+                            <path d="M538,30 Q575,30 575,80 L608,80" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,76 615,80 608,84" fill="#a85a1e"/>
+                            <line x1="538" y1="87.5" x2="608" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,83.5 615,87.5 608,91.5" fill="#a85a1e"/>
+                            <path d="M538,145 Q575,145 575,95 L608,95" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,91 615,95 608,99" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">图 &mdash; Triage 用廉价的代码健康度信号路由到三层之一，最终统一过同一道验证门。</div>
+                    </div>
+                </article>
+
+                <div style="margin-top: 1.8rem; padding: 1.2rem 1.3rem; background: #faf4ec; border-radius: 4px; border-left: 4px solid var(--color-link);">
+                    <h3 style="margin-top: 0; font-size: 1.05rem; color: var(--color-text);">合流 &mdash; 2026 年分诊的三个共同方向</h3>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        上面五篇论文是独立贡献，但它们走在同一条轨迹上。合起来读，它们刻画了这个领域对&ldquo;分诊&rdquo;
+                        理解的一次整体迁移。
+                    </p>
+                    <p style="margin: 0.8rem 0 0.6rem; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(1) 优先级信号已经廉价化了。</strong> 2026 年没人再用前沿模型决定&ldquo;哪些 token 进入
+                        另一个前沿模型&rdquo;。信号要么是一个小的蒸馏打分器（SWE-Pruner 的 0.6B 速读器），要么是直接
+                        对输入算的指标（Triage 那篇的代码健康度代理），要么是和主推理并行跑、不花额外钱的副线程
+                        （SideQuest）。如果你的分诊层自己就是瓶颈，你的架构是 2024 年的。
+                    </p>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(2) 信号已经是计划感知的了。</strong> 同一个事实在不同计划下效用不同 &mdash; 这件事这个
+                        领域终于不再假装它不存在。PAACE 用一个在 (事实, 计划步) 元组上训练的小路由器把这件事显式化；
+                        ACE 走的是另一条路 &mdash; 把计划诱导的修订写进一份长期存活的策略手册。无论哪种做法，打分器的
+                        key 现在都包含 agent 当前的目标，而不只是被打分的内容本身。
+                    </p>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(3) 分诊决策跨轮累积。</strong> 它们被修订，不被复位。每一轮都读前一轮的优先级日志。
+                        当 agent 发现某个 P0 其实是错的，这个错误以&ldquo;修订&rdquo;的形式被刻进日志，同时记下是哪
+                        一次观察揭示了它。分诊层因此本身变成一个学习面 &mdash; 它没有微调过的模型那么好，但比微调反应
+                        快好几倍，因为它跟着 agent 刚刚的发现一起更新。
+                    </p>
+                    <p style="margin: 0.9rem 0 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>合起来的处方。</strong> 两层（外层模型分层路由、内层上下文路由）、一个共享的廉价打分器
+                        每轮都跑、一份 append-only 的优先级日志让修订可审计、一道验证门抓住路由错了的情况。这就是 2026
+                        年认真的生产 agent 普遍长成的样子 &mdash; Anthropic、Cognition、Manus 都已经是这个形状 &mdash;
+                        也是未来 12 个月的论文会精化、但不会取代的架构。今天动手开始设计一个 agent，这就是起点；这个
+                        领域目前的 open question 已经从&ldquo;该包含哪几块&rdquo;变成&ldquo;每一块怎么 scale&rdquo;。
+                    </p>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>相关模式</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/hierarchical-retention/">
+                        <span class="rp-coord">记忆 × 路由</span>
+                        <span class="rp-name">分层保留 Hierarchical Retention</span>
+                    </a>
+                    <a href="/research/dual-axis/patterns/approval-gate/">
+                        <span class="rp-coord">治理 × 路由</span>
+                        <span class="rp-name">审批门 Approval Gate</span>
+                    </a>
+                    <a href="/research/dual-axis/topologies/route/">
+                        <span class="rp-coord">拓扑视图</span>
+                        <span class="rp-name">所有 Route 形态的模式</span>
+                    </a>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--color-text-faint); margin-top: 0.5rem;">
+                    相关模式页目前仅有英文版。
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>这个模式在哪里展开讨论</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning 英文书</strong> &mdash; <em>Designing AI Agents</em>，第 3 章 §3.2（上下文工程 / 分诊）。</li>
+                    <li><strong>论文</strong> &mdash; <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>，§4.1 模式 1。</li>
+                    <li><strong>专栏</strong> &mdash; 极客时间《Harness 设计模式之美》第 4 讲。</li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <p style="font-size: 0.82rem; color: var(--color-text-faint); font-style: italic; padding: 0.85rem 1.1rem; background: var(--color-quote-bg); border-radius: 4px; line-height: 1.7; margin: 0;">
+                    <strong style="font-style: normal; color: var(--color-text-muted);">关于创作。</strong>
+                    本页由人机协作完成。论文选取、编辑视角与工程判断由黄佳本人负责；正文文字与流程图在与 Claude
+                    （Anthropic）的对话中完成。每篇论文涉及的事实性陈述均可回溯到所链接的 arXiv 原文 &mdash; 如需精确
+                    数据细节，请以原论文为准。
+                </p>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← 回到双轴矩阵（英文）</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/patterns/context-triage/">English version →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

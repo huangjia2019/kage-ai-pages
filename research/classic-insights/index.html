@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Technical Books and Papers: Defining Insights — Jia Huang</title>
+    <meta name="description" content="A public reading map of classic technical books and papers: the problem each work answered, the defining insight, the reversal it introduced, and why the idea travelled.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/classic-insights/">
+    <meta property="og:title" content="Classic Technical Books and Papers: Defining Insights">
+    <meta property="og:description" content="A reading map for spotting the kind of idea that changes how a field thinks.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/classic-insights/">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="insights.css">
+</head>
+<body class="page-research page-classic-insights">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/classic-insights/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <p class="eyebrow">Reading map</p>
+            <h1 class="classic-title">Classic technical books and papers: defining insights</h1>
+
+            <p class="lede">
+                Some works become classics because they teach a technique. A smaller number become classics
+                because they change the way a field makes decisions. This page is a public reading map for
+                that second kind of work.
+            </p>
+
+            <p>
+                It is not a ranking, and it is not a private research dump. It is a compact test:
+                when a technical book or paper really matters, what exactly did it name, reverse,
+                and make easier to decide?
+            </p>
+
+            <p class="classic-meta">
+                <strong>How to use this page</strong>: scan the "Reversal" column first. If the reversal
+                changes how you would design, manage, debug, or evaluate a system, the work is probably
+                worth reading. The table links to official pages, author pages, free online editions,
+                or publisher pages where available.
+            </p>
+
+            <div id="classic-principles" class="classic-principles" aria-label="What makes an insight travel"></div>
+
+            <section aria-labelledby="classic-table-title">
+                <h2 id="classic-table-title" style="font-family: var(--font-serif); font-size: 1.45rem; margin-bottom: 0.5rem;">The table</h2>
+                <p class="lede" style="margin-bottom: 0.8rem;">
+                    Books and papers are mixed deliberately. A field-defining idea does not care whether it
+                    first appeared between hard covers or in a conference PDF.
+                </p>
+
+                <div class="classic-controls">
+                    <div class="classic-control">
+                        <label for="classic-search">Search</label>
+                        <input id="classic-search" type="search" placeholder="book, author, insight, problem...">
+                    </div>
+                    <div class="classic-control">
+                        <label for="classic-category">Category</label>
+                        <select id="classic-category"></select>
+                    </div>
+                    <div class="classic-control">
+                        <label for="classic-type">Type</label>
+                        <select id="classic-type"></select>
+                    </div>
+                </div>
+
+                <p id="classic-count" class="classic-count"></p>
+                <div id="classic-table-root"></div>
+            </section>
+
+            <section class="classic-closing">
+                <h2>The useful test</h2>
+                <p>
+                    A merely correct book summarizes what a field already knows. A classic compresses a
+                    recurring situation into a portable judgment. After you learn it, the same facts no longer
+                    lead to the same default decision.
+                </p>
+            </section>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script src="insights.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ClassicInsights.init({ lang: 'en', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
+

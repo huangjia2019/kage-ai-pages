@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成本即设计约束 · 黄佳 / 咖哥</title>
+    <meta name="description" content="当模型被锁死、成本是硬约束时，模式选型本身就是设计。这正是工程判断该出现的地方。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/cost-as-design-constraint/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/cost-as-design-constraint/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/cost-as-design-constraint/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/cost-as-design-constraint/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>成本即设计约束
+            </p>
+
+            <h1>成本即设计约束</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                当模型被锁死、成本是硬约束时，模式选型本身就是设计。这正是工程判断该出现的地方。
+            </p>
+
+            <h2>定义</h2>
+            <p>
+                大多数 Agent 设计文章默认扩展的路径是"换更贵的模型"。
+                但生产里模型常常被锁死在最便宜的可用档，单次调用成本被业务方设成硬上限——
+                这不是工程师能动的旋钮。设计问题从"用哪个模型"变成"用哪些模式组合，
+                让这个固定模型在这个成本下撑住这种工作负载"。
+                成本约束下的模式选型，才是真正的工程表面。
+            </p>
+
+            <h2>它命名了什么问题</h2>
+            <p style="color: var(--color-text-muted); font-style: italic;">
+                [TODO · 咖哥本人填这段：真实场景。RegTech / 客服 / batch processing 这类生产场景里，
+                "用更贵的模型"不是选项—— 业务方已经把 token budget 锁死。
+                这时候才看出工程师水平：同样的 Sonnet，有的人编排出可用系统，有的人卡死在 retry loop。
+                建议你举一个具体例子，把 "cost-as-constraint" 从抽象变成画面。]
+            </p>
+
+            <h2>它如何改变设计决策</h2>
+            <ol style="margin: 0.5rem 0 1rem 1.5rem; list-style: decimal;">
+                <li><strong>推理深度变成预算，不是质量旋钮。</strong>加一层反思循环不再"总是好"，
+                    而是 2-3 倍成本上浮，要拿到值得的位置才行。</li>
+                <li><strong>路由模式变成一级公民。</strong>复杂度路由（R2）不是可选优化——
+                    在查询分布偏斜时，它是把平均成本控在天花板下的<em>唯一</em>办法。</li>
+                <li><strong>缓存与程序性记忆变成架构。</strong>技能包（F2）、分层保留（M1）、失败日记（M4）
+                    不再是优化项，而是承重结构。</li>
+            </ol>
+
+            <h2>谱系</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>数据库查询计划器在内存预算下</strong>——同一个 query 在不同 cache 大小下有不同最优计划</li>
+                <li><strong>嵌入式系统</strong>——RAM 锁死时，算法选择<em>就是</em>设计</li>
+                <li><strong>SRE 错误预算</strong>——失败成本作为绑定约束塑造发布策略</li>
+                <li><strong>成本感知编译器</strong>——JIT 按 profile 数据优化，不是按抽象偏好</li>
+            </ul>
+
+            <h2>它<em>不</em>是什么</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>不是省成本。</strong>省成本是降低开销；成本即约束是<em>接受天花板，在里面做设计</em>。</li>
+                <li><strong>不是"用最便宜的模型"。</strong>模型是给定的，设计是你拿它构建什么。</li>
+                <li><strong>不是优化。</strong>优化是调一个已经选好的设计；成本即约束是<em>选择</em>设计。</li>
+                <li><strong>不是中国市场的特殊问题。</strong>所有规模化的生产 Agent 最终都会撞到这件事；
+                    富裕公司晚一点撞到，但一定会撞到。</li>
+            </ul>
+
+            <h2>在哪里展开</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>模式选项卡（Pattern Selection Card）方法论——把成本档作为第一阶段过滤器</li>
+                <li>书：<em>Designing AI Agents</em>（Manning, 2026）—— Ch7 治理 + Ch10 生产 Harness</li>
+                <li>工作样例：RegTech RAG 案例（待发表为独立 essay）</li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 成本即设计约束.
+                <a href="https://kage-ai.com/zh/concepts/cost-as-design-constraint/">kage-ai.com/zh/concepts/cost-as-design-constraint/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

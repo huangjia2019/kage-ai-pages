@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>咖哥AI - 黄佳 | AI技术作家与研究员</title>
+    <meta name="description" content="黄佳（咖哥）的个人主页。AI资深研究员、技术作家，著有《零基础学机器学习》《GPT图解》《动手做AI Agent》等畅销书，极客时间人气讲师。">
+    <meta name="keywords" content="黄佳,咖哥,AI,机器学习,大模型,LangChain,GPT,RAG,AI Agent,极客时间">
+    <meta name="author" content="黄佳">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="咖哥AI - 黄佳 | AI技术作家与研究员">
+    <meta property="og:description" content="从数据分析到大模型，AI时代技术教学的引路人。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com">
+    <meta property="og:locale" content="zh_CN">
+
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="apple-touch-icon" href="../favicon.png">
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">咖哥AI</a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#books" class="nav-link">书籍</a></li>
+                <li><a href="#courses" class="nav-link">课程</a></li>
+                <li><a href="/zh/writing/" class="nav-link">文章</a></li>
+                <li><a href="/zh/concepts/" class="nav-link">概念</a></li>
+                <li><a href="/zh/cases/" class="nav-link">案例</a></li>
+                <li><a href="/zh/interviews/" class="nav-link">访谈</a></li>
+                <li><a href="#wechat" class="nav-link">公众号</a></li>
+                <li><a href="#planet" class="nav-link">星球</a></li>
+                <li><a href="https://github.com/huangjia2019" class="nav-link" target="_blank" rel="noopener">GitHub</a></li>
+                <li><a href="/" class="nav-link nav-lang">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-avatar">
+                    <img src="../images/avatar-cartoon.png" alt="咖哥 · 黄佳" class="avatar-img">
+                </div>
+                <div class="hero-text">
+                    <h1 class="hero-name">黄佳</h1>
+                    <p class="hero-subtitle">咖哥 &middot; AI Researcher · Author</p>
+                    <p class="hero-intro">
+                        新加坡科技研究局（A*STAR）资深 AI 研究员，奇点智能研究院特聘专家，专注于 AI Agent 系统设计、大模型工程化与企业级 AI 应用研究。他提出了"<strong>双轴 Agent 设计框架</strong>"（认知功能 × 执行拓扑）和"<strong>模式选择卡</strong>"方法论，用于指导复杂 Agent 系统的设计、拆解与落地。
+                    </p>
+                    <div class="hero-links">
+                        <a href="https://github.com/huangjia2019" target="_blank" rel="noopener" class="hero-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                        <a href="#wechat" class="hero-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 01-.023-.156.49.49 0 01.201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-7.062-6.122zM14.53 13.39c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.982.969-.982z"/></svg>
+                            公众号
+                        </a>
+                        <a href="https://wx.zsxq.com/group/51112141125444" target="_blank" rel="noopener" class="hero-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            知识星球
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manning New Book Hero -->
+    <section class="section" style="padding-top: 2.5rem; padding-bottom: 2.5rem;">
+        <div class="container" style="text-align: center;">
+            <a href="https://hubs.la/Q04hCsrS0" target="_blank" rel="noopener" style="display: inline-block;">
+                <img src="../images/manning-book-photo.jpg" alt="Designing AI Agents — Manning Publications, MEAP" style="max-width: 480px; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 6px 24px rgba(26, 26, 46, 0.12);">
+            </a>
+            <p style="margin-top: 1.25rem; font-size: 1.05rem;">
+                <strong><a href="https://hubs.la/Q04hCsrS0" target="_blank" rel="noopener"><em>Designing AI Agents</em></a></strong>
+                &mdash; 生产级 AI Agent 设计模式的工程参考。(Manning)
+            </p>
+            <p style="margin-top: 0.85rem; font-size: 0.92rem; color: var(--color-text-muted);">关于封面：</p>
+            <p style="margin-top: 0.15rem; font-size: 0.92rem; color: var(--color-text-muted);">挑水人两边各挑一桶水，正是这本书在讲那种平衡。</p>
+            <p style="margin-top: 0.15rem; font-size: 0.92rem; color: var(--color-text-muted);">每一次 agent 设计决策，本质上都是一次权衡。</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--color-text-muted);">
+                Manning 折扣码：<code>designing-ai</code>（电子书 / MEAP，仅中国大陆，$20.99）&middot;
+                <code>MLHuang4</code>（折扣码）。
+            </p>
+        </div>
+    </section>
+
+    <!-- Books Section -->
+    <section class="section books" id="books">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">书籍</h2>
+                <p class="section-subtitle">从数据分析到大模型，一路走来的主干思想</p>
+            </div>
+
+            <h3 class="course-group-title">中文书</h3>
+            <div class="card-grid">
+
+                <!-- Book 0: SDD 实战 · 规范驱动开发之道 (2026 下半年, newest) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/sdd-shizhan.png" alt="SDD 实战：规范驱动开发之道 立体封" class="cover-3d-large" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">SDD 实战：规范驱动开发之道</h3>
+                        <p class="card-desc">AI 时代的规范驱动开发方法论。proposal/design/tasks 三份规范完成第一次创造，让代码成为可生成、可审查、可复现的衍生物。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-new">最新</span>
+                            <span class="meta-publisher">人民邮电出版社 · 异步图书</span>
+                        </div>
+                        <div class="card-links">
+                            <span class="btn btn-sm btn-disabled" title="即将上架">京东 · 即将上架</span>
+                            <span class="btn btn-sm btn-disabled" title="即将上架">豆瓣 · 即将上架</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 1: Claude Code 实战 · Harness 工程之道 (2026) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/claude-code-shizhan.png" alt="Claude Code 实战：Harness 工程之道 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Claude Code 实战：Harness 工程之道</h3>
+                        <p class="card-desc">把 Claude Code 当作一个工程系统拆给你看：Harness 控制面、Sub-Agent、Skill、Slash Command、Hook、MCP，每个机制都用真实项目跑通。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating badge-high">豆瓣 9.2</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/15374814.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 2: Agent 设计模式 (2026-02) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/agent-design-patterns.png" alt="Agent 设计模式：图解可复用智能体架构 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Agent 设计模式：图解可复用智能体架构</h3>
+                        <p class="card-desc">上篇讲软件范式从确定性到概率性的演进，下篇构建感知/记忆/推理/行动/反思/协作六层架构，拆解 21 个可复用 Agent 设计模式。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating">豆瓣 8.5</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/15313246.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/38231086/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 3: RAG 实战课 (2025-05) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/rag-shizhan.png" alt="大模型应用开发：RAG 实战课 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">大模型应用开发：RAG 实战课</h3>
+                        <p class="card-desc">系统讲解 RAG 技术栈与架构，从数据导入、文本分块到向量存储、检索优化，涵盖 GraphRAG、Agentic RAG 等前沿范式。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating badge-high">豆瓣 9.2</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/14447967.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/37363743/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 4: 动手做 AI Agent (2024) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/ai-agent-shizhan.png" alt="大模型应用开发：动手做 AI Agent 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">大模型应用开发：动手做 AI Agent</h3>
+                        <p class="card-desc">探讨 AI Agent 技术原理与实现，7 个完整 Agent 应用，涵盖 GPT-4、LangChain、LlamaIndex、MetaGPT 等技术。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating">豆瓣 7.1</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/14600442.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/36884058/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 5: GPT 图解 (2023) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/gpt-tujie.png" alt="GPT 图解：大模型是怎样构建的 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">GPT 图解：大模型是怎样构建的</h3>
+                        <p class="card-desc">从 N-Gram、Word2Vec 到 Transformer、GPT，用图解方式拆解大模型技术演进路径，配套代码实战。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating">豆瓣 8.1</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/13958977.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/36668702/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 6: 数据分析咖哥十话 (2022) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/data-analysis.png" alt="数据分析咖哥十话 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">数据分析咖哥十话</h3>
+                        <p class="card-desc">从思维到实践促进运营增长，十个话题串联数据分析方法论与业务实战。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating">豆瓣 8.5</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/13335199.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/36059516/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 7: 零基础学机器学习 (2020) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/machine-learning.png" alt="零基础学机器学习 立体封" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">零基础学机器学习</h3>
+                        <p class="card-desc">对话式教学，覆盖机器学习全流程：从数学基础到深度学习、CNN、RNN，所有案例 Python 实现。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating badge-high">豆瓣 9.0</span>
+                            <span class="meta-publisher">人民邮电出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://item.jd.com/12763913.html" target="_blank" rel="noopener" class="btn btn-sm">京东</a>
+                            <a href="https://book.douban.com/subject/35264202/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Book 8: SAP 程序设计 (2005, earliest) -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/sap-programming.png" alt="SAP 程序设计 封面" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">SAP 程序设计</h3>
+                        <p class="card-desc">国内早期 SAP/ABAP 编程参考书，技术写作的起点。</p>
+                        <div class="card-meta">
+                            <span class="badge badge-rating">豆瓣 7.6</span>
+                            <span class="meta-publisher">机械工业出版社</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://book.douban.com/subject/1290512/" target="_blank" rel="noopener" class="btn btn-sm">豆瓣</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <h3 class="course-group-title">英文书</h3>
+            <div class="card-grid">
+
+                <!-- EN Book 1: Manning · Designing AI Agents (mock cover, MEAP open) -->
+                <div class="card book-card">
+                    <div class="book-cover book-cover-mock">
+                        <div class="mock-dark-strip"></div>
+                        <div class="mock-content">
+                            <div class="mock-title-block">
+                                <h4 class="mock-title">Designing<br>AI Agents</h4>
+                                <p class="mock-subtitle">Principles, patterns,<br>and best practices</p>
+                            </div>
+                            <p class="mock-author">Jia Huang</p>
+                            <div class="mock-figure-area" aria-hidden="true">
+                                <img src="../images/manning-figure.png" alt="" class="mock-figure-img" loading="lazy">
+                            </div>
+                            <div class="mock-publisher-line">
+                                <span class="mock-manning-bars" aria-hidden="true"><span></span><span></span></span>
+                                <span class="mock-manning-label">MANNING</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Designing AI Agents</h3>
+                        <p class="card-desc">为可靠、可观测、经济可行的 AI Agent 设计蓝图。覆盖认知架构、27 个设计模式，以及让 Agent 进入生产环境的工程 Harness。</p>
+                        <div class="card-meta">
+                            <span class="meta-publisher">Manning Publications</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://hubs.la/Q04hCsrS0" target="_blank" rel="noopener" class="btn btn-sm">Manning</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EN Book 2: Packt · RAG from First Principles -->
+                <div class="card book-card">
+                    <div class="book-cover">
+                        <img src="../images/book-covers/rag-packt.jpg" alt="RAG from First Principles · Packt 封面" class="flat-cover" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">RAG from First Principles</h3>
+                        <p class="card-desc">用 Python、LangChain、LlamaIndex 工程化 RAG 系统——从分块、向量化到 GraphRAG、Agentic RAG 等前沿范式。</p>
+                        <div class="card-meta">
+                            <span class="meta-publisher">Packt Publishing</span>
+                        </div>
+                        <div class="card-links">
+                            <a href="https://www.packtpub.com/en-us/product/rag-from-first-principles-9781835888674" target="_blank" rel="noopener" class="btn btn-sm">Packt</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="section courses" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">课程</h2>
+                <p class="section-subtitle">在极客时间，跟着 AI 技术与时俱进</p>
+                <p class="section-stat">累计学员 <strong>100,000+</strong></p>
+            </div>
+
+            <h3 class="course-group-title">训练营</h3>
+            <div class="course-list">
+
+                <a href="https://u.geekbang.org/subject/airag/1009927" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"></path></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">大模型 RAG 进阶实战营</h3>
+                        <p class="card-desc">高强度训练营，把 RAG 的 10 大组件 + 4 个实战项目逐一拆透。</p>
+                        <span class="badge">训练营</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+            </div>
+
+            <h3 class="course-group-title">专栏</h3>
+            <div class="course-list">
+
+                <a href="https://time.geekbang.org/column/intro/101162601" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Agent 设计模式之美</h3>
+                        <p class="card-desc">双轴框架 + 22 个可复用 Agent 设计模式，把 Manning 全球英文书《Designing AI Agents》的设计模式心法系统化、中文化、可落地。</p>
+                        <span class="badge badge-new">新上线</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+                <a href="https://time.geekbang.org/column/intro/101113501" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Claude Code 工程化实战</h3>
+                        <p class="card-desc">从 Skill、Sub-Agent 到 Hook、MCP、Plugin，把 Claude Code 当作生产级工程系统讲透。</p>
+                        <span class="badge">专栏</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+                <a href="https://time.geekbang.org/column/intro/101053801" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><circle cx="4" cy="4" r="2"></circle><circle cx="20" cy="4" r="2"></circle><circle cx="4" cy="20" r="2"></circle><circle cx="20" cy="20" r="2"></circle><path d="M9.5 9.5L5.5 5.5M14.5 9.5L18.5 5.5M9.5 14.5L5.5 18.5M14.5 14.5L18.5 18.5"></path></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">MCP &amp; A2A 前沿实战</h3>
+                        <p class="card-desc">两大 Agent 通信协议——MCP（Model Context Protocol）与 A2A（Agent-to-Agent）——的原理、源码与落地实战。</p>
+                        <span class="badge">专栏</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+                <a href="https://time.geekbang.org/column/intro/655" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">LangChain 实战课</h3>
+                        <p class="card-desc">带你亲证 AI 应用开发的"奇点"时刻——LangChain 6 大核心组件，从原理到端到端项目。</p>
+                        <span class="badge">专栏</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+                <a href="https://time.geekbang.org/column/intro/100085501" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">零基础实战机器学习</h3>
+                        <p class="card-desc">从零开始，用真实业务项目串联机器学习全流程：从数据预处理到模型评估。</p>
+                        <span class="badge">专栏</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+            </div>
+
+            <h3 class="course-group-title">视频课</h3>
+            <div class="course-list">
+
+                <a href="https://time.geekbang.org/course/intro/100633001" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">AI 应用实战课</h3>
+                        <p class="card-desc">系统实战 AI 应用开发，万行代码全部开源。</p>
+                        <span class="badge">视频课</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+                <a href="https://time.geekbang.org/opencourse/videointro/100541201" target="_blank" rel="noopener" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"></rect><polygon points="22 8 16 12 22 16 22 8"></polygon></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">ChatGPT 和大模型原理公开课</h3>
+                        <p class="card-desc">极客时间视频公开课，讲透 ChatGPT 与大模型背后的原理。</p>
+                        <span class="badge">视频课</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Cases Section -->
+    <section class="section courses" id="cases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">案例</h2>
+                <p class="section-subtitle">可运行、可展示、可复用的行业 Agent demo</p>
+            </div>
+
+            <div class="course-list">
+                <a href="/zh/cases/" class="card course-card">
+                    <div class="course-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"></rect><path d="M7 8h10M7 12h6M7 16h8"></path><path d="M9 20h6"></path></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">金融 Agent 培训案例</h3>
+                        <p class="card-desc">LSEG 学员下载包、RegTech 展示 demo、模式选型卡，把监管文档分析、多 Agent 工单审查和 SDD 闭环放进同一套案例。</p>
+                        <span class="badge badge-new">新建</span>
+                    </div>
+                    <div class="course-arrow">&rarr;</div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interviews Teaser Section -->
+    <section class="section interviews-teaser" id="interviews">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">访谈</h2>
+                <p class="section-subtitle">媒体与社区的深度对话</p>
+            </div>
+
+            <a href="https://mp.weixin.qq.com/s/0CTwb4aEr5mWwsdRdwzwkw" target="_blank" rel="noopener" class="card interview-feature">
+                <div class="card-body">
+                    <span class="interview-source">Datawhale · 公众号</span>
+                    <h3 class="card-title">万字综述 Harness 革命！Datawhale 的采访</h3>
+                    <p class="card-desc">一次围绕 Claude Code Harness、Agent 工程化、与"模型在花，骨架在管"的深度对谈。</p>
+                </div>
+                <div class="course-arrow">&rarr;</div>
+            </a>
+
+            <a href="https://www.eeo.com.cn/2024/0608/665675.shtml" target="_blank" rel="noopener" class="card interview-feature">
+                <div class="card-body">
+                    <span class="interview-source">经济观察网 · 记者 陈奇杰</span>
+                    <h3 class="card-title">专访黄佳：如何写一本畅销的 AI 技术书</h3>
+                    <p class="card-desc">关于 Agent 这门尚未定型的技术、关于写一本能在书店活下去的 AI 书。</p>
+                </div>
+                <div class="course-arrow">&rarr;</div>
+            </a>
+
+            <div class="interviews-more">
+                <a href="/zh/interviews/" class="btn btn-sm">查看全部访谈 &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WeChat Official Account Section -->
+    <section class="section wechat" id="wechat">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">公众号 · 咖哥AI</h2>
+                <p class="section-subtitle">时效性文章与书籍课程推文</p>
+            </div>
+            <div class="wechat-content">
+                <div class="wechat-qr">
+                    <img src="../images/qrcode-wechat.jpg" alt="咖哥AI 公众号二维码" class="qr-image" loading="lazy">
+                </div>
+                <div class="wechat-info">
+                    <p>关注「咖哥AI」公众号，获取：</p>
+                    <ul>
+                        <li>AI技术前沿动态与深度解读</li>
+                        <li>新书发布与课程更新通知</li>
+                        <li>实战教程与代码分享</li>
+                        <li>AI行业观察与趋势分析</li>
+                    </ul>
+                    <p class="wechat-cta">微信搜索「<strong>咖哥AI</strong>」关注</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Knowledge Planet Section -->
+    <section class="section planet" id="planet">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">知识星球 · 咖哥AI</h2>
+                <p class="section-subtitle">记录我思考的一些历程</p>
+            </div>
+            <div class="planet-content">
+                <div class="planet-qr">
+                    <img src="../images/qrcode-zsxq.png" alt="咖哥AI 知识星球二维码" class="qr-image" loading="lazy">
+                </div>
+                <div class="planet-info">
+                    <p>加入「咖哥AI」知识星球，看四类内容：</p>
+                    <ul>
+                        <li><strong>A · 思考复盘</strong> &mdash; 第一人称反思 · 不讲技术细节 · 讲判断力和心法</li>
+                        <li><strong>B · Agent 工程手札</strong> &mdash; 每篇释放一个工程原则的核心洞察</li>
+                        <li><strong>C · 学员问答</strong> &mdash; 课程、书籍学员的真实提问与我的解答</li>
+                        <li><strong>D · 未来技术演进</strong> &mdash; 对 AI、Agent、工程范式走向的观察与判断</li>
+                    </ul>
+                    <p class="wechat-cta">微信扫码或访问「<a href="https://wx.zsxq.com/group/51112141125444" target="_blank" rel="noopener"><strong>知识星球 · 咖哥AI</strong></a>」加入</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-brand">咖哥AI &middot; kage-ai.com</p>
+                <div class="footer-links">
+                    <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                    <a href="https://book.douban.com/author/4616552/" target="_blank" rel="noopener">豆瓣</a>
+                    <a href="https://wx.zsxq.com/group/51112141125444" target="_blank" rel="noopener">知识星球</a>
+                </div>
+                <p class="footer-copy">&copy; 2025 黄佳. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

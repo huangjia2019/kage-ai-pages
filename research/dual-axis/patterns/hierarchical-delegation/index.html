@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Delegation — Pattern Reference — Jia Huang</title>
+    <meta name="description" content="Hierarchical Delegation: the Collaboration × Hierarchy pattern. A manager agent dispatches workers; sub-agents stay isolated; failure stays local.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/patterns/hierarchical-delegation/">
+    <meta property="og:title" content="Hierarchical Delegation — Pattern Reference">
+    <meta property="og:description" content="Manager–worker agents with sub-agent isolation. The Collaboration × Hierarchy pattern.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/patterns/hierarchical-delegation/">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Pattern reference
+                </p>
+                <h1>Hierarchical Delegation</h1>
+                <span class="coord-badge"><strong>Collaboration</strong> × <strong>Hierarchy</strong></span>
+                <p class="essay-meta">
+                    A manager agent decomposes the task and dispatches workers; workers stay isolated; failure stays local; the manager re-plans on failure.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Collaboration</div>
+                    <div class="mm-cell">Handoff Chain</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Fan-Out / Gather</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Adversarial Review</div>
+                    <div class="mm-cell mm-active">Hierarchical Delegation</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this pattern exists</h2>
+                <p>
+                    A single agent cannot do everything for two reasons. The first is bandwidth: one model context
+                    cannot hold an entire enterprise workflow &mdash; you cannot fit a full security audit, a
+                    full legal review, and a full pricing analysis into the same 200K-token window without losing
+                    fidelity in each. The second is accountability: when something goes wrong, you need to know
+                    <em>which decision</em> went wrong, not just <em>the agent went wrong</em>. Hierarchical
+                    Delegation answers both: the manager agent owns the plan and the verdict, but the actual
+                    work happens in isolated workers, each with its own context, its own tools, its own failure
+                    boundary.
+                </p>
+                <p>
+                    For leadership: this is the pattern that lets agent-based work scale beyond a single
+                    specialist. It is also the pattern that introduces real organizational risk &mdash;
+                    multi-agent systems can multiply cost and amplify failure in ways single agents cannot.
+                    Gartner&rsquo;s 2025 projection that 40% of multi-agent projects would be cancelled by 2027
+                    is not a prediction about the model layer; it is a prediction about teams skipping the
+                    isolation discipline this pattern enforces. Get Hierarchical Delegation right and one agent
+                    becomes a team. Get it wrong and you have an N-agent system that is worse than each agent alone.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The agent-design problem it solves</h2>
+                <p>
+                    Hierarchical Delegation organizes multi-agent work along four axes the simpler topologies do not:
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Task decomposition</strong> — the manager owns the breakdown into sub-tasks. Workers do not see the original task; they see only their slice.</li>
+                    <li><strong>Sub-agent isolation</strong> — each worker has its own context, its own tool set, its own permissions. Worker A cannot read worker B&rsquo;s scratchpad. This is bulkhead isolation in agent form.</li>
+                    <li><strong>Result synthesis</strong> — workers return structured outputs to the manager; the manager composes the final answer. Token cost does not multiply because workers do not share context.</li>
+                    <li><strong>Failure escalation</strong> — when a worker fails, the manager decides: retry with a different worker, re-plan the decomposition, or escalate to a human. Failure is bounded by design.</li>
+                </ol>
+                <p>
+                    The distinguishing structural choice is that this is <em>Hierarchy</em>, not <em>Orchestrate</em>.
+                    Orchestrate (e.g., Plan-and-Execute) is one-deep: one orchestrator, many workers, all visible.
+                    Hierarchy is multi-deep: manager dispatches sub-managers that dispatch workers. The recursion
+                    is the point. A research agent runs three sub-research agents, each of which runs five
+                    summarizer workers. The manager need not know that depth exists.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Deep thinking direction</h2>
+                <p>
+                    The deepest failure mode of Hierarchical Delegation is what I call <strong>context bleed</strong>:
+                    when the worker, lacking the manager&rsquo;s context, makes a locally-good decision that is
+                    globally wrong. The legal-review worker correctly flags a clause as risky. But it did not
+                    know that the customer is the company&rsquo;s strategic partner, that this clause has been
+                    accepted in three prior contracts, that the risk is already mitigated by an external
+                    insurance arrangement. Locally right, globally wrong. The cure is not to remove isolation
+                    (then the worker drowns in context) but to enrich the manager&rsquo;s sub-task brief: give the
+                    worker enough situational scaffolding without dumping the whole world.
+                </p>
+                <p>
+                    Three more failure modes recur. <strong>Token Explosion</strong>: the manager copies its full
+                    context into every sub-task, multiplying token cost by N. The discipline is structured
+                    sub-task briefs &mdash; minimal scaffolding plus task spec, never the whole upstream context.
+                    <strong>Synthesis Drift</strong>: the manager assembles worker outputs but lets style or vocabulary
+                    drift across slices, producing a final answer that reads like four people wrote it. The
+                    discipline is a normalization pass owned by the manager. <strong>Escalation Paralysis</strong>:
+                    workers escalate too readily, the manager queues build up, throughput collapses. The
+                    discipline is explicit retry budgets at each level.
+                </p>
+                <p>
+                    The architectural insight is that Hierarchical Delegation is the <em>Erlang/OTP supervisor tree</em>
+                    pattern reborn in agent form. Erlang&rsquo;s 1986 contribution &mdash; processes that may fail,
+                    supervisors that decide how to restart, isolation by default &mdash; is exactly the wiring
+                    this pattern needs. The medium changed from BIFs to LLM calls; the supervision tree did not.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Engineering blog posts &mdash; curated</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/engineering/multi-agent-research-system" target="_blank" rel="noopener">How we built our multi-agent research system — Anthropic</a></span>
+                        <span class="res-meta">Anthropic Engineering · 2025</span>
+                        <span class="res-blurb">Lead/sub-agent architecture in production. Documents 90% time-savings over single-agent on complex research tasks, plus the failure modes that drove the design.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://blog.langchain.com/langgraph-multi-agent-workflows/" target="_blank" rel="noopener">Multi-Agent Workflows in LangGraph</a></span>
+                        <span class="res-meta">LangChain Blog · 2024-2025</span>
+                        <span class="res-blurb">Framework-side argument for state-machine multi-agent over pure DAG. Introduces conditional edges that hierarchical delegation requires for re-planning.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://microsoft.github.io/autogen/" target="_blank" rel="noopener">AutoGen Framework — Microsoft</a></span>
+                        <span class="res-meta">Microsoft Research · ongoing</span>
+                        <span class="res-blurb">Conversable agents with hierarchical group chat. Manager &ldquo;GroupChatManager&rdquo; class is one of the cleanest reference implementations.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://github.com/bytedance/deer-flow" target="_blank" rel="noopener">DeerFlow Multi-Agent Harness — ByteDance</a></span>
+                        <span class="res-meta">ByteDance · 2025</span>
+                        <span class="res-blurb">Production-grade Planner / Researcher / Writer / Reviewer hierarchy at 60K+ stars. Reference for the manager-with-named-roles variant.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027" target="_blank" rel="noopener">40% of Agentic AI Projects to be Cancelled by 2027 — Gartner</a></span>
+                        <span class="res-meta">Gartner · June 2025</span>
+                        <span class="res-blurb">The negative-evidence reference: why the discipline matters. Most cancelled projects are multi-agent without isolation hygiene.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Latest paper progress (arXiv)</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2308.08155" target="_blank" rel="noopener">AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation</a></span>
+                        <span class="res-meta">arXiv:2308.08155 · August 2023</span>
+                        <span class="res-blurb">Microsoft Research&rsquo;s foundational paper for multi-agent conversation. Manager/worker patterns formalized.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2402.01680" target="_blank" rel="noopener">Multi-Agent Collaboration Mechanisms: A Survey of LLMs</a></span>
+                        <span class="res-meta">arXiv:2402.01680 · February 2024</span>
+                        <span class="res-blurb">Survey of collaboration topologies. Direct ancestor table for the topologies axis in the dual-axis framework.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2402.05120" target="_blank" rel="noopener">A Survey on Large Language Model based Autonomous Agents</a></span>
+                        <span class="res-meta">arXiv:2402.05120 · February 2024</span>
+                        <span class="res-blurb">Broad survey covering single and multi-agent. Hierarchical sections explicitly motivated by isolation needs.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2406.04692" target="_blank" rel="noopener">Mixture-of-Agents Enhances Large Language Model Capabilities</a></span>
+                        <span class="res-meta">arXiv:2406.04692 · June 2024</span>
+                        <span class="res-blurb">Multi-layer MoA: layered hierarchy where each layer&rsquo;s agents propose, next layer aggregates. Hierarchical Delegation in pure mathematical form.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2503.20102" target="_blank" rel="noopener">Sub-Agent Isolation and Token Economy in Multi-Agent Systems</a></span>
+                        <span class="res-meta">arXiv:2503.20102 · March 2025</span>
+                        <span class="res-blurb">Quantifies token cost as isolation discipline is relaxed. Engineering case for hard isolation boundaries.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Related patterns</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/observability-harness/">
+                        <span class="rp-coord">Governance × Orchestrate</span>
+                        <span class="rp-name">Observability Harness</span>
+                    </a>
+                    <a href="/research/dual-axis/patterns/approval-gate/">
+                        <span class="rp-coord">Governance × Route</span>
+                        <span class="rp-name">Approval Gate</span>
+                    </a>
+                    <a href="/research/dual-axis/">
+                        <span class="rp-coord">Layer 2</span>
+                        <span class="rp-name">Full matrix</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this pattern is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 8 §8.1 (Collaboration / Hierarchical Delegation).</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.6 Pattern 6.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/collaboration/">All Collaboration patterns →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

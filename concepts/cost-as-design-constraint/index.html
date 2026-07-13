@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost as Design Constraint — Jia Huang</title>
+    <meta name="description" content="When the model is fixed and cost is the binding constraint, pattern selection IS the design. This is where engineering judgment lives.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/cost-as-design-constraint/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/cost-as-design-constraint/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/cost-as-design-constraint/">
+    <meta property="og:title" content="Cost as Design Constraint">
+    <meta property="og:description" content="When the model is fixed and cost is binding, pattern selection IS the design.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/cost-as-design-constraint/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/cost-as-design-constraint/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Cost as Design Constraint
+            </p>
+
+            <h1>Cost as Design Constraint</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                When the model is fixed and cost is the binding constraint, pattern selection IS the design. This is where engineering judgment lives.
+            </p>
+
+            <h2>Definition</h2>
+            <p>
+                Most agent design writing assumes the way to scale is to use a better model. In
+                production, the model is often fixed at the cheapest viable tier, and cost-per-call
+                becomes a hard ceiling set by the business — not by the engineer. The design
+                question moves from "which model" to "which patterns to compose so that this fixed
+                model can carry this workload at this cost." Pattern selection under cost
+                constraint is the actual engineering surface.
+            </p>
+
+            <h2>The problem it names</h2>
+            <p>
+                <em>[TODO: 咖哥 voice — 真实场景。RegTech / 客服 / batch processing 这类生产场景里,
+                "用更贵的模型" 不是选项 —— 业务方已经把 token budget 锁死。
+                这时候才看出工程师水平:同样的 Sonnet,有的人编排出可用系统,有的人卡死在 retry loop。
+                这一段建议你举一个具体例子,把 "cost-as-constraint" 从抽象变成画面。]</em>
+            </p>
+
+            <h2>How it changes design decisions</h2>
+            <p>
+                Three shifts:
+            </p>
+            <ol style="margin: 0.5rem 0 1rem 1.5rem; list-style: decimal;">
+                <li><strong>Reasoning depth becomes a budget, not a quality dial.</strong> Adding a Reflection loop is no longer "always good"; it's a 2-3× cost increase that has to earn its place.</li>
+                <li><strong>Routing patterns become first-class.</strong> Complexity-Based Routing (R2) is not optional polish — it's the only way to keep average cost under ceiling when query distribution is skewed.</li>
+                <li><strong>Caching and procedural memory become architectural.</strong> Skill Package (F2), Hierarchical Retention (M1), Failure Journals (M4) stop being optimizations and become load-bearing structure.</li>
+            </ol>
+
+            <h2>Lineage</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Database query planner under memory budget</strong> — same query has different optimal plans at different cache sizes</li>
+                <li><strong>Embedded systems</strong> — when RAM is fixed, algorithm choice IS the design</li>
+                <li><strong>SRE error budget</strong> — cost (of failure) as the binding constraint that shapes release strategy</li>
+                <li><strong>Cost-aware compilers</strong> — JIT optimization driven by profile data, not abstract preference</li>
+            </ul>
+
+            <h2>What it is NOT</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Not cost-cutting.</strong> Cost-cutting reduces an expense; cost-as-constraint accepts a ceiling and designs within it.</li>
+                <li><strong>Not "use the cheapest model."</strong> The model is given. The design is what you build with it.</li>
+                <li><strong>Not optimization.</strong> Optimization tunes a chosen design. Cost-as-constraint chooses the design.</li>
+                <li><strong>Not a Chinese-market peculiarity.</strong> Every production agent at scale eventually hits this; richer firms hit it later, but they hit it.</li>
+            </ul>
+
+            <h2>Where it's developed further</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>The Pattern Selection Card methodology — encodes cost class as a first-stage filter</li>
+                <li>Book treatment: <em>Designing AI Agents</em> (Manning, 2026) — Ch7 governance + Ch10 production harness</li>
+                <li>Worked example: RegTech RAG case study (forthcoming as a public essay)</li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Cost as Design Constraint.
+                <a href="https://kage-ai.com/concepts/cost-as-design-constraint/">kage-ai.com/concepts/cost-as-design-constraint/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

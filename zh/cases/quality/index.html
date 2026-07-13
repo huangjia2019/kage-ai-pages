@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>质量工程 Agent 案例 — 黄佳</title>
+    <meta name="description" content="四个 QECon 质量工程 AI Agent demo，包含结构蓝图、运行路径、截图和设计模式映射。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/quality/">
+    <meta property="og:title" content="质量工程 Agent 案例 — 黄佳">
+    <meta property="og:description" content="四个 QECon 质量工程 AI Agent demo，包含结构蓝图、运行路径、截图和设计模式映射。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/quality/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="training-hero"><p class="eyebrow">质量工程案例</p><h1>四个质量工程 Agent demo。</h1><p class="lede">这些案例展示 Agent 如何进入代码审查、测试生成、故障诊断和效能度量。每个页面都给出可运行路径、交互式浏览器 Demo、结构蓝图、截图和模式映射。</p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/training/quality/">English</a></div></section>
+<section class="training-visual"><img src="/images/training/agent-pattern-matrix-black.png" alt="四个质量工程 Agent demo。"></section>
+<section class="block training-section"><h2>阅读路径</h2><div class="case-read-map"><div class="read-step"><strong>先跑 CLI</strong><span>看到真实输出、状态和门控结果。</span></div><div class="read-step"><strong>再看交互页</strong><span>逐步观察 pipeline、state、log 和 output。</span></div><div class="read-step"><strong>对照模式</strong><span>把每一步落到 28 个 Agent 设计模式。</span></div><div class="read-step"><strong>回到选型卡</strong><span>讨论为什么这样组合，代价是什么。</span></div></div></section>
+<section class="block training-section"><h2>Demo 列表</h2><div class="training-grid"><article class="demo-link-card"><h3><a href="/zh/cases/quality/code-review-agent/">自动化代码审查 Agent</a></h3><p>一个质量工程审查 Agent：先分诊 PR 文件，再加载团队规范，按复杂度路由审查深度，最后输出带门控的评论。</p><p class="pattern-line">可运行 demo · workshops/workshop1-code-review</p><div class="pattern-chip-row"><span class="pattern-chip">上下文分诊</span><span class="pattern-chip">分层记忆</span><span class="pattern-chip">复杂度路由</span></div></article><article class="demo-link-card"><h3><a href="/zh/cases/quality/test-generation-agent/">智能测试生成 Agent</a></h3><p>一个测试生成 Agent：根据 diff 制定测试计划，生成可运行测试，用 critic 检查稳定性，并记录进度。</p><p class="pattern-line">可运行 demo · workshops/workshop2-test-generation</p><div class="pattern-chip-row"><span class="pattern-chip">规划-执行</span><span class="pattern-chip">生成器-评论家</span><span class="pattern-chip">自愈循环</span></div></article><article class="demo-link-card"><h3><a href="/zh/cases/quality/incident-diagnosis-agent/">跨系统故障诊断 Agent</a></h3><p>一个故障诊断 Agent：从日志、指标、部署和配置中收集证据，再通过可证伪假设逐步收敛。</p><p class="pattern-line">可运行 demo · workshops/workshop3-incident-diagnosis</p><div class="pattern-chip-row"><span class="pattern-chip">扇出/汇聚</span><span class="pattern-chip">多模态融合</span><span class="pattern-chip">迭代假设</span></div></article><article class="demo-link-card"><h3><a href="/zh/cases/quality/engineering-metrics-agent/">研发效能度量 Agent</a></h3><p>一个效能度量 Agent：扫描 Git、CI、Jira 信号，检索指标定义，并生成带来源的趋势报告。</p><p class="pattern-line">可运行 demo · workshops/workshop4-engineering-metrics</p><div class="pattern-chip-row"><span class="pattern-chip">渐进发现</span><span class="pattern-chip">RAG 管道</span><span class="pattern-chip">可观测性 Harness</span></div></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

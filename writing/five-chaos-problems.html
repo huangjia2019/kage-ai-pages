@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Five Chaos Problems in Agent Design — Jia Huang</title>
+    <meta name="description" content="We are in 2026, and &#x27;agent&#x27; has become the most overloaded word in software since &#x27;cloud.&#x27; Five specific chaos problems the field has not solved — and the structural framework that motivated me to write a book about it.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/writing/five-chaos-problems.html">
+    <meta property="og:title" content="The Five Chaos Problems in Agent Design">
+    <meta property="og:description" content="We are in 2026, and &#x27;agent&#x27; has become the most overloaded word in software since &#x27;cloud.&#x27; Five specific chaos problems the field has not solved — and the structural framework that motivated me to write a book about it.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/writing/five-chaos-problems.html">
+    <meta property="article:published_time" content="2026-04-06">
+    <meta property="article:author" content="Jia Huang">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <h1>The Five Chaos Problems in Agent Design</h1>
+                <p class="essay-meta">
+                    <time datetime="2026-04-06">April 6, 2026</time>
+                    &middot; by <a href="/about/">Jia Huang</a>
+                    &middot; <a href="https://agentpatterns.substack.com/p/the-five-chaos-problems" target="_blank" rel="noopener">Originally on Substack</a>
+                </p>
+            </header>
+
+<p>A product manager at a large tech company told his engineering team: <em>&ldquo;We need to build an agent.&rdquo;</em> The lead engineer asked what kind. The PM looked confused. <em>&ldquo;What do you mean, what kind?&rdquo;</em></p>
+<p>That confusion is not his fault. It is the field&rsquo;s fault.</p>
+<p>It is 2026, and <em>agent</em> has become the most overloaded word in software since <em>cloud</em>. A ChatGPT wrapper is an agent. A ReAct loop calling three APIs is an agent. A multi-agent system with planning, memory, tool use, and self-reflection is an agent. A glorified if-else chain with an LLM call in the middle is also an agent. They are all agents, which means the word tells you nothing.</p>
+<p>This is a design problem, not just a naming problem. Two years of reviewing agent architectures across industries and studying every major framework keeps surfacing the same five chaos problems. The field has not solved them. They are what motivated a structural framework, and a book about it.</p>
+<h2>1. &ldquo;Agent&rdquo; means everything and nothing</h2>
+<p>When that PM says <em>&ldquo;build me an agent,&rdquo;</em> the engineer has no vocabulary to ask the right clarifying questions. Is this a single-turn tool caller? A multi-step planner with memory? An autonomous system that can reflect on its own failures? There is no shared taxonomy. No equivalent of saying <em>&ldquo;this is a microservice&rdquo;</em> versus <em>&ldquo;this is a monolith&rdquo;</em> versus <em>&ldquo;this is an event-driven architecture.&rdquo;</em></p>
+<p>In object-oriented programming, this exact problem existed before the Gang of Four published <em>Design Patterns</em> in 1994. Two engineers could solve the same structural problem, say decoupling a publisher from its subscribers, in completely different ways, with no language to compare their solutions. The book did not invent new programming techniques. It <em>named</em> existing ones. It gave the field a vocabulary: Observer, Strategy, Factory, Decorator.</p>
+<p>Agent design in 2026 needs the same treatment. Not new capabilities. New <em>names</em>.</p>
+<h2>2. Patterns exist as isolated papers, unaware of each other</h2>
+<p>ReAct is a paper. Reflexion is a paper. Plan-and-Execute is a paper. LATS is a paper. Tree of Thoughts is a paper. Each introduces a pattern, benchmarks it on a few tasks, and moves on.</p>
+<p>Nobody has mapped how these patterns relate to each other. Which is a specialization of which? Which ones compose well? Which are mutually exclusive? An engineer who reads the Reflexion paper knows <em>how</em> Reflexion works, but not <em>when</em> to choose it over simple retry logic, or <em>when</em> to combine it with planning, or <em>what happens</em> when it is used in the wrong context.</p>
+<p>The individual patterns exist. The map does not.</p>
+<p>This is like a toolbox where every tool came with its own instruction manual, but nobody wrote a carpentry guide. You know how to use a chisel. You know how to use a saw. Nobody has told you which one to reach for when, in what order, or what the thing you are building should look like.</p>
+<h2>3. Cognitive capabilities are tangled with design choices</h2>
+<p>When someone says <em>&ldquo;my agent needs memory,&rdquo;</em> they could mean episodic memory (remembering past interactions), semantic memory (retrieving domain knowledge through RAG), or procedural memory (learning reusable heuristics from past successes and failures). Three fundamentally different cognitive capabilities with different architectures, different costs, and different failure modes, all collapsed into a single checkbox on a feature list.</p>
+<p>The same confusion applies to planning, reasoning, perception, and reflection. Engineers treat them as add-ons: <em>&ldquo;let&rsquo;s add memory, add planning, add tools.&rdquo;</em> These are distinct cognitive dimensions. An agent that needs strong perception but minimal planning requires a very different architecture from one that needs deep multi-step reasoning but no memory. Most teams design both the same way, because no framework separates what cognitive capabilities the problem requires from what design pattern implements them.</p>
+<p>The result is predictable. Over-engineered agents that are slow and expensive because they have capabilities they don&rsquo;t need. Under-engineered agents that fail at basic tasks because they are missing a cognitive module nobody thought to include.</p>
+<h2>4. Framework selection happens by GitHub stars</h2>
+<p>LangChain. LangGraph. AutoGen. CrewAI. Semantic Kernel. Agency Swarm. Claude Agent SDK. OpenAI Agents SDK. The list grows monthly. Frameworks get picked based on what showed up on social media last week, not on systematic analysis of what the problem actually requires.</p>
+<p>This is the NoSQL crisis of 2015 repeating itself. Teams chose MongoDB because it was popular, not because they had thought about whether their data model was document-oriented, graph-oriented, or relational. Years of painful migrations followed when reality collided with hype.</p>
+<p>The same pattern is playing out now with agent frameworks. A team adopts a framework, builds for months, then discovers it does not support the coordination model they need, or the memory architecture their use case demands, or the governance layer that production requires. By then, switching costs are enormous.</p>
+<p>What is missing is a way to reason about agent architectures <em>from first principles</em>: starting from the problem&rsquo;s cognitive requirements, not from the framework&rsquo;s feature list.</p>
+<h2>5. There is no progression path from simple to complex</h2>
+<p>Today, the choice is binary: either build a single ReAct agent or jump straight to multi-agent orchestration. No middle ground, no gradual path, no clear criteria for when to escalate.</p>
+<p>When should a single agent become two? When should two agents become a supervised team? When does a pipeline need to become an autonomous system? These are among the most consequential architectural decisions in agent design, and they are currently made by gut feeling.</p>
+<p>Get the decision wrong in one direction and you under-build: the agent cannot handle the task&rsquo;s complexity. Get it wrong in the other direction and you over-build: a distributed AI system with all its coordination overhead, failure modes, and debugging nightmares, where a single agent with better prompting would have sufficed.</p>
+<h2>The root cause</h2>
+<p>These five problems share a common origin: the field of agent design lacks a structural framework.</p>
+<p>Not a new framework: there are too many of those already. Not another paper: there are plenty. A <em>design</em> framework: a shared vocabulary, a map that organizes existing patterns, and a methodology that lets engineers navigate from problem to solution systematically rather than by guesswork.</p>
+<p>The framework being built for <em>Designing AI Agents</em> organizes the space along two axes: <em>cognitive capabilities</em> (what the agent needs to think and do) and <em>design patterns</em> (how the agent is structured to deliver those capabilities). Seven cognitive modules. Twenty-seven named patterns. One map.</p>
+<p>This newsletter shares the framework as it develops: the thinking behind it, the tradeoffs within it, and the lessons from building agent systems that survive contact with production.</p>
+<p>Next week: why <em>&ldquo;build me an agent&rdquo;</em> is the most dangerous sentence in software engineering right now, and what to ask instead.</p>
+<hr />
+<p><em><a href="https://hubs.la/Q04hCsrS0">Designing AI Agents</a> (Manning). Subscribe for weekly notes on agent design patterns.</em></p>
+<p><em>— Jia Huang, AI Researcher, A*STAR Singapore</em></p>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

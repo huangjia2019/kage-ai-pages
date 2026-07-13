@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模式进化：从 GoF、分布式到 Agent — 黄佳</title>
+    <meta name="description" content="软件设计模式的血脉传承图。GoF 1994 年的 23 个对象模式 + 2010 年代以来的 25 个分布式模式 → Agent 时代如何继承与升级。点击任一模式，查看它的原问题、默认前提，以及 Agent 时代的对应物。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/pattern-evolution/">
+    <meta property="og:title" content="模式进化：从 GoF、分布式到 Agent">
+    <meta property="og:description" content="48 个软件设计模式从面向对象时代和分布式系统时代延伸到 Agent 时代的交互式血脉地图。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/pattern-evolution/">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../research/pattern-evolution/evolution.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/books/">书</a>
+                <a href="/zh/about/">关于</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/research/pattern-evolution/" class="lang-switch">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <h1 class="evo-title">模式进化：从 GoF、分布式到 Agent</h1>
+
+            <p class="lede">
+                软件设计模式不是从 Agent 时代才开始的。GoF 在 1994 年命名了 23 个对象模式，
+                分布式系统社区又在接下来二十年里积累了另外 25 个。这两套模式语言都默认了一件
+                Agent 时代不再默认的事——所有重要决策，可以由 human architect 在 design time 想清楚。
+            </p>
+
+            <p>
+                这个页面要追的就是这条血脉。同样的问题——谁创建什么，谁通知谁，
+                出错了怎么办，由谁决定换哪个策略——在 Agent 时代仍然存在，
+                但答案从"设计期选择"变成了"运行期在不确定性下决策"。
+                模式没有过时，它们只是被抬高了一层。
+            </p>
+
+            <p class="evo-meta">
+                <strong>怎么读这一页</strong>：下面每一个模式都是可以点击的卡片。点开后展示四段进化结构——
+                原问题、默认前提、Agent 时代的对应物、一句话收口。
+                已写完详细分析的卡片用实心点（<span class="evo-status-dot detailed"></span>）；
+                还在写的卡片用空心点（<span class="evo-status-dot pending"></span>）——
+                点击后展示"待补"占位，但骨架已经搭好。
+            </p>
+
+            <!-- =============================================================
+                 第一部分 — GoF（23 个模式，3 个类别）
+                 ============================================================= -->
+            <section class="evo-section" id="gof">
+                <header class="evo-section-header">
+                    <h2>一、Gang of Four — 对象设计模式（1994）</h2>
+                    <p class="evo-section-sub">
+                        23 个模式，分 3 类。共同的默认前提是：一个确定性的对象世界——
+                        类型、创建方式、通知关系、策略切换，大多由 human architect 在 design time 设计好。
+                        Agent 时代继承了这套词汇，但把决策搬到了 runtime。
+                    </p>
+                </header>
+                <div id="gof-matrix" class="evo-matrix"></div>
+            </section>
+
+            <!-- =============================================================
+                 第二部分 — 分布式（25 个模式，5 个组）
+                 ============================================================= -->
+            <section class="evo-section" id="distributed">
+                <header class="evo-section-header">
+                    <h2>二、分布式系统 — 服务模式（2000s–2020s）</h2>
+                    <p class="evo-section-sub">
+                        25 个模式，分 5 组。共同的默认前提是：服务不可靠、网络会撒谎、
+                        状态会漂移、协作必须显式化。Agent 时代继承了完全相同的问题，
+                        只换了一件事——不可靠的不再是服务，而是模型本身。
+                    </p>
+                </header>
+                <div id="dist-matrix" class="evo-matrix"></div>
+            </section>
+
+            <!-- =============================================================
+                 收口
+                 ============================================================= -->
+            <section class="evo-closing">
+                <h2>一句话收口</h2>
+                <blockquote class="evo-collapse">
+                    分布式模式解决的是<em>"不可靠服务之间如何可靠协作"</em>。
+                    Agent 模式解决的是<em>"不确定模型如何可靠行动"</em>。
+                    一样的工程直觉。新的不可靠组件。被抬高了一层。
+                </blockquote>
+                <p>
+                    这个页面是《Designing AI Agents》（Manning, 2026）模式血脉一章的可视化伴随物。
+                    完整章节会把每一个 cell 走到它的工程实现，并把它落到
+                    <a href="/zh/research/dual-axis/">双轴框架</a> 中的位置。
+                </p>
+            </section>
+
+            <!-- =============================================================
+                 详情面板
+                 ============================================================= -->
+            <aside id="evo-detail" class="evo-detail" hidden>
+                <button class="evo-detail-close" aria-label="关闭">×</button>
+                <div class="evo-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <script src="../../../research/pattern-evolution/evolution.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.PatternEvolution.init({ lang: 'zh', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

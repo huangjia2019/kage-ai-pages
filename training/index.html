@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Programming Workshop &mdash; Jia Huang</title>
+    <meta name="description" content="A reusable, fork-friendly workshop for teaching AI-assisted programming with Claude Code &mdash; five extension mechanisms, seven modules, ten enterprise deliveries.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/training/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/training/">
+    <meta property="og:title" content="AI-Assisted Programming Workshop &mdash; Jia Huang">
+    <meta property="og:description" content="A reusable, fork-friendly workshop for teaching AI-assisted programming with Claude Code.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/training/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <section class="training-hero">
+            <p class="eyebrow">AI-Assisted Programming Workshop</p>
+            <h1>A reusable workshop for engineering teams adopting Claude Code.</h1>
+            <p class="lede">
+                A modular workshop curriculum I have run for keysight, LSEG, QECon Shenzhen, the Singularity Intelligence Conference,
+                Packt and Geekbang. The material is organized along two axes: the five extension mechanisms of Claude Code on one side,
+                seven self-contained teaching modules on the other. Everything is in one public repository &mdash; fork it, strip what
+                you do not need, run the workshop your way.
+            </p>
+        </section>
+
+        <section class="block training-section">
+            <h2>Two-axis structure</h2>
+            <p>The workshop is built on a small cross product. The horizontal axis lists the five extension mechanisms taught in the Claude Code book; the vertical axis lists the seven teaching modules. Each module exercises one or more mechanisms against a real engineering scenario.</p>
+            <pre style="background: var(--color-quote-bg); border: 1px solid var(--color-rule); border-radius: 6px; padding: 1rem; overflow-x: auto; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.55; color: var(--color-text); margin-top: 1rem;">
+                       Sub-Agents   Skills   Slash Cmds   Hooks   MCP
+M1  Foundations             .          .          .         .       .
+M2  Sub-Agents              X          .          .         .       .
+M3  Skills                  .          X          .         .       .
+M4  Slash Commands          .          .          X         .       .
+M5  Hooks                   .          .          .         X       .
+M6  MCP Integration         .          .          .         .       X
+M7  Team Playbook           X          X          X         X       X
+</pre>
+            <p class="pattern-line">Each row is a half-day module. The last module composes all five mechanisms into a team-level playbook.</p>
+        </section>
+
+        <section class="block training-section">
+            <h2>Modules</h2>
+            <p>Seven modules, each runnable on its own. Click through to the module folder on GitHub for slides, lab scripts, and the teacher&rsquo;s notes.</p>
+            <div class="domain-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M1-foundations" target="_blank" rel="noopener">M1 &middot; Foundations</a></h2>
+                    <p>What Claude Code is, how the agent loop works, and where the five extension mechanisms sit. Sets the shared vocabulary before any code is written.</p>
+                    <p class="pattern-line"><code>git clone https://github.com/huangjia2019/claude-code-engineering.git</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M2-sub-agents" target="_blank" rel="noopener">M2 &middot; Sub-Agents</a></h2>
+                    <p>Task delegation with isolated context. Building a code reviewer and a test runner that survive a real PR pipeline.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M2-sub-agents &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M3-skills" target="_blank" rel="noopener">M3 &middot; Skills</a></h2>
+                    <p>Declarative capability packages defined through <code>SKILL.md</code>. Writing a financial-analysis skill and an API-generator skill from scratch.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M3-skills &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M4-slash-commands" target="_blank" rel="noopener">M4 &middot; Slash Commands</a></h2>
+                    <p>User-invoked workflows. Wrapping common engineering rituals (code review, release notes, on-call handover) into one-line commands.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M4-slash-commands &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M5-hooks" target="_blank" rel="noopener">M5 &middot; Hooks</a></h2>
+                    <p>Event-driven automation around tool execution. Building pre-commit checks, post-edit linters, and a log-analysis hook that runs without user input.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M5-hooks &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M6-mcp" target="_blank" rel="noopener">M6 &middot; MCP Integration</a></h2>
+                    <p>Model Context Protocol for external tools. Writing a custom MCP server in TypeScript and wiring it into the team&rsquo;s daily workflow.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M6-mcp &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M7-team-playbook" target="_blank" rel="noopener">M7 &middot; Team Playbook</a></h2>
+                    <p>Composing all five mechanisms into a single team workflow: shared skills repository, plugin packaging, governance, and rollout checklist.</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M7-team-playbook &amp;&amp; cat README.md</code></p>
+                </article>
+            </div>
+        </section>
+
+        <section class="block training-section">
+            <h2>Past deliveries</h2>
+            <p>Six representative runs of the workshop in 2025 and 2026. Each instance folder contains the slide deck, the lab agenda, anonymized feedback notes, and the customizations made for that audience.</p>
+            <div class="domain-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/keysight" target="_blank" rel="noopener">Keysight</a></h2>
+                    <p>Two-day onsite for a measurement-instrument R&amp;D team. Focus on test generation and instrument-driver scaffolding.</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/lseg" target="_blank" rel="noopener">LSEG</a></h2>
+                    <p>Refinitiv quant and risk teams. Regulatory document analysis, multi-agent ticket review, and Copilot-driven spec development.</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/qecon-shenzhen" target="_blank" rel="noopener">QECon Shenzhen</a></h2>
+                    <p>Quality engineering conference workshop. Code review, test generation, incident diagnosis and engineering-metrics agents.</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/singularity" target="_blank" rel="noopener">Singularity Intelligence Conf.</a></h2>
+                    <p>Keynote-adjacent workshop on harness engineering and the agent design-pattern catalogue.</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/packt" target="_blank" rel="noopener">Packt</a></h2>
+                    <p>Companion workshop for the Packt Claude Code engineering title. Walks the book&rsquo;s case studies as live labs.</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/geekbang" target="_blank" rel="noopener">Geekbang Live</a></h2>
+                    <p>Online column workshop. Compressed three-hour version of M1, M2 and M3, tailored for a self-paced audience.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="block training-section">
+            <h2>How to fork</h2>
+            <p>
+                The workshop is a public repository. To run it yourself, clone the repo and read the process notes &mdash;
+                they cover audience sizing, time allocation per module, lab environment, and the customizations that have worked
+                in different settings.
+            </p>
+            <p class="pattern-line"><code>git clone https://github.com/huangjia2019/claude-code-engineering.git</code></p>
+            <p>
+                The full fork-and-deliver guide lives at
+                <a href="https://github.com/huangjia2019/claude-code-engineering/blob/main/workshop/PROCESS.md" target="_blank" rel="noopener">workshop/PROCESS.md</a>.
+                For a private engagement or in-house delivery, the easiest contact path is via the
+                <a href="/about/">about page</a>.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

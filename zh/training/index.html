@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 辅助编程训练营 — 黄佳</title>
+    <meta name="description" content="一套可复用、可 fork 的 AI 辅助编程训练营课程：五大扩展机制、七个独立模块、十次企业交付。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/training/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/training/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/training/">
+    <meta property="og:title" content="AI 辅助编程训练营 — 黄佳">
+    <meta property="og:description" content="一套可复用、可 fork 的 AI 辅助编程训练营课程。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/training/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-training">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/training/">训练营</a>
+                <a href="/zh/#books">书</a>
+                <a href="/zh/#hero">关于</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/training/" class="lang-switch">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <section class="training-hero">
+            <p class="eyebrow">AI 辅助编程训练营</p>
+            <h1>一套可复用的工程团队 Claude Code 训练营课程。</h1>
+            <p class="lede">
+                这套课程已经在是德科技、伦交所（路孚特）、QECon 深圳、奇点智能大会、Packt 出版社和极客时间交付过。
+                课程沿两条轴组织：横向是 Claude Code 的五大扩展机制，纵向是七个相对独立的教学模块。
+                每个模块对应一段半天左右的工作坊，落在真实的工程场景上。
+                全部课程材料放在一个公开仓库里，可以直接 fork 使用：保留你需要的部分，删掉不需要的，按自己团队的节奏跑。
+            </p>
+        </section>
+
+        <section class="block training-section">
+            <h2>双轴结构</h2>
+            <p>课程结构是一张小型的交叉表。横轴列出 Claude Code 书里讲的五大扩展机制，纵轴列出七个教学模块。每个模块至少触发一种机制，并在一个真实的工程场景里完成练习。</p>
+            <pre style="background: var(--color-quote-bg); border: 1px solid var(--color-rule); border-radius: 6px; padding: 1rem; overflow-x: auto; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.55; color: var(--color-text); margin-top: 1rem;">
+                        Sub-Agents   Skills   Slash Cmd   Hooks   MCP
+M1  基础与心法                 .          .          .         .       .
+M2  Sub-Agents                 X          .          .         .       .
+M3  Skills                     .          X          .         .       .
+M4  Slash Commands             .          .          X         .       .
+M5  Hooks                      .          .          .         X       .
+M6  MCP 集成                   .          .          .         .       X
+M7  团队 Playbook              X          X          X         X       X
+</pre>
+            <p class="pattern-line">每一行对应一段半天的模块。最后一个模块把五种机制组合成团队层面的落地 playbook。</p>
+        </section>
+
+        <section class="block training-section">
+            <h2>模块</h2>
+            <p>七个模块，每个都可以独立运行。点进 GitHub 模块目录就能拿到讲义、实验脚本和讲师备注。</p>
+            <div class="domain-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M1-foundations" target="_blank" rel="noopener">M1 · 基础与心法</a></h2>
+                    <p>Claude Code 是什么、agent loop 怎么运转、五大扩展机制各自的位置。这一节先把后面所有讨论的共同语言对齐。</p>
+                    <p class="pattern-line"><code>git clone https://github.com/huangjia2019/claude-code-engineering.git</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M2-sub-agents" target="_blank" rel="noopener">M2 · Sub-Agents</a></h2>
+                    <p>用隔离上下文的子任务做委派。构建一个能在真实 PR 流程里跑的代码评审 agent 和测试运行 agent。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M2-sub-agents &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M3-skills" target="_blank" rel="noopener">M3 · Skills</a></h2>
+                    <p>用 <code>SKILL.md</code> 把能力声明式打包。现场从零写一个金融分析 skill 和一个 API 生成 skill。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M3-skills &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M4-slash-commands" target="_blank" rel="noopener">M4 · Slash Commands</a></h2>
+                    <p>把日常工程动作包成一句话命令：代码评审、发版说明、值班交接，都收敛到 slash command 入口。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M4-slash-commands &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M5-hooks" target="_blank" rel="noopener">M5 · Hooks</a></h2>
+                    <p>围绕工具调用做事件驱动的自动化。现场写 pre-commit 检查、post-edit lint 和一个无需用户干预的日志分析 hook。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M5-hooks &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M6-mcp" target="_blank" rel="noopener">M6 · MCP 集成</a></h2>
+                    <p>用 Model Context Protocol 接外部工具。用 TypeScript 写一个自定义 MCP server，并把它接进团队的日常工作流。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M6-mcp &amp;&amp; cat README.md</code></p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/modules/M7-team-playbook" target="_blank" rel="noopener">M7 · 团队 Playbook</a></h2>
+                    <p>把五大机制组合成一份团队工作流：共享 skill 仓库、插件打包、权限治理和落地 checklist。</p>
+                    <p class="pattern-line"><code>cd workshop/modules/M7-team-playbook &amp;&amp; cat README.md</code></p>
+                </article>
+            </div>
+        </section>
+
+        <section class="block training-section">
+            <h2>过往交付</h2>
+            <p>2025-2026 年间六次具有代表性的交付。每个 instance 目录里包含讲义、议程、脱敏后的反馈记录，以及针对那次受众做的定制化改动。</p>
+            <div class="domain-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/keysight" target="_blank" rel="noopener">是德科技</a></h2>
+                    <p>面向测量仪器研发团队的两天线下工作坊，重点放在测试生成和仪器驱动脚手架。</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/lseg" target="_blank" rel="noopener">伦交所（路孚特）</a></h2>
+                    <p>面向 LSEG 量化与风控团队：监管文档分析、多 agent 工单审查、Copilot 驱动的规格开发。</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/qecon-shenzhen" target="_blank" rel="noopener">QECon 深圳</a></h2>
+                    <p>质量工程大会的工作坊：代码评审、测试生成、故障诊断和效能度量 agent。</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/singularity" target="_blank" rel="noopener">奇点智能大会</a></h2>
+                    <p>与 keynote 配套的 workshop，主题是 harness 工程化和 agent 设计模式 catalog。</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/packt" target="_blank" rel="noopener">Packt</a></h2>
+                    <p>配套 Packt 那本 Claude Code 工程化英文书的官方工作坊，把书里案例当现场实验跑。</p>
+                </article>
+                <article class="domain-card">
+                    <h2><a href="https://github.com/huangjia2019/claude-code-engineering/tree/main/workshop/instances/geekbang" target="_blank" rel="noopener">极客时间直播</a></h2>
+                    <p>极客时间专栏配套的线上工作坊。M1、M2、M3 压缩成三小时版本，面向自学型受众。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="block training-section">
+            <h2>如何 fork</h2>
+            <p>
+                整套课程材料是一个公开仓库。要自己跑一遍工作坊，先把仓库 clone 下来，再读一遍流程说明 ——
+                里面写了受众规模、模块时间分配、实验环境，以及在不同场景下做过哪些定制化改动。
+            </p>
+            <p class="pattern-line"><code>git clone https://github.com/huangjia2019/claude-code-engineering.git</code></p>
+            <p>
+                完整的 fork 与交付指南放在
+                <a href="https://github.com/huangjia2019/claude-code-engineering/blob/main/workshop/PROCESS.md" target="_blank" rel="noopener">workshop/PROCESS.md</a>。
+                如果是企业内训或闭门交付，可以从 <a href="/zh/#hero">关于页</a> 上的联系方式联系本人。
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

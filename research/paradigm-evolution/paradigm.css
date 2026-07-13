@@ -1,0 +1,278 @@
+/* ========================================================================
+   Paradigm Evolution page · paradigm.css
+   Vertical timeline of major software paradigms. Inherits brand palette
+   from style.css (warm brown/orange).
+   ======================================================================== */
+
+.para-title {
+    font-family: var(--font-serif);
+    font-size: 1.85rem;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.para-meta {
+    background: var(--color-quote-bg);
+    border-left: 3px solid var(--color-link);
+    padding: 0.85rem 1.1rem;
+    margin: 1.5rem 0 2.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+/* --- Crisis map (compressed summary before the era timeline) --- */
+.para-crisis-map {
+    background: #ffffff;
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    padding: 1rem 1.15rem 1.1rem;
+    margin: 0 0 2.6rem;
+}
+
+.para-crisis-map h2 {
+    font-family: var(--font-serif);
+    font-size: 1.22rem;
+    line-height: 1.3;
+    margin: 0 0 0.35rem;
+    color: var(--color-text);
+}
+
+.para-crisis-map p {
+    margin: 0 0 0.85rem;
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: var(--measure);
+}
+
+.para-crisis-table-wrap {
+    overflow-x: auto;
+}
+
+.para-crisis-table {
+    width: 100%;
+    min-width: 660px;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.para-crisis-table th,
+.para-crisis-table td {
+    border-top: 1px solid var(--color-rule);
+    padding: 0.56rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.para-crisis-table th {
+    background: var(--color-quote-bg);
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.para-crisis-table td:first-child {
+    color: var(--color-link);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.para-crisis-table td:last-child {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+/* --- Era sections (one per era) --- */
+.para-era {
+    position: relative;
+    margin: 2.4rem 0 3rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--color-rule);
+}
+
+.para-era-header {
+    margin-bottom: 1.4rem;
+}
+
+.para-era-name {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: var(--color-link);
+    margin: 0 0 0.45rem -1.6rem;
+    padding-left: 0;
+    line-height: 1.3;
+    position: relative;
+}
+.para-era-name::before {
+    content: "";
+    position: absolute;
+    left: -0.5rem; top: 0.55rem;
+    width: 11px; height: 11px;
+    background: var(--color-link);
+    border-radius: 50%;
+}
+
+.para-era-sub {
+    font-size: 0.94rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    max-width: var(--measure);
+    margin: 0 0 1.2rem 0;
+}
+
+/* --- Paradigm cards (one per paradigm in an era) --- */
+.para-card {
+    display: block;
+    background: #ffffff;
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    padding: 0.95rem 1.15rem;
+    margin-bottom: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.12s, box-shadow 0.12s, transform 0.12s;
+}
+.para-card:hover {
+    border-color: var(--color-link);
+    box-shadow: 0 2px 6px rgba(60, 30, 10, 0.08);
+    transform: translateY(-1px);
+}
+
+.para-card-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.35rem;
+}
+
+.para-card-name {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.para-card-year {
+    font-size: 0.82rem;
+    color: var(--color-text-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+.para-card-by {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.para-card-summary {
+    font-size: 0.94rem;
+    color: var(--color-text-muted);
+    line-height: 1.55;
+    margin: 0;
+    max-width: 46rem;
+}
+
+.para-card-hint {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--color-link);
+    opacity: 0.7;
+}
+
+/* --- Detail panel (right slide-out) --- */
+.para-detail {
+    position: fixed;
+    top: 0; right: 0;
+    width: min(500px, 92vw);
+    height: 100vh;
+    background: #fdfaf4;
+    border-left: 1px solid var(--color-rule);
+    box-shadow: -4px 0 20px rgba(60, 30, 10, 0.12);
+    padding: 2.5rem 1.5rem 2rem;
+    overflow-y: auto;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.25s ease-out;
+}
+.para-detail[data-open="true"] {
+    transform: translateX(0);
+}
+
+.para-detail-close {
+    position: absolute;
+    top: 0.6rem; right: 0.8rem;
+    background: transparent;
+    border: 0;
+    font-size: 1.6rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    line-height: 1;
+}
+.para-detail-close:hover { color: var(--color-link); }
+
+.para-detail h3 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    color: var(--color-text);
+    margin: 0 0 0.3rem 0;
+    line-height: 1.25;
+}
+
+.para-detail .para-detail-meta {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+.para-detail .para-detail-meta strong {
+    color: var(--color-link);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.para-detail-section {
+    margin: 1rem 0 1.2rem;
+}
+.para-detail-section h4 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-link);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.45rem 0;
+}
+.para-detail-section p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.62;
+}
+
+.para-detail-summary {
+    background: var(--color-quote-bg);
+    border-left: 3px solid var(--color-link);
+    padding: 0.7rem 0.95rem;
+    border-radius: 0 4px 4px 0;
+    margin: 0 0 1.4rem 0;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--color-text);
+}
+
+@media (max-width: 600px) {
+    .para-detail { padding: 2.4rem 1.1rem 1.5rem; }
+    .para-era { padding-left: 1.1rem; }
+    .para-era-name { margin-left: -1.2rem; }
+    .para-crisis-map { padding: 0.9rem 0.95rem 1rem; }
+}

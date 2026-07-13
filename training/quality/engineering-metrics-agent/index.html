@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Metrics Agent — Quality Engineering Agent Demo</title>
+    <meta name="description" content="A metrics agent that scans Git, CI and Jira signals, retrieves metric definitions, and writes a source-backed trend report.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/quality/engineering-metrics-agent/">
+    <meta property="og:title" content="Engineering Metrics Agent — Quality Engineering Agent Demo">
+    <meta property="og:description" content="A metrics agent that scans Git, CI and Jira signals, retrieves metric definitions, and writes a source-backed trend report.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/quality/engineering-metrics-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Quality Engineering Demo</p><h1>Engineering Metrics Agent</h1><p class="lede">A metrics agent that scans Git, CI and Jira signals, retrieves metric definitions, and writes a source-backed trend report.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop4-engineering-metrics</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/quality/">Back to quality engineering</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop4-engineering-metrics-blueprint.png" alt="Engineering Metrics Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Engineering Metrics Agent", "subtitle": "Git/CI/Jira -> progressive discovery -> RAG definitions -> trend report", "steps": [["Scan signals", "Progressive Discovery", "Start broad across lead time, failure rate, and review load."], ["Focus anomalies", "Progressive Discovery", "Drill into the few metrics whose slope changed."], ["Retrieve definitions", "RAG Pipeline", "Bind each metric to the team's agreed definition."], ["Build trend report", "Prompt Chaining", "Generate trend, interpretation, and likely cause."], ["Check governance", "Approval Gate", "Flag metrics that could be misused or lack source coverage."], ["Expose trace", "Observability Harness", "Show source rows, definition, slope, and confidence."]], "scenarios": [{"name": "Weekly QE review", "headline": "Lead time improved, escaped defects worsened; report warns against single-metric celebration", "verdict": "REVIEW_READY", "cards": {"Signals": "12", "Anomalies": "3", "Source coverage": "92%", "Risk": "Metric gaming"}, "log": ["forage: scanned Git, CI, Jira, and quality report signals", "focus: escaped defects slope worsened for API team", "rag: metric policy defines escaped defect and release window", "gate: report warns against optimizing lead time alone"]}, {"name": "Release readiness", "headline": "Release ready with two watch items: flaky tests and review queue age", "verdict": "CONDITIONAL_PASS", "cards": {"Signals": "9", "Anomalies": "2", "Source coverage": "88%", "Risk": "Medium"}, "log": ["forage: release metrics filtered to critical path", "focus: flaky test retry count above normal slope", "rag: policy requires manual review when retry slope rises", "gate: conditional pass with two watch items"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Scan signals</h3><p>Start broad across lead time, failure rate and review load.</p><span class="pattern-chip">Progressive Discovery</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Focus anomalies</h3><p>Drill into metrics whose slope changed.</p><span class="pattern-chip">Progressive Discovery</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Retrieve definitions</h3><p>Bind each metric to the team&#x27;s agreed definition.</p><span class="pattern-chip">RAG Pipeline</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Build report</h3><p>Generate trend, interpretation and likely cause.</p><span class="pattern-chip">Prompt Chaining</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Check governance</h3><p>Flag metrics that could be misused or lack source coverage.</p><span class="pattern-chip">Approval Gate</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Expose trace</h3><p>Show source rows, definition, slope and confidence.</p><span class="pattern-chip">Observability Harness</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop4-engineering-metrics-terminal.png" alt="Terminal output: signal scan, anomaly focus, metric policy retrieval and trend report."><figcaption>Terminal output: signal scan, anomaly focus, metric policy retrieval and trend report.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Progressive Discovery</td><td>Do not load every metric; forage, focus, then drill.</td></tr>
+<tr><td>RAG Pipeline</td><td>Metric definitions need source-backed retrieval.</td></tr>
+<tr><td>Observability Harness</td><td>Trend, source coverage and confidence are part of the product.</td></tr>
+<tr><td>Approval Gate</td><td>Potentially misleading metrics should be flagged before publication.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Metrics need definitions</h3><p>The agent should explain what a metric means before explaining why it moved.</p></article>
+<article class="insight-card"><h3>Slope beats snapshot</h3><p>A week-over-week slope catches quality drift earlier than a static threshold.</p></article>
+<article class="insight-card"><h3>Governance prevents metric theatre</h3><p>A report should warn when a metric can be gamed or lacks source coverage.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop4-engineering-metrics
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop4-engineering-metrics/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop4-engineering-metrics-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

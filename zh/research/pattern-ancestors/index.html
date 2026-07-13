@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 设计模式的工程先祖 — 黄佳</title>
+    <meta name="description" content="把 28 个 AI Agent 设计模式映射到它们的软件工程先祖：缓存、队列、管道、工作流、RBAC、Saga、可观测性、MapReduce 等。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/pattern-ancestors/">
+    <meta property="og:title" content="Agent 设计模式的工程先祖">
+    <meta property="og:description" content="鼠标移到每个 Agent 模式上，看它解决什么问题，以及它继承了哪个软件工程思想。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/pattern-ancestors/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-research page-pattern-ancestors">
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/cases/">案例</a>
+                <a href="/books/">书</a>
+                <a href="/about/">关于</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/research/pattern-ancestors/" class="lang-switch">English</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay ancestor-hero">
+            <header>
+                <p class="eyebrow">Agent 模式血脉</p>
+                <h1>Agent 设计模式的工程先祖。</h1>
+                <p class="lede">
+                    Agent 模式看起来很新，是因为模型很新；但在架构层面，很多问题早就在软件工程里出现过：
+                    缓存、队列、管道、工作流、事件日志、RBAC、Saga、隔舱、可观测性和 MapReduce。
+                    把鼠标放到模式上，可以看到这条桥。
+                </p>
+            </header>
+        </article>
+
+        <section id="lineage-table" class="block">
+            <p class="eyebrow">完整映射</p>
+            <h2>模式 → 工程先祖 → 当年的工程问题</h2>
+            <div id="lineage-table-wrap" class="lineage-table-wrap"></div>
+        </section>
+
+        <section class="block">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">28 个模式</p>
+                    <h2>悬停地图</h2>
+                </div>
+                <p class="ancestor-more"><a href="#ancestor-catalog">More：完整工程先祖表 &darr;</a></p>
+            </div>
+            <button id="ancestor-panel-show" class="matrix-panel-show ancestor-panel-show" type="button" aria-controls="ancestor-detail-panel" hidden>显示详情面板</button>
+            <div id="ancestor-layout" class="ancestor-layout">
+                <div id="pattern-ancestor-grid" class="pattern-ancestor-grid" aria-label="Agent patterns"></div>
+                <aside id="ancestor-detail-panel" class="ancestor-detail-panel" aria-live="polite">
+                    <button id="ancestor-panel-close" class="matrix-panel-close ancestor-panel-close" type="button" aria-controls="ancestor-detail-panel" aria-label="隐藏详情面板">Hide</button>
+                    <p class="eyebrow" id="detail-meta">上下文工程 · 链式</p>
+                    <h2 id="detail-name">语义压缩</h2>
+                    <p id="detail-intro">选择左侧一个模式。</p>
+                    <h3>工程先祖</h3>
+                    <p id="detail-ancestor"></p>
+                    <h3>对应 30 年前的工程问题</h3>
+                    <p id="detail-problem"></p>
+                    <h3>设计洞察</h3>
+                    <p id="detail-insight"></p>
+                    <div id="detail-tags" class="ancestor-tag-row"></div>
+                    <p class="ancestor-more"><a href="#ancestor-catalog">More：完整工程先祖表</a></p>
+                </aside>
+            </div>
+        </section>
+
+        <section id="distributed-lineage" class="block">
+            <p class="eyebrow">分布式时代</p>
+            <h2>典型分布式模式 → Agent 后裔</h2>
+            <p class="lede">
+                GoF 假设的是单进程。分布式时代换了一套运行假设：失败是 default，不是 exception。
+                下面这些模式是真正进了生产手册、厂商 API 和平台工程的那一批。
+                每个都至少有一个 Agent 时代的后裔——有时是直接搬，有时是 reframe。
+            </p>
+            <div id="distributed-table-wrap" class="lineage-table-wrap"></div>
+        </section>
+
+        <section id="ancestor-catalog" class="block">
+            <p class="eyebrow">More</p>
+            <h2>工程先祖表</h2>
+            <p class="lede">
+                这里不是说每个 Agent 模式都和某个旧模式一一对应，而是帮架构师追问：
+                这个新的 Agent 问题，背后到底在重演哪个老的软件工程问题？
+            </p>
+            <div id="ancestor-catalog-grid" class="ancestor-catalog-grid"></div>
+        </section>
+
+        <section class="block">
+            <h2>来源与延伸阅读</h2>
+            <ol class="source-grid">
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Cache-Aside pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Pipes and Filters pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Priority Queue pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Competing Consumers pattern</a></li>
+                <li><a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/saga" target="_blank" rel="noopener">Microsoft Azure Architecture Center: Saga distributed transactions pattern</a></li>
+                <li><a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="noopener">Martin Fowler: Circuit Breaker</a></li>
+                <li><a href="https://www.martinfowler.com/eaaDev/EventSourcing.html" target="_blank" rel="noopener">Martin Fowler: Event Sourcing</a></li>
+                <li><a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">OpenTelemetry documentation</a></li>
+                <li><a href="https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html" target="_blank" rel="noopener">Apache Airflow documentation: DAGs</a></li>
+                <li><a href="https://docs.temporal.io/" target="_blank" rel="noopener">Temporal documentation</a></li>
+                <li><a href="https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/" target="_blank" rel="noopener">Google Research: MapReduce</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/routine-vacuuming.html" target="_blank" rel="noopener">PostgreSQL documentation: Routine Vacuuming</a></li>
+                <li><a href="https://www.nist.gov/publications/role-based-access-controls" target="_blank" rel="noopener">NIST: Role-Based Access Controls</a></li>
+                <li><a href="https://www.ibm.com/think/topics/etl" target="_blank" rel="noopener">IBM: What is ETL?</a></li>
+                <li><a href="https://lucene.apache.org/core/" target="_blank" rel="noopener">Apache Lucene Core</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/reference/core/beans/introduction.html" target="_blank" rel="noopener">Spring Framework: IoC Container</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/reference/core/aop.html" target="_blank" rel="noopener">Spring Framework: Aspect Oriented Programming</a></li>
+                <li><a href="https://docs.spring.io/spring-framework/docs/6.1.7/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html" target="_blank" rel="noopener">Spring Framework: HandlerInterceptor</a></li>
+                <li><a href="https://www.iso.org/standard/62085.html" target="_blank" rel="noopener">ISO 9001:2015 Quality management systems</a></li>
+                <li><a href="https://kernel.org/doc/html/v6.0/scheduler/sched-design-CFS.html" target="_blank" rel="noopener">Linux Kernel documentation: CFS Scheduler</a></li>
+                <li><a href="https://docs.kernel.org/mm/page_tables.html" target="_blank" rel="noopener">Linux Kernel documentation: Page Tables</a></li>
+                <li><a href="https://www.oracle.com/java/technologies/javase/hotspot-garbage-collection.html" target="_blank" rel="noopener">Oracle: Java HotSpot Garbage Collection</a></li>
+                <li><a href="https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html" target="_blank" rel="noopener">Stanford IR Book: Relevance feedback and query expansion</a></li>
+                <li><a href="https://www.postgresql.org/docs/current/wal-intro.html" target="_blank" rel="noopener">PostgreSQL documentation: Write-Ahead Logging</a></li>
+                <li><a href="https://sre.google/sre-book/postmortem-culture/" target="_blank" rel="noopener">Google SRE Book: Postmortem Culture</a></li>
+                <li><a href="https://aws.amazon.com/documentation-overview/elasticloadbalancing/" target="_blank" rel="noopener">AWS: Elastic Load Balancing documentation</a></li>
+                <li><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html" target="_blank" rel="noopener">Martin Fowler: Test-Driven Development</a></li>
+                <li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews" target="_blank" rel="noopener">GitHub Docs: Pull request reviews</a></li>
+                <li><a href="https://spark.apache.org/docs/latest/index.html" target="_blank" rel="noopener">Apache Spark documentation</a></li>
+                <li><a href="https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=152164" target="_blank" rel="noopener">NIST SP 800-115: Technical Guide to Information Security Testing and Assessment</a></li>
+                <li><a href="https://www.atlassian.com/software/confluence/templates/devops-runbook" target="_blank" rel="noopener">Atlassian: DevOps runbook template</a></li>
+                <li><a href="https://www.sec.gov/rule-release/33-8212" target="_blank" rel="noopener">SEC: Internal Control over Financial Reporting rules</a></li>
+                <li><a href="https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach-banking-sector.html" target="_blank" rel="noopener">FATF: Risk-Based Approach for the Banking Sector</a></li>
+                <li><a href="https://kubernetes.io/docs/concepts/architecture/self-healing/" target="_blank" rel="noopener">Kubernetes: Self-Healing</a></li>
+                <li><a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/" target="_blank" rel="noopener">Kubernetes: Namespaces</a></li>
+                <li><a href="https://github.com/Netflix/Hystrix" target="_blank" rel="noopener">Netflix Hystrix</a></li>
+                <li><a href="https://github.com/prometheus/blackbox_exporter" target="_blank" rel="noopener">Prometheus Blackbox Exporter</a></li>
+                <li><a href="https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf" target="_blank" rel="noopener">Pirolli and Card: Information Foraging</a></li>
+                <li><a href="https://refactoring.guru/design-patterns/chain-of-responsibility/python/example" target="_blank" rel="noopener">Refactoring.Guru: Chain of Responsibility</a></li>
+                <li><a href="https://refactoring.guru/design-patterns/command" target="_blank" rel="noopener">Refactoring.Guru: Command pattern</a></li>
+            </ol>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const ancestorLinks = {
+            "标记-整理式垃圾回收、数据库 VACUUM": "https://www.postgresql.org/docs/current/routine-vacuuming.html",
+            "优先级队列、调度器、成本感知路由": "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue",
+            "ETL、数据集成、特征融合": "https://www.ibm.com/think/topics/etl",
+            "信息觅食、渐进式下钻": "https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf",
+            "信息检索、数据流水线": "https://www.ibm.com/think/topics/etl",
+            "缓存层次、Cache-Aside": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside",
+            "工作流状态、检查点、持久执行": "https://docs.temporal.io/",
+            "事故复盘、事件日志": "https://www.martinfowler.com/eaaDev/EventSourcing.html",
+            "责任链、结构化推导": "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example",
+            "成本型查询规划、请求路由": "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue",
+            "投机执行、集成方法、MapReduce": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/",
+            "科学方法、调试循环、TDD": "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html",
+            "Unix 管道、Pipes-and-Filters": "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters",
+            "Command 模式、插件注册表、服务代理": "https://refactoring.guru/design-patterns/command",
+            "DAG 调度器、工作流编排": "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html",
+            "输入校验、沙箱、策略执行点": "https://www.nist.gov/publications/role-based-access-controls",
+            "同行评审、编译器诊断、lint-test 反馈": "https://opentelemetry.io/docs/",
+            "插件、软件包、运维 Runbook": "https://refactoring.guru/design-patterns/command",
+            "控制循环、重试、Circuit Breaker": "https://martinfowler.com/bliki/CircuitBreaker.html",
+            "案例推理、可回放的事故知识": "https://www.martinfowler.com/eaaDev/EventSourcing.html",
+            "责任链、工作流交接": "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example",
+            "Scatter-Gather、Fork-Join、MapReduce": "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/",
+            "红队评审、独立验证": "https://opentelemetry.io/docs/",
+            "Manager-Worker、Supervisor、Competing Consumers": "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers",
+            "RBAC、变更控制、人在回路复核": "https://www.nist.gov/publications/role-based-access-controls",
+            "两阶段提交、Saga、灰度发布": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga",
+            "APM、分布式追踪、OpenTelemetry": "https://opentelemetry.io/docs/",
+            "隔舱、Circuit Breaker、最小权限": "https://martinfowler.com/bliki/CircuitBreaker.html"
+        };
+
+        const lineageRows = [
+            ["上下文分诊", "感知×路由", "优先级队列 · LRU", "OS 进程调度 · 缓存替换", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+            ["语义压缩", "感知×串行", "Mark-and-Sweep GC", "JVM 内存压缩", "https://www.postgresql.org/docs/current/routine-vacuuming.html"],
+            ["渐进式发现", "感知×循环", "信息觅食 (Pirolli)", "搜索引擎 query refinement", "https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf"],
+            ["多模态融合", "感知×并行", "ETL · MapReduce", "数据仓库多源聚合", "https://www.ibm.com/think/topics/etl"],
+            ["分层保留", "记忆×层级", "CPU 缓存层次 (L1/L2/L3)", "虚拟内存分页", "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"],
+            ["RAG 管道", "记忆×路由", "倒排索引 · 全文检索", "搜索引擎 (Lucene)", "https://lucene.apache.org/core/"],
+            ["进度跟踪", "记忆×串行", "WAL · Event Sourcing", "数据库事务日志", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["失败日志", "记忆×循环", "Postmortem · 故障树", "SRE / 学习型组织", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["思维链", "推理×串行", "递归算法 · 分治", "数学证明步骤化", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+            ["复杂度路由", "推理×路由", "负载均衡 · 分层定价", "CDN / 弹性计算", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+            ["并行探索", "推理×并行", "BFS · MapReduce", "Self-Consistency / 蒙特卡洛", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+            ["迭代假设", "推理×循环", "Karl Popper 证伪", "科学方法论 / TDD", "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"],
+            ["工具分发", "行动×路由", "Spring IoC · DI", "依赖注入 / 服务发现", "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html"],
+            ["计划并执行", "行动×层级", "项目管理 · 甘特图", "WBS / Saga", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["提示链", "行动×串行", "Unix pipe · ETL", "Pipeline 工程", "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters"],
+            ["护栏夹心", "行动×层级", "AOP · 切面编程", "Interceptor / Filter Chain", "https://docs.spring.io/spring-framework/reference/core/aop.html"],
+            ["生成器-批评者", "反思×循环", "金丝雀部署 · 编辑回路", "代码 review / PR 工作流", "https://opentelemetry.io/docs/"],
+            ["技能包", "反思×层级", "标准化操作 SOP", "ISO 9001 / 教学知识库", "https://www.iso.org/standard/62085.html"],
+            ["经验回放", "反思×循环", "强化学习 ER · WAL", "案例库 / 复盘", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+            ["自愈循环", "反思×循环", "TDD · CI/CD 自愈", "测试驱动 / k8s self-heal", "https://kubernetes.io/docs/concepts/architecture/self-healing/"],
+            ["层级委派", "协作×层级", "微服务 · 组织层级", "公司 OKR / Manager-IC", "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers"],
+            ["扇出 / 汇聚", "协作×并行", "MapReduce · Spark", "大数据 ETL", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+            ["对抗式评审", "协作×P2P", "同行评议 · Red Team", "学术评议 / 渗透测试", "https://opentelemetry.io/docs/"],
+            ["交接链", "协作×接力", "客户支持分级", "ITIL / Runbook", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+            ["审批门控", "治理×路由", "RBAC · 变更审批", "GRC / SOX / 财务双签", "https://www.nist.gov/publications/role-based-access-controls"],
+            ["爆炸半径控制", "治理×层级", "熔断器 · 沙箱", "Hystrix / k8s namespace", "https://github.com/Netflix/Hystrix"],
+            ["渐进式承诺", "治理×并行", "权限演进 · KYC tiers", "金融业实名制分级", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["可观测性 Harness", "治理×编排", "OpenTelemetry · APM", "Datadog / 黑匣子", "https://opentelemetry.io/docs/"]
+        ];
+        const problemLinks = {
+            "OS 进程调度 · 缓存替换": "https://kernel.org/doc/html/v6.0/scheduler/sched-design-CFS.html",
+            "JVM 内存压缩": "https://www.oracle.com/java/technologies/javase/hotspot-garbage-collection.html",
+            "搜索引擎 query refinement": "https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html",
+            "数据仓库多源聚合": "https://www.ibm.com/think/topics/etl",
+            "虚拟内存分页": "https://docs.kernel.org/mm/page_tables.html",
+            "搜索引擎 (Lucene)": "https://lucene.apache.org/core/",
+            "数据库事务日志": "https://www.postgresql.org/docs/current/wal-intro.html",
+            "SRE / 学习型组织": "https://sre.google/sre-book/postmortem-culture/",
+            "数学证明步骤化": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+            "CDN / 弹性计算": "https://aws.amazon.com/documentation-overview/elasticloadbalancing/",
+            "Self-Consistency / 蒙特卡洛": "https://www.ibm.com/think/topics/monte-carlo-simulation",
+            "科学方法论 / TDD": "https://martinfowler.com/bliki/TestDrivenDevelopment.html",
+            "依赖注入 / 服务发现": "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html",
+            "WBS / Saga": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga",
+            "Pipeline 工程": "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters",
+            "Interceptor / Filter Chain": "https://docs.spring.io/spring-framework/docs/6.1.7/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html",
+            "代码 review / PR 工作流": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+            "ISO 9001 / 教学知识库": "https://www.iso.org/standard/62085.html",
+            "案例库 / 复盘": "https://sre.google/sre-book/postmortem-culture/",
+            "测试驱动 / k8s self-heal": "https://kubernetes.io/docs/concepts/architecture/self-healing/",
+            "公司 OKR / Manager-IC": "https://martinfowler.com/articles/distributed-objects-microservices.html",
+            "大数据 ETL": "https://spark.apache.org/docs/latest/index.html",
+            "学术评议 / 渗透测试": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=152164",
+            "ITIL / Runbook": "https://www.atlassian.com/software/confluence/templates/devops-runbook",
+            "GRC / SOX / 财务双签": "https://www.sec.gov/rule-release/33-8212",
+            "Hystrix / k8s namespace": "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+            "金融业实名制分级": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach-banking-sector.html",
+            "Datadog / 黑匣子": "https://github.com/prometheus/blackbox_exporter"
+        };
+
+        const patterns = [
+            {
+                name: "语义压缩",
+                meta: "上下文工程 · 链式",
+                ancestor: "标记-整理式垃圾回收、数据库 VACUUM",
+                intro: "把很长、很杂的上下文压成更短的表示，同时保留下一次模型调用真正需要的承诺、实体和证据。",
+                ancestorIntro: "内存管理会整理仍然存活的对象；PostgreSQL VACUUM 会回收过期行留下的可复用空间。Agent 版本回收的不是磁盘，而是注意力预算。",
+                insight: "关键问题不是能塞多少文本，而是哪些语义对象在压缩后必须继续存活。",
+                tags: ["压缩", "注意力预算", "可追溯"]
+            },
+            {
+                name: "上下文分诊",
+                meta: "上下文工程 · 路由",
+                ancestor: "优先级队列、调度器、成本感知路由",
+                intro: "先按紧急度、相关性、不确定性和风险给证据分诊，再决定什么进入模型窗口。",
+                ancestorIntro: "优先级队列和请求路由器把资源稀缺性显式化：不是每个输入都应该得到同样的延迟、worker 或资源等级。",
+                insight: "很多糟糕回答不是推理失败，而是在推理开始之前，错误证据已经进了上下文。",
+                tags: ["优先级", "路由", "稀缺性"]
+            },
+            {
+                name: "多模态融合",
+                meta: "上下文工程 · 并行",
+                ancestor: "ETL、数据集成、特征融合",
+                intro: "并行接入文本、图像、表格、音频或结构化数据，再合并成可推理的统一状态。",
+                ancestorIntro: "ETL 把多个来源的数据组合、清洗和组织起来。多模态融合是在模型输入层做同样的工程化处理。",
+                insight: "融合不是简单拼接。每个通道都需要规范形式、置信度和冲突处理规则。",
+                tags: ["ETL", "规范化", "证据融合"]
+            },
+            {
+                name: "渐进式发现",
+                meta: "上下文工程 · 编排",
+                ancestor: "信息觅食、渐进式下钻",
+                intro: "先广泛扫描，再沿着有希望的信息气味缩小路径，最后深入关键证据。",
+                ancestorIntro: "信息觅食理论把搜索看成信息价值与导航成本之间的权衡。",
+                insight: "好的 Agent 探索不是把所有东西读完，而像分析师在预算内沿着线索推进。",
+                tags: ["觅食", "下钻", "搜索"]
+            },
+            {
+                name: "RAG 管道",
+                meta: "记忆 · 链式",
+                ancestor: "信息检索、数据流水线",
+                intro: "检索外部知识、排序或过滤，再把有证据支撑的内容注入生成。",
+                ancestorIntro: "经典信息检索会拆分索引、检索、排序和呈现。RAG 把这条管道变成模型运行时的外部记忆面。",
+                insight: "决定性设计不只是向量库，而是判断力放在哪里：检索、重排、提示组装还是后验检查。",
+                tags: ["检索", "排序", "落地证据"]
+            },
+            {
+                name: "分层保留",
+                meta: "记忆 · 路由",
+                ancestor: "缓存层次、Cache-Aside",
+                intro: "按复用价值把事实路由到工作记忆、短期笔记、长期存储或程序性记忆。",
+                ancestorIntro: "Cache-Aside 先读缓存，未命中再回源并填充缓存；记忆层次则进一步区分成本、刷新度和访问速度。",
+                insight: "Agent 记忆失败，常常是因为所有记忆都被当成同样持久、同样可信、同样便宜。",
+                tags: ["缓存", "分层", "新鲜度"]
+            },
+            {
+                name: "进度跟踪",
+                meta: "记忆 · 编排",
+                ancestor: "工作流状态、检查点、持久执行",
+                intro: "维护显式任务账本，让长任务可以暂停、恢复、检查进度，并避免重复已完成步骤。",
+                ancestorIntro: "工作流引擎和持久执行平台会保存执行状态，使工作在中断或失败后继续推进。",
+                insight: "todo 文件不是文书工作。在 Agent harness 里，它就是一次运行的可见工作记忆。",
+                tags: ["检查点", "工作流状态", "恢复"]
+            },
+            {
+                name: "失败日志",
+                meta: "记忆 · 循环",
+                ancestor: "事故复盘、事件日志",
+                intro: "记录失败、根因、尝试过的修复和预防规则，让后续运行不要重复同一个错误。",
+                ancestorIntro: "事件日志保留状态如何变化；事故复盘保留判断如何失败。失败日志把两者带进 Agent 记忆。",
+                insight: "系统只有把教训存成下一次能检索、能应用的形式，才会真的变聪明。",
+                tags: ["复盘", "事件日志", "学习"]
+            },
+            {
+                name: "思维链",
+                meta: "推理 · 链式",
+                ancestor: "责任链、结构化推导",
+                intro: "把中间推理步骤显式化，让系统可以组织、检查或交接决策路径。",
+                ancestorIntro: "责任链把请求沿处理器传递；结构化推导则把问题沿命名的认知操作传递。",
+                insight: "价值不在于暴露私密草稿，而在于给推理一个可约束、可检查的形状。",
+                tags: ["序列", "推导", "可检查"]
+            },
+            {
+                name: "复杂度路由",
+                meta: "推理 · 路由",
+                ancestor: "成本型查询规划、请求路由",
+                intro: "把简单任务交给便宜路径，把困难或高风险任务交给更强模型、更多工具或人工复核。",
+                ancestorIntro: "查询规划器和路由器会根据预期成本、选择性和容量选择执行路径。",
+                insight: "模型选择是架构问题，不只是采购问题；路由策略就是成本、延迟和质量显式化的地方。",
+                tags: ["模型路由", "成本", "延迟"]
+            },
+            {
+                name: "并行探索",
+                meta: "推理 · 并行",
+                ancestor: "投机执行、集成方法、MapReduce",
+                intro: "同时运行多条推理路径，再比较、投票、合并或选择更稳健的答案。",
+                ancestorIntro: "MapReduce 把独立工作分散到多个机器，再汇总结果；投机执行用额外计算换取不确定性下降。",
+                insight: "并行的价值在于分歧有诊断意义，而不是把同一个盲点复制很多份。",
+                tags: ["扇出", "自一致", "MapReduce"]
+            },
+            {
+                name: "迭代假设",
+                meta: "推理 · 循环",
+                ancestor: "科学方法、调试循环、TDD",
+                intro: "提出假设，用证据测试，再修正解释，直到达到置信度阈值。",
+                ancestorIntro: "调试和测试驱动开发都遵循猜测、实验、反馈、修订的循环。",
+                insight: "循环只有在每次迭代改变信念状态时才有价值，否则只是换一种说法重复猜测。",
+                tags: ["测试", "修订", "信念状态"]
+            },
+            {
+                name: "提示链",
+                meta: "行动 · 链式",
+                ancestor: "Unix 管道、Pipes-and-Filters",
+                intro: "把任务拆成有顺序的提示步骤，每一步都把产物变换给下一步。",
+                ancestorIntro: "Pipes-and-Filters 把处理拆成可复用过滤器，并用管道连接。提示链则把每次模型调用变成一个过滤器。",
+                insight: "好的链路应该有类型化的中间产物，否则下一步继承的只是模糊文本。",
+                tags: ["管道", "过滤器", "产物"]
+            },
+            {
+                name: "工具分发",
+                meta: "行动 · 路由",
+                ancestor: "Command 模式、插件注册表、服务代理",
+                intro: "根据意图、schema 和策略选择工具，并通过受控接口调用。",
+                ancestorIntro: "Command 把请求封装成可执行对象；插件注册表暴露能力，而不是把每个实现写死。",
+                insight: "工具使用要可靠，动作表面必须类型化、可观测、可做策略检查。",
+                tags: ["命令", "注册表", "schema"]
+            },
+            {
+                name: "计划并执行",
+                meta: "行动 · 编排",
+                ancestor: "DAG 调度器、工作流编排",
+                intro: "先生成计划，再执行步骤，同时更新状态、依赖和异常。",
+                ancestorIntro: "Airflow DAG 和工作流引擎把依赖显式化，让编排可以被测试、恢复和可视化。",
+                insight: "计划有用的前提是它是可执行控制结构，而不是行动前的一段漂亮提纲。",
+                tags: ["DAG", "工作流", "编排"]
+            },
+            {
+                name: "护栏夹心",
+                meta: "行动 · 层级",
+                ancestor: "输入校验、沙箱、策略执行点",
+                intro: "在风险动作前后加上前置检查、受限执行和后置检查，再释放结果。",
+                ancestorIntro: "安全架构长期使用校验、隔离和策略执行点来包裹不可信操作。",
+                insight: "护栏最强的时候，是围住动作路径，而不是最后加一句免责声明。",
+                tags: ["校验", "沙箱", "策略"]
+            },
+            {
+                name: "生成器-批评者",
+                meta: "反思 · 链式",
+                ancestor: "同行评审、编译器诊断、lint-test 反馈",
+                intro: "把生成和批评拆成两个角色：一个产出，一个检查质量、缺口和违规点。",
+                ancestorIntro: "工程评审系统把反馈变成一等阶段，而不是事后补一句意见。",
+                insight: "批评者必须有标准和权力；否则它只是另一个语气更挑剔的生成器。",
+                tags: ["评审", "诊断", "质量门"]
+            },
+            {
+                name: "技能包",
+                meta: "反思 · 路由",
+                ancestor: "插件、软件包、运维 Runbook",
+                intro: "把成功的重复流程沉淀为可复用的说明、工具、约束和示例。",
+                ancestorIntro: "包管理器分发代码；Runbook 分发运维步骤。技能包分发的是可重复的 Agent 行为。",
+                insight: "技能真正有价值，是因为它捕捉了决策策略，而不只是开心路径步骤。",
+                tags: ["软件包", "Runbook", "复用"]
+            },
+            {
+                name: "自愈循环",
+                meta: "反思 · 循环",
+                ancestor: "控制循环、重试、Circuit Breaker",
+                intro: "检测失败、尝试修复、重新验证，并在恢复不安全或不可能时停止。",
+                ancestorIntro: "Circuit Breaker 在失败达到阈值后停止继续调用；控制循环则根据反馈调整行为。",
+                insight: "自愈必须有停止条件。无限修复只是听起来更高级的失败。",
+                tags: ["重试", "阈值", "恢复"]
+            },
+            {
+                name: "经验回放",
+                meta: "反思 · 层级",
+                ancestor: "案例推理、可回放的事故知识",
+                intro: "回看过去的轨迹、决策和结果，抽取可复用启发，用于相似任务。",
+                ancestorIntro: "回放系统保留足够历史来重建行为；案例推理用旧案例解决新问题。",
+                insight: "经验回放强大之处，在于把轨迹整理成例子、反例和边界条件。",
+                tags: ["轨迹", "案例记忆", "复盘"]
+            },
+            {
+                name: "交接链",
+                meta: "协作 · 链式",
+                ancestor: "责任链、工作流交接",
+                intro: "在固定顺序中把工作交给不同专长的 Agent，每个 Agent 增加状态或作出判断。",
+                ancestorIntro: "工作流交接和责任链都在管理顺序责任，而不是让一个组件承担所有关注点。",
+                insight: "风险在边界处丢上下文；真正的设计工作是定义交接契约。",
+                tags: ["交接", "契约", "序列"]
+            },
+            {
+                name: "扇出 / 汇聚",
+                meta: "协作 · 并行",
+                ancestor: "Scatter-Gather、Fork-Join、MapReduce",
+                intro: "把任务拆成并行子任务，再通过投票、综合或冲突解决合并结果。",
+                ancestorIntro: "Scatter-Gather 和 MapReduce 都把独立局部工作与后续聚合步骤分离。",
+                insight: "汇聚步骤才是架构。没有合并规则，扇出只会制造更多要读的文本。",
+                tags: ["散播汇聚", "合并", "并行"]
+            },
+            {
+                name: "对抗式评审",
+                meta: "协作 · 循环",
+                ancestor: "红队评审、独立验证",
+                intro: "让另一个 Agent 攻击假设、寻找反证，并压力测试拟定输出。",
+                ancestorIntro: "安全红队和独立验证都会有意引入对立视角，用来暴露隐藏缺陷。",
+                insight: "对抗式评审只有在分歧能够阻塞或改变答案时才有价值。",
+                tags: ["红队", "挑战", "验证"]
+            },
+            {
+                name: "层级委派",
+                meta: "协作 · 层级",
+                ancestor: "Manager-Worker、Supervisor、Competing Consumers",
+                intro: "协调者拆解任务、委派给专家 worker、整合结果并控制升级。",
+                ancestorIntro: "Manager-Worker 和 Competing Consumers 都能分发工作，同时保留协调与归属。",
+                insight: "委派能扩展工作量，但前提是所有权、汇报格式和合并权力明确。",
+                tags: ["管理者-工人", "监督", "所有权"]
+            },
+            {
+                name: "审批门控",
+                meta: "治理 · 路由",
+                ancestor: "RBAC、变更控制、人在回路复核",
+                intro: "根据权限、风险和证据质量，把动作路由到自动批准、人工复核或拒绝。",
+                ancestorIntro: "RBAC 通过角色中介访问权限；变更控制门则要求高影响动作先经过批准。",
+                insight: "门控不是刹车，而是系统声明谁在什么风险条件下拥有授权。",
+                tags: ["RBAC", "权限", "人工复核"]
+            },
+            {
+                name: "渐进式承诺",
+                meta: "治理 · 并行",
+                ancestor: "两阶段提交、Saga、灰度发布",
+                intro: "让系统分阶段赢得执行许可：提案、模拟、dry-run、局部执行，最后再 commit。",
+                ancestorIntro: "Saga 用本地事务与补偿动作协调分布式工作；灰度发布只在证据改善后扩大承诺范围。",
+                insight: "高风险 Agent 动作的设计问题不是做不做，而是先做哪个更小的承诺。",
+                tags: ["Saga", "灰度", "补偿"]
+            },
+            {
+                name: "可观测性 Harness",
+                meta: "治理 · 编排",
+                ancestor: "APM、分布式追踪、OpenTelemetry",
+                intro: "围绕 Agent 运行捕获 trace、工具调用、prompt、输出、延迟、成本、策略检查和漂移信号。",
+                ancestorIntro: "OpenTelemetry 标准化 traces、metrics、logs 等遥测数据。Agent harness 把这个思想扩展到推理和行动轨迹。",
+                insight: "一个行动后无法检查的 Agent，也就无法在下一次行动前被负责任地改进。",
+                tags: ["trace", "metrics", "logs"]
+            },
+            {
+                name: "爆炸半径控制",
+                meta: "治理 · 层级",
+                ancestor: "隔舱、Circuit Breaker、最小权限",
+                intro: "限制错误决策、失败工具调用或被滥用权限能够扩散的范围。",
+                ancestorIntro: "隔舱隔离故障域；Circuit Breaker 在失败阈值后停止调用；最小权限默认限制授权。",
+                insight: "自治能力应该被放进隔间里。没有隔间的强 Agent，就是很大的故障域。",
+                tags: ["隔舱", "最小权限", "隔离"]
+            }
+        ];
+
+        const catalog = [
+            ["缓存层次 / Cache-Aside", "把记忆看成成本、新鲜度和延迟不同的层级。它解释了分层保留和 RAG 记忆设计。"],
+            ["优先级队列", "把资源稀缺性显式化，用紧急度、价值或风险排列工作。它是上下文分诊和升级路由的先祖。"],
+            ["Pipes and Filters", "把处理拆成可复用变换，并用类型化产物连接。提示链和很多 SDD 流水线都继承了这个形状。"],
+            ["Command 模式", "把请求封装成可执行对象。工具分发是 Agent 时代带 schema、权限和 telemetry 的 Command。"],
+            ["责任链", "让责任沿处理器链条传递，直到某个环节能处理。它解释交接链，也解释一部分结构化推理链。"],
+            ["工作流 DAG", "把依赖关系建成图。计划并执行只有借用 DAG 纪律，才更容易测试和恢复。"],
+            ["持久执行", "把工作流进度跨失败保存下来。进度跟踪即使用简单 ledger 实现，也继承了这个思想。"],
+            ["事件溯源", "把状态变化存成可回放事件。它支持失败日志、审计性和可恢复的 Agent 运行。"],
+            ["Saga / 补偿", "把分布式工作拆成本地承诺和补偿动作。渐进式承诺把这个思想迁移到高风险 Agent 动作。"],
+            ["RBAC", "通过角色中介权限。审批门控继承这个关注点，并进一步加入证据质量条件。"],
+            ["隔舱", "隔离故障域。爆炸半径控制把它用于权限、工具、数据范围和发布阶段。"],
+            ["Circuit Breaker", "失败达到阈值后跳闸并阻断调用。自愈循环和爆炸半径控制都需要这个停止条件。"],
+            ["OpenTelemetry", "提供 traces、metrics、logs 的共同词汇。可观测性 Harness 把这套词汇延伸到 prompt、工具和模型决策。"],
+            ["MapReduce", "把并行 map 与 reduce 聚合分开。扇出/汇聚和并行探索都复用了这个结构。"],
+            ["Competing Consumers", "多个 worker 从共享队列消费任务。层级委派借用其扩展思想，但加上明确所有权。"],
+            ["ETL", "从多个来源抽取、转换、加载数据。多模态融合把这个纪律迁移到模型输入面。"],
+            ["信息觅食", "把搜索看成成本约束下的信息价值最大化。渐进式发现用它决定下一步看什么。"],
+            ["复盘 / Runbook", "把运维经验变成可复用过程。失败日志和技能包是 Agent 时代的对应物。"],
+            ["编译器 / Linter 反馈", "把生成与诊断反馈拆开。生成器-批评者继承了这个生产/批评分离。"],
+            ["沙箱 / 策略执行点", "用检查和限制包裹不可信执行。护栏夹心把这些检查做成可见架构层。"]
+        ];
+
+        const distributedRows = [
+            // [分布式模式, 原始工程问题, Agent 后裔, 工业典型应用, 链接]
+            ["Two-Phase Commit · 两阶段提交 (Gray 1978)", "多节点原子提交", "Approval Gate · 不可逆动作的原子人审", "数据库 XA 事务", "https://en.wikipedia.org/wiki/Two-phase_commit_protocol"],
+            ["Saga (Garcia-Molina, SIGMOD 1987)", "长事务 · 无 2PC 的多步骤一致性", "Plan-and-Execute · Progressive Commitment", "Temporal · AWS Step Functions", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+            ["指数退避重试 · Retry with Backoff (Jacobson, TCP 1988)", "瞬态失败恢复 · 防止 thundering herd", "Self-Heal Loop · Iterative Hypothesis", "gRPC · AWS SDK retry policy", "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"],
+            ["Paxos / Raft 共识 (Lamport 1998 / Ongaro 2014)", "分区失败下的共享状态一致性", "Adversarial Review · 多 Agent 投票 (宽松类比)", "etcd · Consul · TiKV", "https://raft.github.io/"],
+            ["Strangler Fig · 绞杀者 (Martin Fowler 2004)", "渐进替换 legacy 系统", "迁移模式 · 28 模式里没有对应专门项", "微服务迁移 playbook", "https://martinfowler.com/bliki/StranglerFigApplication.html"],
+            ["Event Sourcing (~2005, Fowler 推广)", "可审计 / 可重放的状态变更", "Failure Journals · Experience Replay", "Kafka + EventStoreDB", "https://martinfowler.com/eaaDev/EventSourcing.html"],
+            ["Circuit Breaker · 熔断器 (Nygard, Release It! 2007)", "局部故障时阻止级联失败", "Self-Heal Loop (停止条件) · Blast Radius Control", "Hystrix · Resilience4j · Sentinel", "https://martinfowler.com/bliki/CircuitBreaker.html"],
+            ["Bulkhead Isolation · 舱壁隔离 (Nygard 2007)", "把故障限制在一个隔间内", "Blast Radius Control · 子 Agent 隔离", "Hystrix 线程池隔离", "https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead"],
+            ["Idempotency-Key · 幂等键 (Stripe / AWS API 惯例)", "非幂等写操作的安全重试", "Approval Gate · 不可逆动作的人审守门", "Stripe payment API · AWS APIs", "https://stripe.com/docs/api/idempotent_requests"],
+            ["Rate Limiter / Token Bucket · 限流 / 令牌桶", "负载下的资源耗尽 · 防 noisy neighbor", "Context Triage · Tool Dispatch (per-tool 预算)", "Envoy · Cloudflare · API Gateway", "https://learn.microsoft.com/en-us/azure/architecture/patterns/rate-limiting-pattern"],
+            ["CQRS · 命令查询职责分离 (Greg Young ~2010)", "读写模型分离 · 各自优化", "Talker-Reasoner 拆分 (非正式映射)", "Axon · EventStoreDB", "https://martinfowler.com/bliki/CQRS.html"],
+            ["Sharding / Partitioning · 分片", "单机性能极限之外的水平扩展", "Hierarchical Delegation · Fan-Out / Gather", "Cassandra · MongoDB · TiDB", "https://www.mongodb.com/docs/manual/sharding/"],
+            ["Reconciliation Loop · 收敛循环 (Kubernetes 2014)", "声明式收敛 · desired ↔ observed 状态", "Iterative Hypothesis · PRA 循环本身", "Kubernetes controllers · Operators", "https://kubernetes.io/docs/concepts/architecture/controller/"],
+            ["Outbox Pattern · 事务发件箱 (~2017)", "分布式事务中的原子发送", "Progressive Commitment (commit 后再 emit)", "Debezium · Eventuate", "https://microservices.io/patterns/data/transactional-outbox.html"],
+            ["Sidecar / Service Mesh (Istio · Linkerd, ~2017)", "横切关注点从业务代码里剥离", "Guardrail Sandwich · Observability Harness", "Istio · Linkerd · Envoy", "https://learn.microsoft.com/en-us/azure/architecture/patterns/sidecar"]
+        ];
+
+        const grid = document.getElementById("pattern-ancestor-grid");
+        const catalogGrid = document.getElementById("ancestor-catalog-grid");
+        const lineageTableWrap = document.getElementById("lineage-table-wrap");
+        const distributedTableWrap = document.getElementById("distributed-table-wrap");
+        const ancestorLayout = document.getElementById("ancestor-layout");
+        const closeAncestorPanel = document.getElementById("ancestor-panel-close");
+        const showAncestorPanel = document.getElementById("ancestor-panel-show");
+        const detailPanel = document.getElementById("ancestor-detail-panel");
+        const detail = {
+            meta: document.getElementById("detail-meta"),
+            name: document.getElementById("detail-name"),
+            intro: document.getElementById("detail-intro"),
+            ancestor: document.getElementById("detail-ancestor"),
+            problem: document.getElementById("detail-problem"),
+            insight: document.getElementById("detail-insight"),
+            tags: document.getElementById("detail-tags")
+        };
+
+        function setAncestorPanelClosed(isClosed) {
+            ancestorLayout.classList.toggle("ancestor-panel-closed", isClosed);
+            detailPanel.hidden = isClosed;
+            detailPanel.setAttribute("aria-hidden", String(isClosed));
+            showAncestorPanel.hidden = !isClosed;
+            showAncestorPanel.setAttribute("aria-expanded", String(!isClosed));
+            closeAncestorPanel.setAttribute("aria-expanded", String(!isClosed));
+        }
+
+        function linkAncestor(label) {
+            const href = ancestorLinks[label];
+            if (!href) return label;
+            return `<a href='${href}' target='_blank' rel='noopener'>${label}</a>`;
+        }
+
+        function showPattern(index) {
+            const item = patterns[index];
+            const row = lineageRows.find(([name]) => name === item.name || name === item.name.replace("RAG 管道", "RAG"));
+            detail.meta.textContent = item.meta;
+            detail.name.textContent = item.name;
+            detail.intro.textContent = item.intro;
+            detail.ancestor.innerHTML = row ? `<a href='${row[4]}' target='_blank' rel='noopener'>${row[2]}</a>。${item.ancestorIntro}` : linkAncestor(item.ancestor) + "。" + item.ancestorIntro;
+            if (row && problemLinks[row[3]]) {
+                detail.problem.innerHTML = `<a href='${problemLinks[row[3]]}' target='_blank' rel='noopener'>${row[3]}</a>`;
+            } else {
+                detail.problem.textContent = row ? row[3] : "见上方完整映射表。";
+            }
+            detail.insight.textContent = item.insight;
+            detail.tags.innerHTML = item.tags.map(tag => `<span class="ancestor-tag">${tag}</span>`).join("");
+            document.querySelectorAll(".ancestor-pattern-card").forEach((card, cardIndex) => {
+                card.classList.toggle("active", cardIndex === index);
+            });
+        }
+
+        patterns.forEach((item, index) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "ancestor-pattern-card";
+            button.innerHTML = `<span class="pattern-name">${item.name}</span><span class="pattern-meta">${item.meta}</span><span class="pattern-ancestor">${item.ancestor}</span>`;
+            button.addEventListener("mouseenter", () => showPattern(index));
+            button.addEventListener("focus", () => showPattern(index));
+            button.addEventListener("click", () => showPattern(index));
+            grid.appendChild(button);
+        });
+
+        closeAncestorPanel.addEventListener("click", event => {
+            event.preventDefault();
+            setAncestorPanelClosed(true);
+            showAncestorPanel.focus();
+        });
+        showAncestorPanel.addEventListener("click", event => {
+            event.preventDefault();
+            setAncestorPanelClosed(false);
+            detailPanel.focus();
+        });
+        detailPanel.setAttribute("tabindex", "-1");
+        setAncestorPanelClosed(false);
+
+        lineageTableWrap.innerHTML = `
+            <table class="lineage-table">
+                <thead>
+                    <tr>
+                        <th>Agent 模式</th>
+                        <th>双轴位置</th>
+                        <th>工程先祖</th>
+                        <th>对应 30 年前的工程问题</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${lineageRows.map(([name, position, ancestor, problem, href]) => `
+                        <tr>
+                            <td>${name}</td>
+                            <td class="position">${position}</td>
+                            <td><a href='${href}' target='_blank' rel='noopener'>${ancestor}</a></td>
+                            <td>${problemLinks[problem] ? `<a href='${problemLinks[problem]}' target='_blank' rel='noopener'>${problem}</a>` : problem}</td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        `;
+
+        distributedTableWrap.innerHTML = `
+            <table class="lineage-table">
+                <thead>
+                    <tr>
+                        <th>分布式模式</th>
+                        <th>当年的工程问题</th>
+                        <th>Agent 后裔</th>
+                        <th>工业典型应用</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${distributedRows.map(([name, problem, descendant, example, href]) => `
+                        <tr>
+                            <td><a href='${href}' target='_blank' rel='noopener'>${name}</a></td>
+                            <td>${problem}</td>
+                            <td>${descendant}</td>
+                            <td>${example}</td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        `;
+
+        catalog.forEach(([title, body]) => {
+            const card = document.createElement("article");
+            card.className = "ancestor-catalog-card";
+            const link = Object.entries(ancestorLinks).find(([key]) => key.includes(title.split(" / ")[0].split("、")[0]));
+            card.innerHTML = `<h3>${link ? `<a href='${link[1]}' target='_blank' rel='noopener'>${title}</a>` : title}</h3><p>${body}</p>`;
+            catalogGrid.appendChild(card);
+        });
+
+        showPattern(0);
+    </script>
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

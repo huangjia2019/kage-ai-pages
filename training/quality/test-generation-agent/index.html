@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Test Generation Agent — Quality Engineering Agent Demo</title>
+    <meta name="description" content="A test agent that plans cases from a diff, generates runnable tests, critic-checks stability, and records progress.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/quality/test-generation-agent/">
+    <meta property="og:title" content="Intelligent Test Generation Agent — Quality Engineering Agent Demo">
+    <meta property="og:description" content="A test agent that plans cases from a diff, generates runnable tests, critic-checks stability, and records progress.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/quality/test-generation-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Quality Engineering Demo</p><h1>Intelligent Test Generation Agent</h1><p class="lede">A test agent that plans cases from a diff, generates runnable tests, critic-checks stability, and records progress.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop2-test-generation</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/quality/">Back to quality engineering</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop2-test-generation-blueprint.png" alt="Intelligent Test Generation Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Intelligent Test Generation Agent", "subtitle": "code change -> test plan -> generated tests -> critic -> progress log", "steps": [["Read change set", "Context Triage", "Separate touched code, existing tests, and coverage gaps."], ["Plan test cases", "Plan-and-Execute", "Turn the diff into boundary, regression, and negative cases."], ["Generate tests", "Tool Dispatch", "Create pytest-style test bodies from the plan."], ["Critic pass", "Generator-Critic", "Check determinism, assertions, and fixture style."], ["Run verification", "Self-Heal Loop", "If a test fails, repair once and re-run."], ["Persist progress", "Progress Tracking", "Record generated cases to avoid repeating work across PRs."]], "scenarios": [{"name": "Discount boundary change", "headline": "5 tests planned, 4 generated, 1 escalated for ambiguous business rule", "verdict": "PARTIAL_PASS", "cards": {"Coverage +": "8.4%", "Flaky risk": "Low", "Repair loops": "1", "Escalation": "1 rule"}, "log": ["plan: boundary cases for 0, 1, 99, 100, and invalid coupon", "generate: created pytest functions for four deterministic cases", "critic: one case lacks clear expected behavior", "progress: wrote test_generation_state.json"]}, {"name": "Pure refactor", "headline": "2 regression tests confirmed, no new generated tests needed", "verdict": "NO_NEW_TESTS", "cards": {"Coverage +": "0%", "Flaky risk": "None", "Repair loops": "0", "Escalation": "0"}, "log": ["plan: behavior-preserving refactor detected", "critic: existing regression tests cover touched paths", "verify: all selected tests pass", "progress: no duplicated test generation"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Read change set</h3><p>Separate touched code, current tests and coverage gaps.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Plan cases</h3><p>Turn the diff into boundary, regression and negative cases.</p><span class="pattern-chip">Plan-and-Execute</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Generate tests</h3><p>Create pytest-style test bodies from the plan.</p><span class="pattern-chip">Tool Dispatch</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Critic pass</h3><p>Check determinism, assertions and fixture style.</p><span class="pattern-chip">Generator-Critic</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Verify run</h3><p>Repair once when tests fail for mechanical reasons.</p><span class="pattern-chip">Self-Heal Loop</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Persist progress</h3><p>Record generated cases to avoid duplicated work.</p><span class="pattern-chip">Progress Tracking</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop2-test-generation-terminal.png" alt="Terminal output: test plan, generated cases, critic pass and progress log."><figcaption>Terminal output: test plan, generated cases, critic pass and progress log.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Plan-and-Execute</td><td>Generation needs an explicit test plan before code emission.</td></tr>
+<tr><td>Generator-Critic</td><td>Generated tests must be checked by a separate role.</td></tr>
+<tr><td>Self-Heal Loop</td><td>A bounded repair loop handles mechanical failures without hiding ambiguity.</td></tr>
+<tr><td>Progress Tracking</td><td>The agent should remember generated coverage across PRs.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Runnable beats plausible</h3><p>A test that looks good but cannot run is negative value.</p></article>
+<article class="insight-card"><h3>Critic grounding matters</h3><p>The best critic is grounded in deterministic checks: import, assertion, fixture, and test result.</p></article>
+<article class="insight-card"><h3>Progress prevents churn</h3><p>Without progress tracking, the same cases get regenerated again and again.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop2-test-generation
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop2-test-generation/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop2-test-generation-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDD 实战 — 规范驱动开发系列 · 黄佳</title>
+    <meta name="description" content="规范驱动开发（SDD）实战系列。从手写第一份 spec，到 OpenSpec / BMAD / Superpowers 协同实操。配套代码库 sdd-in-action。">
+    <link rel="canonical" href="https://kage-ai.com/zh/writing/sdd/">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+      .writing-list .post-date { color: #c8702a; font-weight: 600; }
+    </style>
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="/zh/interviews/">访谈</a>
+                <a href="/zh/">中文首页</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <div class="writing-index">
+            <h1>SDD 实战</h1>
+            <p class="lede">
+                规范驱动开发（Specification-Driven Development）实战系列。
+                从手写第一份 spec 开始，到 OpenSpec、BMAD、Superpowers 等工具的协同实操。
+                配套代码库 <a href="https://github.com/huangjia2019/sdd-in-action" target="_blank" rel="noopener">sdd-in-action</a>，
+                每一篇都能跟着跑通。
+            </p>
+            <p class="lede" style="color: #666;">
+                这是我 SDD 课程的实操配套。把概念落到能跑通的具体动作上：
+                Specify → Clarify → Implement 的三段闭环，
+                两层 Spec（项目愿景 + 任务变更）的结构，
+                以及它们在真实工程里怎么和现有的 Memory、Sub-Agents、Skills 协同。
+            </p>
+
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">第 1 篇</span>
+                    <a href="/zh/writing/sdd/01-sdd-essence-first-spec.html">SDD 本质：手写第一份 spec</a>
+                    <p class="post-blurb">不装任何工具，只用 Claude Code / OpenCode，手写一份能跑的 spec。从 Vibe 路径和 SDD 闭环的双路对比开始，看清规范驱动开发到底解决什么问题。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 2 篇</span>
+                    <a href="/zh/writing/sdd/02-memory-agents-md-sdd-rewrite.html">Memory 工程：AGENTS.md 的 SDD 化重写</a>
+                    <p class="post-blurb">把项目级 Memory 文件 AGENTS.md 当作 spec 来重写。用 SDD 三阶段——Specify、Clarify、Implement——把零散的项目说明变成可验收的规范。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 3 篇</span>
+                    <a href="/zh/writing/sdd/03-sub-agents-three-agent-collaboration.html">Sub-Agents 角色分工：三 Agent 协作规格</a>
+                    <p class="post-blurb">用 SDD 给三个 Sub-Agent 写协作规格：每个 Agent 的输入、输出、边界、失败模式。一份规格 = 一次明确的角色对话契约。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 4 篇</span>
+                    <a href="/zh/writing/sdd/04-two-layer-spec-grayscale.html">SDD 两层 Spec 的完整故事：从灰度开始讲</a>
+                    <p class="post-blurb">Spec 不是一份文档，是两层结构：项目级愿景 + 任务级变更。从灰度发布这个真实需求切入，把两层 Spec 的演化过程讲清楚。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 5 篇</span>
+                    <a href="/zh/writing/sdd/05-openspec-practical-guide.html">OpenSpec 实操指南</a>
+                    <p class="post-blurb">OpenSpec 是 SDD 思想落地的开源工具。这一篇是完整实操：怎么装、怎么跑、怎么和 Claude Code / OpenCode 协同，附完整命令清单和踩坑记录。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 6 篇</span>
+                    <a href="/zh/writing/sdd/06-bmad-openspec-add-metrics-collector.html">BMAD + OpenSpec 协同实操：add-metrics-collector</a>
+                    <p class="post-blurb">用一个真实需求——给项目加一个指标采集器——把 BMAD 方法论和 OpenSpec 工具串起来。从需求到 spec 到代码到验收，端到端走一遍。</p>
+                </li>
+                <li>
+                    <span class="post-date">第 7 篇</span>
+                    <a href="/zh/writing/sdd/07-superpowers-guide.html">Superpowers 详解 + 实操指南</a>
+                    <p class="post-blurb">Superpowers 是 SDD 体系下的一类高阶能力封装。这一篇把它的设计哲学、调用方式、以及与 Skills / Sub-Agents 的边界讲透。</p>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; SDD 实战系列</p>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

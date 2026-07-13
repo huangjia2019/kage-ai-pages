@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regulatory Document Agent — Finance Agent Demo</title>
+    <meta name="description" content="A spec-driven compliance agent that compares MAS notice changes, checks evidence quality, and emits a cited impact report.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/finance/regulatory-document-agent/">
+    <meta property="og:title" content="Regulatory Document Agent — Finance Agent Demo">
+    <meta property="og:description" content="A spec-driven compliance agent that compares MAS notice changes, checks evidence quality, and emits a cited impact report.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/finance/regulatory-document-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Finance Demo</p><h1>Regulatory Document Agent</h1><p class="lede">A spec-driven compliance agent that compares MAS notice changes, checks evidence quality, and emits a cited impact report.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop1-compliance</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/finance/">Back to finance</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop1-pattern-blueprint.png" alt="Regulatory Document Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{
+  "title": "Interactive run · regulatory impact analysis",
+  "scenarios": [
+    {
+      "label": "MAS AML/KYC amendment",
+      "summary": "Lower CDD threshold, shorter STR window, internal SOP impact.",
+      "steps": [
+        {
+          "name": "Load SDD contract",
+          "pattern": "Spec as Contract",
+          "log": "Loaded compliance-spec.md: inputs, output schema, citation rule, confidence threshold.",
+          "state": {
+            "spec": "compliance-spec.md",
+            "required_fields": [
+              "changes",
+              "impact",
+              "actions",
+              "quality"
+            ],
+            "citation_required": true,
+            "confidence_threshold": 0.8
+          },
+          "output": "Contract accepted. The agent cannot emit uncited findings."
+        },
+        {
+          "name": "Parse evidence",
+          "pattern": "Context Triage",
+          "log": "Parsed MAS amendment, baseline notice, and internal AML/KYC SOP as separate evidence streams.",
+          "state": {
+            "new_doc_chars": 949,
+            "baseline_chars": 429,
+            "internal_policy": "company-sop-aml.txt",
+            "scope": "AML/KYC"
+          },
+          "output": "Evidence map created: new notice, baseline notice, internal SOP."
+        },
+        {
+          "name": "Extract semantic diff",
+          "pattern": "Semantic Compaction",
+          "log": "Compressed long clauses into two material changes with clause anchors.",
+          "state": {
+            "changes_found": 2,
+            "changed_topics": [
+              "CDD threshold",
+              "STR reporting window"
+            ],
+            "clauses": [
+              "4.2",
+              "7.1"
+            ]
+          },
+          "output": "Two impact rows generated from changed clauses."
+        },
+        {
+          "name": "Ground with policy",
+          "pattern": "RAG Pipeline",
+          "log": "Matched changes to AML SOP controls and implementation teams.",
+          "state": {
+            "policy_matches": 3,
+            "teams": [
+              "Compliance Operations",
+              "Engineering + Compliance"
+            ],
+            "source_refs": 2
+          },
+          "output": "Internal policy context attached to each impact row."
+        },
+        {
+          "name": "Generate report",
+          "pattern": "Prompt Chaining",
+          "log": "Created structured impact report with actions, owners, dates, and rationale.",
+          "state": {
+            "report_id": "CR-2026-0517-DEMO",
+            "overall_impact": "high",
+            "action_items": 2,
+            "review_required": false
+          },
+          "output": "Report ready: high impact, two action items, no open citation gaps."
+        },
+        {
+          "name": "Apply quality gate",
+          "pattern": "Approval Gate",
+          "log": "Citation completeness 2/2, all confidence values above threshold, high-impact actions covered.",
+          "state": {
+            "citation_completeness": "2/2",
+            "confidence": ">=0.86",
+            "gate": "PASS",
+            "observability": [
+              "citations",
+              "confidence",
+              "actions",
+              "checks"
+            ]
+          },
+          "output": "PASS: the report is reviewable and can move to compliance review workflow."
+        }
+      ],
+      "final": {
+        "verdict": "PASS",
+        "headline": "Compliance impact report generated",
+        "cards": [
+          [
+            "Changes",
+            "2 material changes"
+          ],
+          [
+            "Impact",
+            "High"
+          ],
+          [
+            "Actions",
+            "Revise AML SOP; pilot RAG-backed review"
+          ],
+          [
+            "Patterns",
+            "SDD + RAG + Approval Gate"
+          ]
+        ]
+      }
+    }
+  ]
+}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>SDD Contract</h3><p>The spec defines input evidence, output schema, citation requirements, confidence threshold, and quality checks.</p><span class="pattern-chip">Spec as Contract</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Document Intake</h3><p>The agent reads the revised notice, previous baseline, and internal AML/KYC SOP as separate evidence sources.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Semantic Diff</h3><p>Long regulatory text is compacted into changed clauses, obligations, impact rows, and action candidates.</p><span class="pattern-chip">Semantic Compaction</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Policy RAG</h3><p>Internal policy context grounds the interpretation and keeps source references attached.</p><span class="pattern-chip">RAG Pipeline</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Impact Report</h3><p>The output is a structured compliance report with severity, owner, due date, and rationale.</p><span class="pattern-chip">Prompt Chaining</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Quality Gate</h3><p>Weak citation, low confidence, or high-impact missing action triggers review.</p><span class="pattern-chip">Approval Gate</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop1-compliance-terminal.png" alt="Terminal output: parsing, analysis, quality gate, compliance report."><figcaption>Terminal output: parsing, analysis, quality gate, compliance report.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Context Triage</td><td>Separate changed clauses, baseline text, and internal policy before deeper reasoning.</td></tr>
+<tr><td>Semantic Compaction</td><td>Compress long documents into obligations, impacts, and actions without losing traceability.</td></tr>
+<tr><td>RAG Pipeline</td><td>Ground conclusions in retrieved policy and source anchors.</td></tr>
+<tr><td>Approval Gate</td><td>Use confidence and impact to decide when the agent must stop and escalate.</td></tr>
+<tr><td>Observability Harness</td><td>Expose citations, confidence, checks, and generated action items.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Evidence is the product</h3><p>The useful deliverable is not only a summary; it is a chain from clause to impact to action.</p></article>
+<article class="insight-card"><h3>Quality gates define autonomy</h3><p>The agent should know when it can proceed and when it must ask for review.</p></article>
+<article class="insight-card"><h3>SDD makes compliance executable</h3><p>The specification becomes a contract for prompts, code, output, and evaluation.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop1-compliance
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd src
+python main.py
+
+# optional visual walkthrough
+open ../visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop1-compliance/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop1-pattern-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

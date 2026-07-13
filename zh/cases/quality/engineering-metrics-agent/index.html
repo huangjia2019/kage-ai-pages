@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研发效能度量 Agent — 质量工程 Agent 案例</title>
+    <meta name="description" content="一个效能度量 Agent：扫描 Git、CI、Jira 信号，检索指标定义，并生成带来源的趋势报告。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/quality/engineering-metrics-agent/">
+    <meta property="og:title" content="研发效能度量 Agent — 质量工程 Agent 案例">
+    <meta property="og:description" content="一个效能度量 Agent：扫描 Git、CI、Jira 信号，检索指标定义，并生成带来源的趋势报告。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/quality/engineering-metrics-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">质量工程 Demo</p><h1>研发效能度量 Agent</h1><p class="lede">一个效能度量 Agent：扫描 Git、CI、Jira 信号，检索指标定义，并生成带来源的趋势报告。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop4-engineering-metrics</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/quality/">返回质量工程案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop4-engineering-metrics-blueprint.png" alt="研发效能度量 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Engineering Metrics Agent", "subtitle": "Git/CI/Jira -> progressive discovery -> RAG definitions -> trend report", "steps": [["Scan signals", "Progressive Discovery", "Start broad across lead time, failure rate, and review load."], ["Focus anomalies", "Progressive Discovery", "Drill into the few metrics whose slope changed."], ["Retrieve definitions", "RAG Pipeline", "Bind each metric to the team's agreed definition."], ["Build trend report", "Prompt Chaining", "Generate trend, interpretation, and likely cause."], ["Check governance", "Approval Gate", "Flag metrics that could be misused or lack source coverage."], ["Expose trace", "Observability Harness", "Show source rows, definition, slope, and confidence."]], "scenarios": [{"name": "Weekly QE review", "headline": "Lead time improved, escaped defects worsened; report warns against single-metric celebration", "verdict": "REVIEW_READY", "cards": {"Signals": "12", "Anomalies": "3", "Source coverage": "92%", "Risk": "Metric gaming"}, "log": ["forage: scanned Git, CI, Jira, and quality report signals", "focus: escaped defects slope worsened for API team", "rag: metric policy defines escaped defect and release window", "gate: report warns against optimizing lead time alone"]}, {"name": "Release readiness", "headline": "Release ready with two watch items: flaky tests and review queue age", "verdict": "CONDITIONAL_PASS", "cards": {"Signals": "9", "Anomalies": "2", "Source coverage": "88%", "Risk": "Medium"}, "log": ["forage: release metrics filtered to critical path", "focus: flaky test retry count above normal slope", "rag: policy requires manual review when retry slope rises", "gate: conditional pass with two watch items"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>扫描信号</h3><p>从交付周期、失败率、评审负载等指标广扫。</p><span class="pattern-chip">渐进发现</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>聚焦异常</h3><p>钻取斜率发生变化的少数指标。</p><span class="pattern-chip">渐进发现</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>检索定义</h3><p>把每个指标绑定到团队约定口径。</p><span class="pattern-chip">RAG 管道</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>生成报告</h3><p>输出趋势、解释和可能原因。</p><span class="pattern-chip">提示链</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>治理检查</h3><p>标记可能被误用或来源不足的指标。</p><span class="pattern-chip">审批门控</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>暴露轨迹</h3><p>展示来源行、指标定义、斜率和置信度。</p><span class="pattern-chip">可观测性 Harness</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop4-engineering-metrics-terminal.png" alt="命令行输出：信号扫描、异常聚焦、指标口径检索和趋势报告。"><figcaption>命令行输出：信号扫描、异常聚焦、指标口径检索和趋势报告。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>渐进发现</td><td>不要一次塞满所有指标，要先广扫，再聚焦，再钻取。</td></tr>
+<tr><td>RAG 管道</td><td>指标口径需要带来源检索。</td></tr>
+<tr><td>可观测性 Harness</td><td>趋势、来源覆盖和置信度就是产品的一部分。</td></tr>
+<tr><td>审批门控</td><td>可能误导的指标在发布前要被标记。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>指标先要有定义</h3><p>Agent 先解释指标含义，再解释指标为什么变化。</p></article>
+<article class="insight-card"><h3>斜率优于快照</h3><p>周环比斜率比静态阈值更早发现质量漂移。</p></article>
+<article class="insight-card"><h3>治理避免指标表演</h3><p>报告应提示指标是否可被游戏化、来源是否充分。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop4-engineering-metrics
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop4-engineering-metrics/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop4-engineering-metrics-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS Document Analysis Pipeline — Finance Agent Demo</title>
+    <meta name="description" content="A five-step analyst workflow: ingest a revised MAS notice, compare versions, extract obligations, map products and create an impact report.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/finance/mas-document-analysis/">
+    <meta property="og:title" content="MAS Document Analysis Pipeline — Finance Agent Demo">
+    <meta property="og:description" content="A five-step analyst workflow: ingest a revised MAS notice, compare versions, extract obligations, map products and create an impact report.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/finance/mas-document-analysis/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Finance Demo</p><h1>MAS Document Analysis Pipeline</h1><p class="lede">A five-step analyst workflow: ingest a revised MAS notice, compare versions, extract obligations, map products and create an impact report.</p><p class="demo-meta">Streamlit showcase · Repo path: <code>showcases/finance/demo-doc-analysis</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/finance/">Back to finance</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/mas-document-analysis-blueprint.png" alt="MAS Document Analysis Pipeline blueprint"></figure></section>
+
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Notice Intake</h3><p>Normalize the revised notice and preserve section-level source anchors.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Version Diff</h3><p>Compare the revised notice with the baseline and isolate material changes.</p><span class="pattern-chip">Semantic Compaction</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Obligation Extract</h3><p>Turn changes into obligations, deadlines, owners, and evidence.</p><span class="pattern-chip">Prompt Chaining</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Product Mapping</h3><p>Connect obligations to product lines, customers, controls, and operational teams.</p><span class="pattern-chip">RAG Pipeline</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Impact Report</h3><p>Produce readiness score, risk matrix, executive summary, and action register.</p><span class="pattern-chip">Progress Tracking</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Review Loop</h3><p>Ambiguous or high-impact findings remain reviewable and traceable.</p><span class="pattern-chip">Approval Gate</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-01-challenge.png" alt="Business context and five-step agent pipeline."><figcaption>Business context and five-step agent pipeline.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-02-step1-ingestion.png" alt="Step 1: document ingestion and section map."><figcaption>Step 1: document ingestion and section map.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-03-step2-comparison.png" alt="Step 2: old/new comparison with structured changes."><figcaption>Step 2: old/new comparison with structured changes.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-04-step5-report-top.png" alt="Step 5: executive summary, readiness score and risk matrix."><figcaption>Step 5: executive summary, readiness score and risk matrix.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-05-step5-report-bottom.png" alt="Action list and report tail."><figcaption>Action list and report tail.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Context Triage</td><td>Separate source sections, changed clauses, and background context.</td></tr>
+<tr><td>Semantic Compaction</td><td>Convert a long notice into reviewable changes and obligations.</td></tr>
+<tr><td>Progress Tracking</td><td>Expose readiness score, risk matrix, and action register.</td></tr>
+<tr><td>Approval Gate</td><td>Preserve human review for ambiguous or high-impact changes.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Document change must become product impact</h3><p>Finance teams act on affected products and controls, not raw paragraphs.</p></article>
+<article class="insight-card"><h3>Progress visibility matters</h3><p>Compliance work is collaborative, so status and action ownership must be visible.</p></article>
+<article class="insight-card"><h3>The pipeline is the explanation</h3><p>Each step is inspectable, which makes the final report more trustworthy.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd showcases/finance/demo-doc-analysis
+streamlit run app.py</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>showcases/finance/demo-doc-analysis/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/mas-document-analysis-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

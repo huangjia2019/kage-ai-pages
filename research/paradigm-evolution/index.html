@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paradigm Evolution: Structured Programming → Agent — Jia Huang</title>
+    <meta name="description" content="A bilingual interactive timeline of major software engineering paradigms — from Structured Programming through OOP, Pattern Language, distributed systems, CAP, REST, microservices, cloud native, data-intensive thinking, to Agent architecture and Harness Engineering. Click any paradigm to see the problem it solved, the insight it brought, and the shift it produced.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/paradigm-evolution/">
+    <meta property="og:title" content="Paradigm Evolution: Structured Programming → Agent">
+    <meta property="og:description" content="Interactive timeline of major software paradigms across six eras. Each paradigm answered the previous era's hidden uncertainty.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/paradigm-evolution/">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="paradigm.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/paradigm-evolution/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <h1 class="para-title">Paradigm Evolution: from Structured Programming to the Agent Era</h1>
+
+            <p class="lede">
+                Software engineering is one continuous fight with complexity. Each paradigm
+                in this timeline did not arrive to replace its predecessor — it arrived because
+                a new kind of <em>uncertainty</em> had become unbearable, and the previous toolkit
+                quietly stopped being enough. The shifts compound. The Agent era inherits
+                everything below it.
+            </p>
+
+            <p>
+                This page sits beside the
+                <a href="/research/dual-axis/">Dual-Axis Framework</a>
+                and the
+                <a href="/research/pattern-evolution/">Pattern Evolution map</a>.
+                Together they ask the same question at three layers — <strong>paradigms</strong>
+                are the largest unit (how engineers think about the world),
+                <strong>patterns</strong> are the middle unit (named solutions inside a paradigm),
+                and the <strong>two-axis matrix</strong> is the structural anatomy of one specific
+                paradigm — the agent era.
+            </p>
+
+            <p class="para-meta">
+                <strong>How to read this page</strong>: each card is a major paradigm.
+                Click any card to open a side panel with three short sections —
+                what problem it answered, the key insight that made it stick, and the shift
+                it produced in how engineers thought. The list is intentionally short:
+                only paradigms that changed engineering vocabulary at the CAP / Microservices
+                level made it in. Design patterns live one floor down on the
+                <a href="/research/pattern-evolution/">pattern evolution page</a>.
+            </p>
+
+            <section class="para-crisis-map" aria-labelledby="crisis-map-title">
+                <h2 id="crisis-map-title">Complexity crisis map</h2>
+                <p>
+                    A compressed view before the era cards: each row names the kind of complexity
+                    that became dominant, and the paradigm that made it tractable enough to keep building.
+                </p>
+                <div class="para-crisis-table-wrap">
+                    <table class="para-crisis-table">
+                        <thead>
+                            <tr>
+                                <th>Era</th>
+                                <th>Complexity crisis</th>
+                                <th>Paradigm response</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1970s</td>
+                                <td>Flow-control collapse</td>
+                                <td>Structured Programming</td>
+                            </tr>
+                            <tr>
+                                <td>1980s</td>
+                                <td>State-control collapse</td>
+                                <td>Object-Oriented Programming</td>
+                            </tr>
+                            <tr>
+                                <td>1990s</td>
+                                <td>Object collaboration collapse</td>
+                                <td>GoF Patterns</td>
+                            </tr>
+                            <tr>
+                                <td>2000s</td>
+                                <td>Web system complexity</td>
+                                <td>MVC</td>
+                            </tr>
+                            <tr>
+                                <td>2010s</td>
+                                <td>Distributed system complexity</td>
+                                <td>CAP / Saga</td>
+                            </tr>
+                            <tr>
+                                <td>2015+</td>
+                                <td>Organizational scaling complexity</td>
+                                <td>Microservices</td>
+                            </tr>
+                            <tr>
+                                <td>2017+</td>
+                                <td>Data trade-off complexity</td>
+                                <td>Data-Intensive Thinking</td>
+                            </tr>
+                            <tr>
+                                <td>2020+</td>
+                                <td>AI cognition complexity</td>
+                                <td>Agent Architecture</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div id="para-timeline"></div>
+
+            <section class="evo-closing" style="margin-top: 3rem;">
+                <h2 style="font-family: var(--font-serif); font-size: 1.45rem;">The thread in one sentence</h2>
+                <blockquote class="evo-collapse" style="background: var(--color-quote-bg); border-left: 3px solid var(--color-link); padding: 0.9rem 1.15rem; font-size: 1rem; line-height: 1.55; margin: 1rem 0;">
+                    Every paradigm absorbed a new source of uncertainty and made it tractable —
+                    from <em>can humans reason about the code</em>,
+                    to <em>can different teams ship without blocking each other</em>,
+                    to <em>can an unreliable model act inside a reliable system</em>.
+                    The instinct is the same. The unreliable component keeps moving up.
+                </blockquote>
+            </section>
+
+            <aside id="para-detail" class="para-detail" data-open="false" aria-hidden="true">
+                <button class="para-detail-close" aria-label="Close">×</button>
+                <div class="para-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script src="paradigm.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ParadigmEvolution.init({ lang: 'en', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Every Agent Team I Know Runs Out of Context Before They Run Out of Compute — Jia Huang</title>
+    <meta name="description" content="Different teams, different domains, different stacks. They keep hitting the same wall well before they hit any compute or model capability limit. Context is the bottleneck, and unlike compute, you cannot scale it horizontally.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/writing/context-bottleneck.html">
+    <meta property="og:title" content="Why Every Agent Team I Know Runs Out of Context Before They Run Out of Compute">
+    <meta property="og:description" content="Context is the bottleneck. The model spends; the harness budgets.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/writing/context-bottleneck.html">
+    <meta property="article:published_time" content="2026-05-12">
+    <meta property="article:author" content="Jia Huang">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <h1>Why Every Agent Team I Know Runs Out of Context Before They Run Out of Compute</h1>
+                <p class="essay-meta">
+                    <time datetime="2026-05-12">May 12, 2026</time>
+                    &middot; by <a href="/about/">Jia Huang</a>
+                    &middot; <a href="https://agentpatterns.substack.com/p/why-every-agent-team-i-know-runs" target="_blank" rel="noopener">Originally on Substack</a>
+                </p>
+            </header>
+
+<p>A team I reviewed last quarter had spent three months scaling their agent. They were on H100s. They had budget. They were optimistic.</p>
+<p>What was failing was not the model. The model worked fine on shorter inputs. What was failing was the agent&rsquo;s ability to keep track of what it had already seen. The team&rsquo;s system prompt had grown to forty thousand tokens. The conversation history was at fifty thousand. Tool definitions ate another thirty. By the time a real user query arrived, the model was reading something that looked less like a task description and more like a poorly indexed wiki.</p>
+<p>They had not run out of compute. They had run out of <em>room to think</em>.</p>
+<p>Versions of this show up on every agent project that crosses my desk. Different teams, different domains, different stacks. Same wall. They keep hitting it well before they hit any compute or model capability limit.</p>
+<p>This essay is about that wall, and why it changes what we should consider the actual bottleneck in agent engineering.</p>
+<h2>We were trained to think the bottleneck was compute</h2>
+<p>If you grew up with the cloud era of software, your instinct about scaling is shaped by one assumption: compute is the limit, and you can throw money at it. Need more throughput? More cores. Need more memory? Bigger instance. Need more parallelism? More replicas. The cloud bill is annoying, but the curve is smooth.</p>
+<p>Agent systems break that assumption.</p>
+<p>You can buy bigger GPUs. You can buy faster GPUs. You can run more inferences in parallel. None of that helps when the problem is <em>what your model can pay attention to in a single forward pass</em>. The context window is the new bottleneck, and unlike compute, you cannot scale it horizontally.</p>
+<p>There is no AWS instance type that gives you a context window twice as big.</p>
+<p>There is no &ldquo;Premium Tier&rdquo; that lets you fit more relevant information into the same prompt slot.</p>
+<p>Even when frontier labs raise the limit (200K, 400K, 1M, 2M), real-world useful capacity does not scale linearly with the headline number. Performance degrades as the window fills with stale conversation, irrelevant tool output, and accumulated chain-of-thought. By the time the window is at 80% of the published limit, the model is operating in a different regime than what the benchmarks measured.</p>
+<p>So the question is not <em>&ldquo;how much context can you buy?&rdquo;</em> The question is: how do you allocate the context you have?</p>
+<p>That is a different question from any question the cloud era asked.</p>
+<h2>The thesis</h2>
+<p>Stripped to one sentence: agent architecture is <em>context-budget allocation under uncertainty</em>.</p>
+<p>The model spends. The harness budgets.</p>
+<p>The next few weeks of essays defend this premise more fully (the MEAP for <em>Designing AI Agents</em> launches with the full argument). For today the goal is simpler: show the symptom. Once seen, it shows up everywhere.</p>
+<h2>Five places the context wall shows up</h2>
+<p><strong>1. Sub-agent proliferation that nobody planned.</strong></p>
+<p>A team starts with one agent. Three months in, they have a planner agent, an executor agent, a critic agent, a coordinator agent, and a &ldquo;router&rdquo; agent. Ask any individual engineer why each one exists, and the answer is the same: <em>the parent agent&rsquo;s context window was getting full</em>. Each sub-agent is a forced spawn. Nobody designed a multi-agent architecture; the architecture grew because the context kept overflowing. This is not multi-agent design. This is involuntary process forking.</p>
+<p><strong>2. RAG systems with five retrieval stages.</strong></p>
+<p>The team adds a vector store. Then a reranker. Then a summarizer in front of the reranker because the reranker&rsquo;s input was too big. Then a query rewriter in front of all of it. Each stage is a patch on a context-budget problem the previous stage didn&rsquo;t fully solve. None of them would exist if the model could just read the whole knowledge base.</p>
+<p><strong>3. The summarization tax that nobody measures.</strong></p>
+<p>Every time conversation history gets compacted into a summary, a tax is paid. The summary is shorter (good) but lossy (bad). Most teams do not measure how much information their summarizer destroys per compaction. They simply notice the agent &ldquo;forgets things&rdquo; or &ldquo;starts hallucinating after turn fifteen&rdquo; and assume the model degraded. The model did not degrade. The summarizer did its job. Context shortage was compensated for by trading information for tokens.</p>
+<p><strong>4. The token cost of being thorough.</strong></p>
+<p>Want a thorough agent that double-checks its work? That is another reasoning trace consuming the same context window. Want it to consult three tools before answering? Each tool call&rsquo;s output occupies real estate. By the time an agent thinks carefully, validates against three sources, and writes back a coherent justification, the useful context for the <em>next</em> user message is already half-spent.</p>
+<p><strong>5. Memory schema arguments that go in circles.</strong></p>
+<p>Listen to a senior engineering meeting on agent memory. The team will fight for ninety minutes about what to store: <em>&ldquo;we should keep the user&rsquo;s full history&rdquo;</em> vs <em>&ldquo;no, just the last five turns&rdquo;</em> vs <em>&ldquo;but what about the system facts we extracted in turn three?&rdquo;</em> Underneath every memory architecture argument is the same constraint: there is not room for everything; choose what to keep. This is not a knowledge management problem. It is a budget allocation problem dressed up in knowledge management vocabulary.</p>
+<p>If you have lived through any of these, you have already lived the thesis. Context, not compute, is the limit. Allocation, not accumulation, is the engineering problem.</p>
+<h2>What changes when this is taken seriously</h2>
+<p>Once context is the scarce resource, several things start looking different.</p>
+<p>The patterns the AI engineering community keeps reinventing (context triage, hierarchical memory, complexity routing, sub-agent isolation, declarative skills loaded on demand) stop looking like unrelated tricks. They start looking like what they actually are: strategies for allocating a fixed context budget across competing demands. Different patterns, same underlying constraint. Same questions: <em>what gets in, what gets out, what gets summarized, what gets sharded across processes.</em></p>
+<p>The harness, the layer wrapping the model that the community has started naming explicitly, stops looking like infrastructure plumbing. It starts looking like the place where the budgeting happens. The model is not making context allocation decisions. The harness is. The harness decides what to load, what to prune, what to delegate, what to escalate. The model spends; the harness budgets.</p>
+<p>And the role of the engineer designing one of these systems stops being <em>&ldquo;build the smartest agent.&rdquo;</em> It becomes something stranger and more interesting: decide the budget, design the allocator, make the consequences observable. Most agent failure modes that recur in production reduce to a budget that was wrong, an allocator that ran ad hoc, or consequences that were invisible.</p>
+<h2>What this is building toward</h2>
+<p>Several engineering teams have worked through this allocation problem in the last year, and the book with Manning lays out a framework for it. The framework has two axes (one for what the agent is doing, one for how the work is wired) and twenty-seven recurring patterns, all of which turn out to be consequences of the same allocation premise once they are seen through the right lens.</p>
+<p>That book, <em>Designing AI Agents</em>, launches in MEAP on May 26. The Chinese edition has shipped 9,000+ copies in two months and is in its 4th print run; the English edition gives the framework its first international readership.</p>
+<p>In the meantime, one essay a week appears on this Substack until the MEAP drops, and one engineering idea a week for ten weeks after. Each builds on the same thesis: agent architecture is context-budget allocation under uncertainty.</p>
+<p>If you are designing or operating agents in production and have hit some version of the context wall, subscribe. The next two essays go deeper into specific allocation strategies and into a related failure mode that is the single most underrated risk in agent systems today.</p>
+<p>— Jia Huang (黄佳)
+<em>AI Researcher, A*STAR Singapore</em>
+<em>Author of <a href="https://hubs.la/Q04hCsrS0">Designing AI Agents</a> (Manning) and <a href="https://www.packtpub.com/en-us/product/rag-from-first-principles-9781835888674">RAG from First Principles</a> (Packt)</em></p>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

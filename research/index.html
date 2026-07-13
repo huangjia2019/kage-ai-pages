@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research — Jia Huang</title>
+    <meta name="description" content="Papers and frameworks by Jia Huang on agent architecture, design patterns, and the engineering of bounded resource allocation in AI systems.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/">
+    <meta property="og:title" content="Research — Jia Huang">
+    <meta property="og:description" content="Papers and frameworks by Jia Huang on agent architecture and AI system design.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/research/">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-research">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <div class="writing-index">
+            <h1>Research</h1>
+            <p class="lede">
+                Papers and frameworks on agent architecture &mdash;
+                the thesis the Manning book makes the engineering case for, in formal form.
+                The central claim: <em>agent architecture is bounded resource allocation under uncertainty</em>.
+                The model spends; the harness budgets.
+            </p>
+
+            <h2 style="margin-top: 2.5rem;">Frameworks</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/dual-axis/">The Dual-Axis Framework for AI Agent Design Patterns</a>
+                    <p class="post-blurb">
+                        Two-dimensional classification of agent architectures along
+                        Cognitive Function (7 categories) &times; Execution Topology (6 archetypes).
+                        The 7&times;6 matrix yields 27 distinct agent design patterns,
+                        13 of them introduced and named in the work.
+                        Five empirical laws of pattern selection close the framework.
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/pattern-evolution/">Pattern Evolution: GoF &rarr; Distributed &rarr; Agent</a>
+                    <p class="post-blurb">
+                        Interactive lineage of <strong>48 software design patterns</strong> &mdash;
+                        the 23 GoF object patterns (1994) and 25 distributed-systems patterns
+                        (2000s&ndash;2020s) &mdash; traced into the Agent era.
+                        Each pattern is clickable; the panel reveals original problem,
+                        default assumption, and Agent-era counterpart.
+                        The thesis: patterns did not become obsolete, they were lifted one layer.
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/pattern-ancestors/">Engineering Ancestors of Agent Design Patterns</a>
+                    <p class="post-blurb">
+                        A hoverable map from 28 Agent design patterns to their software-engineering ancestors:
+                        cache hierarchy, priority queues, Pipes-and-Filters, Command, workflow DAGs,
+                        durable execution, Event Sourcing, RBAC, Saga, MapReduce, OpenTelemetry, and more.
+                        Each pattern shows both the Agent-era intent and the older engineering idea it inherits.
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/harness-anatomy/">Harness Anatomy: cross-cutting view of 8 agent harnesses</a>
+                    <p class="post-blurb">
+                        Eight production agent harnesses (Claude Code, Codex CLI, Aider, OpenCode,
+                        OpenClaw, Hermes Agent, DeerFlow, OpenHands) analyzed across the
+                        <em>7 cognitive functions</em>. The output is a coverage heatmap built by a
+                        fixed <strong>five-step method</strong> (Detect &rarr; Classify &rarr; Filter
+                        &rarr; Map &rarr; Verify). Each cell is anchored to a file path and a line range.
+                        The list is open — the same method extends to any new harness.
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/paradigm-evolution/">Paradigm Evolution: Structured Programming &rarr; Agent</a>
+                    <p class="post-blurb">
+                        One layer above patterns: <strong>paradigms</strong>. An interactive
+                        timeline across six eras and fifteen major paradigms &mdash; Structured Programming
+                        &rarr; OOP / Pattern Language / GoF &rarr; Distributed / CAP / REST / DDD /
+                        Event Sourcing &rarr; Microservices / Cloud Native / Reactive &rarr;
+                        Data-Intensive Thinking &rarr; LLM / Agent Architecture / Harness Engineering.
+                        Each card opens a three-part panel &mdash; <em>what it solved, the key insight,
+                        and the shift it produced</em>. Only paradigms that changed engineering
+                        vocabulary at the CAP / Microservices level are admitted.
+                    </p>
+                </li>
+            </ul>
+
+            <h2 style="margin-top: 2.5rem;">Reading Maps</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/classic-insights/">Classic Technical Books and Papers: Defining Insights</a>
+                    <p class="post-blurb">
+                        A public reading map for technical works that changed how a field thinks:
+                        the problem each book or paper answered, the defining insight, the reversal
+                        it introduced, and why the idea travelled. This page is deliberately not an
+                        Agent framework; it is a way to study what makes an idea field-defining.
+                    </p>
+                </li>
+                <li>
+                    <span class="post-date">v1 &middot; 2026</span>
+                    <a href="/research/thinking-principles/">Long-Lived Thinking Principles</a>
+                    <p class="post-blurb">
+                        A cross-era map of durable human thinking moves: Socratic questioning,
+                        first-principles reasoning, wu wei, Occam's razor, methodic doubt,
+                        falsifiability, systems thinking, the Pyramid Principle, deliberate practice,
+                        dark time, and more. Each entry is framed as a problem, a principle,
+                        a reversal, and a practice question.
+                    </p>
+                </li>
+            </ul>
+
+            <h2 style="margin-top: 2.5rem;">Papers</h2>
+            <ul class="writing-list">
+                <li>
+                    <span class="post-date">May 15, 2026</span>
+                    <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">
+                        A Two-Dimensional Framework for AI Agent Design Patterns:
+                        Cognitive Function &times; Execution Topology
+                    </a>
+                    <p class="post-blurb">
+                        Huang &amp; Zhou, 2026. arXiv preprint
+                        <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a> (cs.AI) &middot;
+                        archival DOI <a href="https://doi.org/10.5281/zenodo.19036557" target="_blank" rel="noopener">10.5281/zenodo.19036557</a>.
+                        Coauthor: Joey Tianyi Zhou (A*STAR CFAR).
+                        We argue that neither a topology-only nor a cognition-only axis is sufficient
+                        to distinguish architecturally different agent systems, and propose the
+                        two-dimensional taxonomy that organizes 27 patterns and yields five
+                        empirical pattern-selection laws.
+                    </p>
+                </li>
+            </ul>
+
+            <p style="margin-top: 2.5rem;">
+                Citations and further readings live in
+                <a href="/books/#designing-ai-agents">Designing AI Agents</a>
+                (Manning, MEAP launches May 26, 2026).
+            </p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

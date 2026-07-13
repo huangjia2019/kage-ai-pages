@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS Compliance Analyst Agent — Finance Agent Demo</title>
+    <meta name="description" content="A broader compliance-manager workspace: product compliance analysis, customer/product checks, task automation and a MAS knowledge base.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/finance/mas-compliance-analyst/">
+    <meta property="og:title" content="MAS Compliance Analyst Agent — Finance Agent Demo">
+    <meta property="og:description" content="A broader compliance-manager workspace: product compliance analysis, customer/product checks, task automation and a MAS knowledge base.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/finance/mas-compliance-analyst/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Finance Demo</p><h1>MAS Compliance Analyst Agent</h1><p class="lede">A broader compliance-manager workspace: product compliance analysis, customer/product checks, task automation and a MAS knowledge base.</p><p class="demo-meta">Streamlit showcase · Repo path: <code>showcases/finance/demo-MAS-analyst</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/finance/">Back to finance</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/mas-compliance-analyst-blueprint.png" alt="MAS Compliance Analyst Agent blueprint"></figure></section>
+
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Product Profile</h3><p>Read product type, channel, customer segment, and risk context.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Rule Retrieval</h3><p>Retrieve bounded MAS requirements and relevant internal policy snippets.</p><span class="pattern-chip">RAG Pipeline</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Tool Dispatch</h3><p>Run product checks, customer suitability checks, and task automation.</p><span class="pattern-chip">Tool Dispatch</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Risk Scoring</h3><p>Turn rule and product context into blockers, warnings, and review needs.</p><span class="pattern-chip">Guardrail Sandwich</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Checklist Output</h3><p>Produce product-specific checklist, evidence, and next actions.</p><span class="pattern-chip">Skill Package</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Review Gate</h3><p>High-risk cases escalate and preserve evidence for audit.</p><span class="pattern-chip">Approval Gate</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-01-home.png" alt="Product-by-product compliance automation setup."><figcaption>Product-by-product compliance automation setup.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-02-pipeline-top.png" alt="Pipeline output: regulations and product-specific checklist."><figcaption>Pipeline output: regulations and product-specific checklist.</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-03-pipeline-report.png" alt="Compliance report view."><figcaption>Compliance report view.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Tool Dispatch</td><td>Bounded product and suitability checks become explicit tools.</td></tr>
+<tr><td>RAG Pipeline</td><td>Rules are retrieved with source context before judgment.</td></tr>
+<tr><td>Guardrail Sandwich</td><td>Checks surround generation so warnings affect action.</td></tr>
+<tr><td>Approval Gate</td><td>High-risk outputs are routed to review.</td></tr>
+<tr><td>Observability Harness</td><td>Evidence, rules, checks, and review status remain visible.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Compliance is product-aware</h3><p>A rule matters differently across product type, customer segment, and channel.</p></article>
+<article class="insight-card"><h3>Risk warning should change behavior</h3><p>A warning is useful only when it changes autonomy, review, or documentation.</p></article>
+<article class="insight-card"><h3>Workbench beats chatbot</h3><p>The shape is closer to a compliance router than a general conversation surface.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd showcases/finance/demo-MAS-analyst
+streamlit run app.py</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>showcases/finance/demo-MAS-analyst/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/mas-compliance-analyst-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

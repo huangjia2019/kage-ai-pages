@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dual-Axis Framework for AI Agent Design Patterns — Jia Huang</title>
+    <meta name="description" content="A two-dimensional classification of AI agent architectures: Cognitive Function (7 categories) × Execution Topology (6 archetypes), yielding 27 named design patterns. Reference page for the framework introduced in Huang &amp; Zhou (2026) and developed in Designing AI Agents (Manning, 2026).">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/">
+    <meta property="og:title" content="The Dual-Axis Framework for AI Agent Design Patterns">
+    <meta property="og:description" content="Two dimensions, 27 patterns, 5 empirical pattern-selection laws. The canonical reference page for the framework.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/">
+    <meta property="og:image" content="https://kage-ai.com/research/dual-axis/matrix.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://kage-ai.com/research/dual-axis/matrix.png">
+
+    <!-- Google Scholar + Dublin Core citation tags · auto-indexed by academic crawlers -->
+    <meta name="citation_title" content="A Two-Dimensional Framework for AI Agent Design Patterns: Cognitive Function × Execution Topology">
+    <meta name="citation_author" content="Huang, Jia">
+    <meta name="citation_author" content="Zhou, Joey Tianyi">
+    <meta name="citation_publication_date" content="2026/05/15">
+    <meta name="citation_arxiv_id" content="2605.13850">
+    <meta name="citation_doi" content="10.5281/zenodo.19036557">
+    <meta name="citation_abstract_html_url" content="https://arxiv.org/abs/2605.13850">
+    <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2605.13850">
+    <meta name="citation_publisher" content="arXiv">
+    <meta name="citation_keywords" content="AI agents; agent design patterns; LLM agents; cognitive function; execution topology; software architecture">
+    <meta name="DC.title" content="A Two-Dimensional Framework for AI Agent Design Patterns: Cognitive Function × Execution Topology">
+    <meta name="DC.creator" content="Huang, Jia">
+    <meta name="DC.creator" content="Zhou, Joey Tianyi">
+    <meta name="DC.date" content="2026-05-15">
+    <meta name="DC.identifier" content="https://arxiv.org/abs/2605.13850">
+    <meta name="DC.identifier.doi" content="https://doi.org/10.5281/zenodo.19036557">
+    <meta name="DC.publisher" content="arXiv">
+    <meta name="DC.type" content="Text">
+    <meta name="DC.subject" content="AI agents, agent design patterns, software architecture">
+
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .matrix-figure {
+            margin: 2rem 0 1.5rem;
+            text-align: center;
+        }
+        .matrix-figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #d4c4b0;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(90, 58, 26, 0.06);
+        }
+        .matrix-figure figcaption {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: #8a6a3e;
+            font-style: italic;
+        }
+        .matrix-downloads {
+            margin-top: 0.4rem;
+            font-size: 0.85rem;
+        }
+        .matrix-downloads a {
+            margin: 0 0.4rem;
+        }
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #d4c4b0;
+            padding: 0.55rem 0.65rem;
+            vertical-align: top;
+            text-align: left;
+        }
+        .matrix-table th {
+            background: #f5e6d3;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .matrix-table td.empty { color: #b8a68a; text-align: center; }
+        .matrix-table tr th:first-child { background: #ead4b8; }
+        .cite-block {
+            background: #faf4ec;
+            border-left: 3px solid #a85a1e;
+            padding: 1rem 1.2rem;
+            margin: 1.5rem 0;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .cite-pill {
+            background: #faf4ec;
+            border: 1px solid #ead4b8;
+            border-radius: 6px;
+            padding: 0.7rem 1rem;
+            margin: 1.2rem 0 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .cite-pill strong { color: #7a4216; }
+        .copy-btn {
+            display: inline-block;
+            background: #a85a1e;
+            color: #fff;
+            border: 0;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.78rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 0.3rem 0 0.6rem;
+        }
+        .copy-btn:hover { background: #7a4216; }
+        .copy-btn.copied { background: #2e7d32; }
+        .axes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 640px) {
+            .axes-grid { grid-template-columns: 1fr; }
+            .matrix-table { font-size: 0.75rem; }
+            .matrix-table th, .matrix-table td { padding: 0.35rem 0.4rem; }
+        }
+    </style>
+</head>
+<body class="page-dualaxis">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <h1>The Dual-Axis Framework for AI Agent Design Patterns</h1>
+                <p class="essay-meta">
+                    Reference page &middot;
+                    formal source: <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou, 2026</a> &middot;
+                    book treatment: <a href="/books/#designing-ai-agents"><em>Designing AI Agents</em></a>
+                </p>
+                <p class="cite-pill">
+                    <strong>Cite as:</strong>
+                    Huang, J. &amp; Zhou, J. T. (2026). <em>A Two-Dimensional Framework for AI Agent Design Patterns.</em>
+                    <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a>
+                    &middot; archival DOI <a href="https://doi.org/10.5281/zenodo.19036557" target="_blank" rel="noopener">10.5281/zenodo.19036557</a>
+                    &middot; <a href="#cite">BibTeX &darr;</a>
+                </p>
+            </header>
+
+            <p>
+                Existing frameworks for LLM-based agent architectures describe systems from a single perspective.
+                Industry guides emphasize <em>execution topology</em>&mdash;how information and control flow.
+                Cognitive-science-oriented surveys emphasize <em>cognitive function</em>&mdash;what the agent is trying to accomplish.
+                Neither axis alone distinguishes architecturally different systems. The same
+                Orchestrator&ndash;Workers topology can realize Plan-and-Execute, Hierarchical Delegation,
+                or Adversarial Verification &mdash; three substantially different systems with three
+                different failure modes.
+            </p>
+
+            <p>
+                The dual-axis framework crosses the two views.
+                Each agent design pattern is the intersection of one cognitive function and one execution topology.
+                The 7&times;6 matrix yields 27 distinct patterns, 13 of them introduced and named in the work.
+            </p>
+
+            <figure class="matrix-figure">
+                <img src="matrix.png?v=20260616" alt="The dual-axis framework: a 7-by-6 matrix of 28 AI agent design patterns. Rows are cognitive functions (Perception, Memory, Reasoning, Action, Reflection, Collaboration, Governance). Columns are execution topologies (Chain, Route, Parallel, Loop, Hierarchy, Orchestrate). Each filled cell names the pattern at that intersection." width="1095" height="770">
+                <figcaption>
+                    The dual-axis matrix at a glance. 27 patterns occupy the 7&times;6 grid; the remaining cells are open territory.
+                </figcaption>
+                <p class="matrix-downloads">
+                    Download: <a href="matrix.svg" download>SVG</a> &middot; <a href="matrix.png" download>PNG</a>
+                </p>
+            </figure>
+
+            <h2>The two axes</h2>
+
+            <div class="axes-grid">
+                <div>
+                    <h3>Cognitive Function (7)</h3>
+                    <p><strong>What the agent is trying to do.</strong></p>
+                    <ol>
+                        <li><strong>Perception</strong> &mdash; what enters the model</li>
+                        <li><strong>Memory</strong> &mdash; what persists across turns</li>
+                        <li><strong>Reasoning</strong> &mdash; how decisions are formed</li>
+                        <li><strong>Action</strong> &mdash; how the agent affects the world</li>
+                        <li><strong>Reflection</strong> &mdash; how the agent inspects itself</li>
+                        <li><strong>Collaboration</strong> &mdash; how multiple agents combine</li>
+                        <li><strong>Governance</strong> &mdash; how the system stays accountable</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3>Execution Topology (6)</h3>
+                    <p><strong>How the work is wired.</strong></p>
+                    <ol>
+                        <li><strong>Chain</strong> &mdash; sequential pass</li>
+                        <li><strong>Route</strong> &mdash; conditional pick</li>
+                        <li><strong>Parallel</strong> &mdash; concurrent spread</li>
+                        <li><strong>Loop</strong> &mdash; iterative cycle</li>
+                        <li><strong>Hierarchy</strong> &mdash; recursive split</li>
+                        <li><strong>Orchestrate</strong> &mdash; dynamic conduct</li>
+                    </ol>
+                    <p style="margin-top: 0.6rem; font-size: 0.88rem; color: var(--color-text-muted);">
+                        <strong>A note on Choreography.</strong> Choreography is sometimes listed
+                        as a topology. We treat it instead as a coordination mode that operates
+                        <em>across</em> topologies &mdash; closer in spirit to the Teams pattern
+                        than to an independent execution shape &mdash; so it is described in the
+                        patterns text rather than given its own column.
+                    </p>
+                </div>
+            </div>
+
+            <h2>The 7&times;6 pattern matrix &mdash; interactive</h2>
+
+            <div class="three-layers-box">
+                <h3>Three layers · how to navigate this reference</h3>
+                <ol>
+                    <li><strong>This page (Layer 2)</strong> &mdash; the full 7&times;6 matrix. Each filled cell, each row header, each column header is clickable.</li>
+                    <li><strong>Pattern pages (Layer 3)</strong> &mdash; deep dives into individual patterns. Why the pattern exists, the design problem it solves, deep thinking direction, curated engineering blog posts, latest arXiv papers. <strong>Five flagship samplers are published here as free reference.</strong> The remaining 22 patterns &mdash; each with full reverse engineering across five production frameworks, runnable Python code, typical pitfalls, and composition recipes &mdash; are developed in depth in <a href="/books/#designing-ai-agents"><em>Designing AI Agents</em></a> (Manning, 2026).</li>
+                    <li><strong>Aggregation views</strong> &mdash; click a <em>row header</em> (cognitive function) to see all patterns in that row together, plus the cross-cutting commentary on why this function matters and how topology choice changes its behavior. Click a <em>column header</em> (execution topology) for the same view along the orthogonal axis.</li>
+                </ol>
+                <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--color-text-muted);">
+                    The five free samplers live at corners production engineers care about most: <em>Context Triage</em>, <em>Hierarchical Retention</em>, <em>Hierarchical Delegation</em>, <em>Approval Gate</em>, <em>Observability Harness</em>. They are enough to evaluate the framework. The other 22 are the book.
+                </p>
+            </div>
+
+            <p>
+                Each cell names the pattern at the intersection of one cognitive function and one execution topology.
+                Empty cells (&mdash;) mark intersections where no recurring pattern is currently catalogued; some are
+                structurally vacant, others are open research directions.
+                Filled cells with a <strong>&rarr;</strong> arrow have a Layer 3 deep-dive page.
+            </p>
+            <p class="cite-pill">
+                New companion view:
+                <a href="/research/pattern-ancestors/">Engineering Ancestors of Agent Design Patterns</a>
+                maps the pattern names below to older software-engineering ideas such as cache hierarchy,
+                priority queues, Pipes-and-Filters, workflow DAGs, RBAC, Saga, MapReduce, and OpenTelemetry.
+            </p>
+
+            <button id="matrix-panel-show" class="matrix-panel-show" type="button" aria-controls="matrix-hover-panel" hidden>Show lineage panel</button>
+            <div class="matrix-reference-layout" id="matrix-reference-layout">
+                <div class="matrix-scroll">
+            <table class="matrix-interactive">
+                <thead>
+                    <tr>
+                        <th class="corner-cell">Function &darr;<br>Topology &rarr;</th>
+                        <th class="col-header"><a href="topologies/chain/">Chain</a></th>
+                        <th class="col-header"><a href="topologies/route/">Route</a></th>
+                        <th class="col-header"><a href="topologies/parallel/">Parallel</a></th>
+                        <th class="col-header"><a href="topologies/loop/">Loop</a></th>
+                        <th class="col-header"><a href="topologies/hierarchy/">Hierarchy</a></th>
+                        <th class="col-header"><a href="topologies/orchestrate/">Orchestrate</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="row-header"><a href="functions/perception/">Perception</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">Semantic Compaction</span><span class="pattern-hint">long &rarr; short, meaning preserved</span></a></td>
+                        <td class="pattern-cell has-page"><a href="patterns/context-triage/"><span class="pattern-name">Context Triage</span><span class="pattern-hint">priority routing under budget</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Multi-Modal Fusion</span><span class="pattern-hint">heterogeneous inputs joined</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Progressive Discovery</span><span class="pattern-hint">broad &rarr; focus &rarr; drill</span></a></td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/memory/">Memory</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">RAG Pipeline</span><span class="pattern-hint">external library on demand</span></a></td>
+                        <td class="pattern-cell has-page"><a href="patterns/hierarchical-retention/"><span class="pattern-name">Hierarchical Retention</span><span class="pattern-hint">working/short/long/procedural</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Failure Journals</span><span class="pattern-hint">structured lessons-learned</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Progress Tracking</span><span class="pattern-hint">todo.md as durable state</span></a></td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/reasoning/">Reasoning</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">Chain-of-Thought</span><span class="pattern-hint">steps made explicit</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Complexity-Based Routing</span><span class="pattern-hint">small vs. large model dispatch</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Parallel Exploration</span><span class="pattern-hint">multi-chain self-consistency</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Iterative Hypothesis</span><span class="pattern-hint">guess-check-revise</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="empty">&mdash;</td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/action/">Action</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">Prompt Chaining</span><span class="pattern-hint">single Unix pipe</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Tool Dispatch</span><span class="pattern-hint">typed registry + handler</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Guardrail Sandwich</span><span class="pattern-hint">pre + act + post wrap</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Plan-and-Execute</span><span class="pattern-hint">think first, then act</span></a></td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/reflection/">Reflection</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">Generator-Critic</span><span class="pattern-hint">draft &rarr; critique loop</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Skill Package</span><span class="pattern-hint">codified successful flows</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Self-Heal Loop</span><span class="pattern-hint">test &rarr; fix &rarr; retest</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Experience Replay</span><span class="pattern-hint">retrospective on past runs</span></a></td>
+                        <td class="empty">&mdash;</td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/collaboration/">Collaboration</a></th>
+                        <td class="pattern-cell"><a><span class="pattern-name">Handoff Chain</span><span class="pattern-hint">sequential baton-pass</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Fan-Out / Gather</span><span class="pattern-hint">map then reduce</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Adversarial Review</span><span class="pattern-hint">red-team peer review</span></a></td>
+                        <td class="pattern-cell has-page"><a href="patterns/hierarchical-delegation/"><span class="pattern-name">Hierarchical Delegation</span><span class="pattern-hint">manager dispatches workers</span></a></td>
+                        <td class="empty">&mdash;</td>
+                    </tr>
+                    <tr>
+                        <th class="row-header"><a href="functions/governance/">Governance</a></th>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell has-page"><a href="patterns/approval-gate/"><span class="pattern-name">Approval Gate</span><span class="pattern-hint">human-in-loop guard</span></a></td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Progressive Commitment</span><span class="pattern-hint">trust earned in stages</span></a></td>
+                        <td class="empty">&mdash;</td>
+                        <td class="pattern-cell"><a><span class="pattern-name">Blast Radius Control</span><span class="pattern-hint">bounded failure scope</span></a></td>
+                        <td class="pattern-cell has-page"><a href="patterns/observability-harness/"><span class="pattern-name">Observability Harness</span><span class="pattern-hint">trace, cost, latency, drift</span></a></td>
+                    </tr>
+                </tbody>
+            </table>
+                </div>
+                <aside id="matrix-hover-panel" class="matrix-hover-panel" aria-live="polite">
+                    <button id="matrix-panel-close" class="matrix-panel-close" type="button" aria-controls="matrix-hover-panel" aria-label="Hide lineage panel">Hide</button>
+                    <p class="eyebrow" id="matrix-hover-meta">Perception × Chain</p>
+                    <h3 id="matrix-hover-name">Semantic Compaction</h3>
+                    <p id="matrix-hover-brief">Hover any pattern cell in the matrix to see its engineering lineage.</p>
+                    <dl>
+                        <dt>Engineering ancestor</dt>
+                        <dd id="matrix-hover-ancestor"></dd>
+                        <dt>30-year engineering problem</dt>
+                        <dd id="matrix-hover-problem"></dd>
+                    </dl>
+                    <p class="ancestor-more"><a href="/research/pattern-ancestors/#lineage-table">Open full ancestor table &rarr;</a></p>
+                </aside>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--color-text-muted);">
+                Cells with a <strong>&rarr;</strong> arrow have a Layer 3 deep-dive page open here as a free sampler.
+                The remaining 22 patterns are full patterns in the framework &mdash; each is developed in depth, with five-framework reverse engineering and runnable Python, in <a href="/books/#designing-ai-agents"><em>Designing AI Agents</em></a> (Manning, 2026).
+                Web samplers stay open. Book chapters carry the engineering depth.
+            </p>
+
+            <script>
+                const matrixLineage = {
+                    "Semantic Compaction": ["Perception × Chain", "Compacts long context while preserving live semantic objects.", "Mark-and-Sweep GC", "JVM memory compaction", "https://www.postgresql.org/docs/current/routine-vacuuming.html"],
+                    "Context Triage": ["Perception × Route", "Routes evidence by urgency, relevance, uncertainty and risk before it enters the model window.", "Priority Queue · LRU", "OS process scheduling · cache replacement", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+                    "Multi-Modal Fusion": ["Perception × Parallel", "Normalizes and merges heterogeneous evidence channels into one reasoning state.", "ETL · MapReduce", "Data-warehouse multi-source aggregation", "https://www.ibm.com/think/topics/etl"],
+                    "Progressive Discovery": ["Perception × Orchestrate", "Starts broad, follows information scent, and drills down as evidence improves.", "Information Foraging", "Search-engine query refinement", "https://citeseerx.ist.psu.edu/document?doi=5eb0ebaa4bc61a5df2d8337aa6df9030acf516aa&repid=rep1&type=pdf"],
+                    "RAG Pipeline": ["Memory × Chain", "Retrieves, ranks and injects external evidence as runtime memory.", "Inverted index · full-text retrieval", "Search engines such as Lucene", "https://lucene.apache.org/core/"],
+                    "Hierarchical Retention": ["Memory × Route", "Routes facts into working, short-term, long-term or procedural memory.", "CPU cache hierarchy (L1/L2/L3)", "Virtual memory paging", "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"],
+                    "Progress Tracking": ["Memory × Orchestrate", "Keeps an explicit task ledger so long work can resume and avoid repetition.", "WAL · Event Sourcing", "Database transaction log", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+                    "Failure Journals": ["Memory × Loop", "Stores failure, cause, attempted fix and prevention rule for later runs.", "Postmortem · fault tree", "SRE / learning organization", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+                    "Chain-of-Thought": ["Reasoning × Chain", "Gives reasoning a visible sequence that can be constrained and inspected.", "Recursive algorithms · divide and conquer", "Stepwise mathematical proof", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+                    "Complexity-Based Routing": ["Reasoning × Route", "Dispatches easy and hard tasks to different model, tool or review paths.", "Load balancing · tiered pricing", "CDN / elastic compute", "https://learn.microsoft.com/en-us/azure/architecture/patterns/priority-queue"],
+                    "Parallel Exploration": ["Reasoning × Parallel", "Runs multiple reasoning paths and compares or merges their results.", "BFS · MapReduce", "Self-consistency / Monte Carlo", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+                    "Iterative Hypothesis": ["Reasoning × Loop", "Forms a hypothesis, tests it, revises it, and repeats under evidence.", "Popper falsification", "Scientific method / TDD", "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"],
+                    "Prompt Chaining": ["Action × Chain", "Turns a task into ordered model calls connected by intermediate artifacts.", "Unix pipe · ETL", "Pipeline engineering", "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters"],
+                    "Tool Dispatch": ["Action × Route", "Selects and invokes tools through typed schemas and policy checks.", "Spring IoC · Dependency Injection", "Dependency injection / service discovery", "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html"],
+                    "Plan-and-Execute": ["Action × Orchestrate", "Builds an executable plan and updates state while carrying it out.", "Project management · Gantt chart", "WBS / Saga", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+                    "Guardrail Sandwich": ["Action × Hierarchy", "Wraps risky action with pre-checks, constrained execution and post-checks.", "AOP · aspect-oriented programming", "Interceptor / filter chain", "https://docs.spring.io/spring-framework/reference/core/aop.html"],
+                    "Generator-Critic": ["Reflection × Chain", "Separates drafting from critique so quality criteria can change the output.", "Canary deployment · editorial loop", "Code review / PR workflow", "https://opentelemetry.io/docs/"],
+                    "Skill Package": ["Reflection × Route", "Packages a repeated successful workflow into reusable instructions and tools.", "SOP · standardized operations", "ISO 9001 / teaching knowledge base", "https://www.iso.org/standard/62085.html"],
+                    "Self-Heal Loop": ["Reflection × Loop", "Detects failure, repairs, reruns validation and stops when recovery is unsafe.", "TDD · CI/CD self-healing", "Test-driven repair / Kubernetes self-healing", "https://kubernetes.io/docs/concepts/architecture/self-healing/"],
+                    "Experience Replay": ["Reflection × Hierarchy", "Revisits traces and outcomes to extract reusable heuristics.", "Reinforcement-learning experience replay · WAL", "Case library / retrospective", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
+                    "Handoff Chain": ["Collaboration × Chain", "Passes work through specialized agents with explicit handoff contracts.", "Tiered customer support", "ITIL / Runbook", "https://refactoring.guru/design-patterns/chain-of-responsibility/python/example"],
+                    "Fan-Out / Gather": ["Collaboration × Parallel", "Splits work across agents and merges results through a gather rule.", "MapReduce · Spark", "Big-data ETL", "https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/"],
+                    "Adversarial Review": ["Collaboration × Loop", "Assigns opposition to expose hidden assumptions and counterevidence.", "Peer review · Red Team", "Academic review / penetration testing", "https://opentelemetry.io/docs/"],
+                    "Hierarchical Delegation": ["Collaboration × Hierarchy", "A coordinator decomposes work, delegates, integrates and escalates.", "Microservices · organization hierarchy", "Company OKR / manager-IC split", "https://learn.microsoft.com/en-us/azure/architecture/patterns/competing-consumers"],
+                    "Approval Gate": ["Governance × Route", "Routes actions to automatic approval, human review or rejection.", "RBAC · change approval", "GRC / SOX / dual financial sign-off", "https://www.nist.gov/publications/role-based-access-controls"],
+                    "Progressive Commitment": ["Governance × Parallel", "Earns permission in stages before making a high-risk commitment.", "Permission evolution · KYC tiers", "Financial real-name verification tiers", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
+                    "Observability Harness": ["Governance × Orchestrate", "Captures prompts, tools, traces, latency, cost and policy checks.", "OpenTelemetry · APM", "Datadog / black-box monitoring", "https://opentelemetry.io/docs/"],
+                    "Blast Radius Control": ["Governance × Hierarchy", "Limits how far a bad decision, failed call or permission can spread.", "Circuit breaker · sandbox", "Hystrix / Kubernetes namespace", "https://github.com/Netflix/Hystrix"]
+                };
+                const matrixProblemLinks = {
+                    "OS process scheduling · cache replacement": "https://kernel.org/doc/html/v6.0/scheduler/sched-design-CFS.html",
+                    "JVM memory compaction": "https://www.oracle.com/java/technologies/javase/hotspot-garbage-collection.html",
+                    "Search-engine query refinement": "https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html",
+                    "Data-warehouse multi-source aggregation": "https://www.ibm.com/think/topics/etl",
+                    "Virtual memory paging": "https://docs.kernel.org/mm/page_tables.html",
+                    "Search engines such as Lucene": "https://lucene.apache.org/core/",
+                    "Database transaction log": "https://www.postgresql.org/docs/current/wal-intro.html",
+                    "SRE / learning organization": "https://sre.google/sre-book/postmortem-culture/",
+                    "Stepwise mathematical proof": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/",
+                    "CDN / elastic compute": "https://aws.amazon.com/documentation-overview/elasticloadbalancing/",
+                    "Self-consistency / Monte Carlo": "https://www.ibm.com/think/topics/monte-carlo-simulation",
+                    "Scientific method / TDD": "https://martinfowler.com/bliki/TestDrivenDevelopment.html",
+                    "Dependency injection / service discovery": "https://docs.spring.io/spring-framework/reference/core/beans/introduction.html",
+                    "WBS / Saga": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga",
+                    "Pipeline engineering": "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters",
+                    "Interceptor / filter chain": "https://docs.spring.io/spring-framework/docs/6.1.7/javadoc-api/org/springframework/web/servlet/HandlerInterceptor.html",
+                    "Code review / PR workflow": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+                    "ISO 9001 / teaching knowledge base": "https://www.iso.org/standard/62085.html",
+                    "Case library / retrospective": "https://sre.google/sre-book/postmortem-culture/",
+                    "Test-driven repair / Kubernetes self-healing": "https://kubernetes.io/docs/concepts/architecture/self-healing/",
+                    "Company OKR / manager-IC split": "https://martinfowler.com/articles/distributed-objects-microservices.html",
+                    "Big-data ETL": "https://spark.apache.org/docs/latest/index.html",
+                    "Academic review / penetration testing": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=152164",
+                    "ITIL / Runbook": "https://www.atlassian.com/software/confluence/templates/devops-runbook",
+                    "GRC / SOX / dual financial sign-off": "https://www.sec.gov/rule-release/33-8212",
+                    "Hystrix / Kubernetes namespace": "https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/",
+                    "Financial real-name verification tiers": "https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Risk-based-approach-banking-sector.html",
+                    "Datadog / black-box monitoring": "https://github.com/prometheus/blackbox_exporter"
+                };
+
+                (function(){
+                    const layout = document.getElementById("matrix-reference-layout");
+                    const closePanel = document.getElementById("matrix-panel-close");
+                    const showPanel = document.getElementById("matrix-panel-show");
+                    const hoverPanel = document.getElementById("matrix-hover-panel");
+                    const panel = {
+                        meta: document.getElementById("matrix-hover-meta"),
+                        name: document.getElementById("matrix-hover-name"),
+                        brief: document.getElementById("matrix-hover-brief"),
+                        ancestor: document.getElementById("matrix-hover-ancestor"),
+                        problem: document.getElementById("matrix-hover-problem")
+                    };
+                    function setPanelClosed(isClosed) {
+                        layout.classList.toggle("matrix-panel-closed", isClosed);
+                        hoverPanel.hidden = isClosed;
+                        hoverPanel.setAttribute("aria-hidden", String(isClosed));
+                        showPanel.hidden = !isClosed;
+                        showPanel.setAttribute("aria-expanded", String(!isClosed));
+                        closePanel.setAttribute("aria-expanded", String(!isClosed));
+                    }
+                    function show(name) {
+                        const row = matrixLineage[name];
+                        if (!row) return;
+                        panel.meta.textContent = row[0];
+                        panel.name.textContent = name;
+                        panel.brief.textContent = row[1];
+                        panel.ancestor.innerHTML = `<a href='${row[4]}' target='_blank' rel='noopener'>${row[2]}</a>`;
+                        const problemHref = matrixProblemLinks[row[3]];
+                        panel.problem.innerHTML = problemHref ? `<a href='${problemHref}' target='_blank' rel='noopener'>${row[3]}</a>` : row[3];
+                    }
+                    closePanel.addEventListener("click", function(event){
+                        event.preventDefault();
+                        setPanelClosed(true);
+                        showPanel.focus();
+                    });
+                    showPanel.addEventListener("click", function(event){
+                        event.preventDefault();
+                        setPanelClosed(false);
+                        hoverPanel.focus();
+                    });
+                    document.querySelectorAll(".matrix-interactive .pattern-cell a").forEach(function(node){
+                        const label = node.querySelector(".pattern-name");
+                        if (!label) return;
+                        const name = label.textContent.trim();
+                        node.setAttribute("tabindex", "0");
+                        node.addEventListener("mouseenter", function(){ show(name); });
+                        node.addEventListener("focus", function(){ show(name); });
+                    });
+                    hoverPanel.setAttribute("tabindex", "-1");
+                    setPanelClosed(false);
+                    show("Semantic Compaction");
+                })();
+            </script>
+
+            <h2>Orthogonality</h2>
+
+            <p>
+                The two axes are orthogonal in the engineering sense: the choice of cognitive function does not
+                determine the choice of topology, and vice versa. The same cognitive function can be realized
+                under different topologies with different cost, latency, and failure-mode profiles
+                (e.g., Reasoning under Chain-of-Thought versus Iterative Hypothesis Testing).
+                The same topology can serve different cognitive functions
+                (e.g., Hierarchy carrying Guardrail Sandwich, Experience Replay, Hierarchical Delegation,
+                or Blast Radius Control). The orthogonality is what makes the matrix usable as a selection grid
+                rather than a taxonomy of fixed patterns.
+            </p>
+
+            <h2>Five empirical laws of pattern selection</h2>
+
+            <p>The framework closes with five laws derived from cross-domain analysis
+                (financial lending, legal due diligence, network operations, healthcare triage). Each law
+                relates an environmental constraint to an architectural decision:</p>
+
+            <ol>
+                <li><strong>Time &rarr; simplicity.</strong> Tighter time budgets compress topology toward Chain and Loop.</li>
+                <li><strong>Authority &rarr; governance.</strong> Higher action authority forces heavier Governance investment.</li>
+                <li><strong>Failure cost &rarr; reflection bias.</strong> Asymmetric failure costs justify Reflection layers that look uneconomic on average.</li>
+                <li><strong>Volume &rarr; collaboration.</strong> High task volume forces multi-agent topologies (Parallel, Hierarchy).</li>
+                <li><strong>Same pattern, different parameterization.</strong> Most production differences across systems are parameter choices on the same selected pattern, not different patterns.</li>
+            </ol>
+
+            <p style="font-size: 0.9rem; color: var(--color-text-muted); border-left: 3px solid var(--color-accent, #a85a1e); padding: 0.6rem 0.9rem; margin-top: 1.1rem; background: rgba(168, 90, 30, 0.04);">
+                These five laws are stated here as principles. The case studies that derive them &mdash; the financial-lending, legal due diligence, network-operations, and healthcare-triage analyses &mdash; the decision trees that apply them, the seven key discriminators that calibrate them, and the counter-examples where they break, are developed in Chapter 10 of <a href="/books/#designing-ai-agents"><em>Designing AI Agents</em></a>. The web page gives you the laws; the book gives you the worked judgement.
+            </p>
+
+            <h2 id="cite">How to cite</h2>
+
+            <p>If you use the framework, its vocabulary (&ldquo;dual-axis&rdquo;, &ldquo;Cognitive Function &times; Execution Topology&rdquo;),
+                its 27 pattern names, or its five empirical pattern-selection laws, please cite the formal source.
+                Permanent canonical URL for this page: <a href="https://kage-ai.com/cite">kage-ai.com/cite</a>.</p>
+
+            <h3 style="margin-top:1.5rem;">One-line citation</h3>
+            <button class="copy-btn" data-copy-target="cite-oneline">Copy one-line</button>
+            <div class="cite-block" id="cite-oneline">Huang, J. &amp; Zhou, J. T. (2026). A Two-Dimensional Framework for AI Agent Design Patterns: Cognitive Function &#215; Execution Topology. arXiv:2605.13850. https://arxiv.org/abs/2605.13850</div>
+
+            <h3 style="margin-top:1.5rem;">BibTeX</h3>
+            <p style="font-size:0.85rem; color:#8b8680; margin-bottom:0.3rem;">
+                Dual-listed: <code>eprint</code> = arXiv primary surface; <code>doi</code> = Zenodo permanent archive.
+            </p>
+            <button class="copy-btn" data-copy-target="cite-bibtex">Copy BibTeX</button>
+            <div class="cite-block" id="cite-bibtex">@misc{huang_zhou_2026_dual_axis,
+  author        = {Huang, Jia and Zhou, Joey Tianyi},
+  title         = {A Two-Dimensional Framework for AI Agent Design Patterns:
+                   Cognitive Function &#215; Execution Topology},
+  year          = {2026},
+  eprint        = {2605.13850},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.5281/zenodo.19036557},
+  url           = {https://arxiv.org/abs/2605.13850}
+}</div>
+
+            <h3 style="margin-top:1.5rem;">Chicago short-form</h3>
+            <p>
+                Huang, Jia, and Joey Tianyi Zhou.
+                &ldquo;A Two-Dimensional Framework for AI Agent Design Patterns: Cognitive Function &times; Execution Topology.&rdquo;
+                arXiv preprint arXiv:2605.13850 (2026).
+                <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">https://arxiv.org/abs/2605.13850</a>.
+            </p>
+
+            <p style="font-size:0.85rem; color:#8b8680;">
+                The Zenodo DOI <a href="https://doi.org/10.5281/zenodo.19036557" target="_blank" rel="noopener">10.5281/zenodo.19036557</a> remains the permanent archival identifier (originally posted 2026-03-12, predating the arXiv submission and serving as priority timestamp).
+            </p>
+
+            <script>
+                document.querySelectorAll('.copy-btn[data-copy-target]').forEach(function(btn){
+                    btn.addEventListener('click', function(){
+                        var t = document.getElementById(btn.dataset.copyTarget);
+                        if (!t) return;
+                        navigator.clipboard.writeText(t.innerText).then(function(){
+                            var orig = btn.textContent;
+                            btn.textContent = 'Copied ✓';
+                            btn.classList.add('copied');
+                            setTimeout(function(){
+                                btn.textContent = orig;
+                                btn.classList.remove('copied');
+                            }, 1500);
+                        });
+                    });
+                });
+            </script>
+
+            <h2>Where the framework is developed</h2>
+
+            <ul>
+                <li>
+                    <strong>Paper</strong> &mdash;
+                    <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850 (Huang &amp; Zhou, 2026)</a>:
+                    the formal taxonomy, orthogonality argument, eight detailed patterns, and the five empirical laws.
+                    Archival DOI: <a href="https://doi.org/10.5281/zenodo.19036557" target="_blank" rel="noopener">10.5281/zenodo.19036557</a>.
+                </li>
+                <li>
+                    <strong>Book</strong> &mdash;
+                    <a href="/books/#designing-ai-agents"><em>Designing AI Agents</em></a> (Manning, MEAP launches May 26, 2026):
+                    the full eleven-chapter engineering treatment, all 27 patterns implemented in Python,
+                    the running case study (Argus), and the six-step pattern-selection methodology.
+                </li>
+                <li>
+                    <strong>Essays</strong> &mdash;
+                    <a href="/writing/">Writing archive</a> and
+                    <a href="https://agentpatterns.substack.com" target="_blank" rel="noopener"><em>Agent Design Patterns</em> on Substack</a>:
+                    deployment notes, dollar economics, and the engineering arguments behind individual patterns.
+                </li>
+            </ul>
+
+            <hr />
+            <p><em>This page is the canonical reference URL for the dual-axis framework.
+                It is meant to be cited and linked rather than reproduced &mdash; the matrix evolves as the patterns evolve.</em></p>
+
+            <footer>
+                <p>
+                    Subscribe to <a href="https://agentpatterns.substack.com" target="_blank" rel="noopener"><em>Agent Design Patterns</em></a>
+                    for the engineering arguments behind each pattern. &middot;
+                    <a href="/research/">All research &rarr;</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+/* ========================================================================
+   Classic Insights page · insights.css
+   Public reading map for field-defining technical books and papers.
+   ======================================================================== */
+
+.classic-title {
+    font-family: var(--font-serif);
+    font-size: 1.9rem;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.classic-meta {
+    background: var(--color-quote-bg);
+    border-left: 3px solid var(--color-link);
+    color: var(--color-text-muted);
+    font-size: 0.94rem;
+    line-height: 1.62;
+    margin: 1.5rem 0 2rem;
+    padding: 0.9rem 1.1rem;
+}
+
+.classic-principles {
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 1.4rem 0 2.5rem;
+}
+
+.classic-principle {
+    background: #fff;
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    padding: 0.85rem 0.95rem;
+}
+
+.classic-principle strong {
+    color: var(--color-link);
+    display: block;
+    font-size: 0.94rem;
+    margin-bottom: 0.3rem;
+}
+
+.classic-principle span {
+    color: var(--color-text-muted);
+    display: block;
+    font-size: 0.86rem;
+    line-height: 1.48;
+}
+
+.classic-controls {
+    align-items: end;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: minmax(15rem, 1.25fr) minmax(11rem, 0.75fr) minmax(11rem, 0.75fr);
+    margin: 1.2rem 0 1rem;
+}
+
+.classic-control label {
+    color: var(--color-text-muted);
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.classic-control input,
+.classic-control select {
+    background: #fff;
+    border: 1px solid var(--color-rule);
+    border-radius: 4px;
+    color: var(--color-text);
+    font: inherit;
+    min-height: 2.25rem;
+    padding: 0.42rem 0.55rem;
+    width: 100%;
+}
+
+.classic-count {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    margin: 0.35rem 0 0.75rem;
+}
+
+.classic-table-wrap {
+    overflow-x: auto;
+}
+
+.classic-table {
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    min-width: 1080px;
+    width: 100%;
+}
+
+.classic-table th,
+.classic-table td {
+    border-top: 1px solid var(--color-rule);
+    padding: 0.68rem 0.62rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.classic-table th {
+    background: var(--color-quote-bg);
+    color: var(--color-text);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.classic-table td:first-child {
+    width: 12rem;
+}
+
+.classic-work-title {
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.classic-work-title:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+}
+
+.classic-author,
+.classic-small {
+    color: var(--color-text-muted);
+    display: block;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    margin-top: 0.18rem;
+}
+
+.classic-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+}
+
+.classic-badge {
+    background: var(--color-badge-bg);
+    border-radius: 3px;
+    color: var(--color-badge);
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    padding: 0.22rem 0.38rem;
+}
+
+.classic-badge.secondary {
+    background: #f0f6f4;
+    color: #49695f;
+}
+
+.classic-empty {
+    background: #fff;
+    border: 1px solid var(--color-rule);
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    padding: 1rem;
+}
+
+.classic-closing {
+    border-top: 1px solid var(--color-rule);
+    margin-top: 2.4rem;
+    padding-top: 1.3rem;
+}
+
+.classic-closing h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin-bottom: 0.65rem;
+}
+
+.classic-closing p {
+    color: var(--color-text-muted);
+    line-height: 1.62;
+    max-width: var(--measure);
+}
+
+@media (max-width: 760px) {
+    .classic-title { font-size: 1.55rem; }
+    .classic-principles,
+    .classic-controls { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 761px) and (max-width: 980px) {
+    .classic-principles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+

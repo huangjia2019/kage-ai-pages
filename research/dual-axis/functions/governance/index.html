@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governance — Cognitive Function Aggregation — Jia Huang</title>
+    <meta name="description" content="Governance: the row of the dual-axis matrix that asks how an agent system stays accountable. Five patterns, one design problem: bounded authority with explicit audit.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/functions/governance/">
+    <meta property="og:title" content="Governance — Cognitive Function Aggregation">
+    <meta property="og:description" content="The Governance row: five patterns, one design problem — bounded authority with explicit audit.">
+    <meta property="og:type" content="article">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Cognitive function aggregation
+                </p>
+                <h1>Governance &mdash; the row</h1>
+                <span class="coord-badge"><strong>Cognitive function 7 of 7</strong> &middot; five patterns across the topology axis</span>
+                <p class="essay-meta">
+                    How an agent system stays accountable: bounded authority, explicit audit trail, predictable failure containment, evidence on demand.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix &mdash; the whole row</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Governance</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-active">Approval Gate</div>
+                    <div class="mm-cell mm-active">Progressive Commitment</div>
+                    <div class="mm-cell mm-active">Observability Harness</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-active">Blast Radius Control</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this row exists</h2>
+                <p>
+                    The other six cognitive functions assume the agent is allowed to act. Governance is the row
+                    that asks <em>under what conditions</em>. Without governance, an agent that can read can also
+                    delete; an agent that can email can also impersonate; an agent that can spend can also drain.
+                    The five governance patterns answer the four operational questions that every production
+                    agent eventually has to answer:
+                </p>
+                <ul style="list-style: disc; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Where do we stop and ask?</strong> &mdash; <em>Approval Gate</em>.</li>
+                    <li><strong>How do we contain blast radius when something goes wrong?</strong> &mdash; <em>Blast Radius Control</em>.</li>
+                    <li><strong>How do we know what happened?</strong> &mdash; <em>Observability Harness</em>.</li>
+                    <li><strong>How does authority earn its way up?</strong> &mdash; <em>Progressive Commitment</em>.</li>
+                </ul>
+                <p>
+                    Three industry pressures converged in 2025 to elevate Governance from optional to load-bearing.
+                    OWASP&rsquo;s Agentic AI Top 10 reported an 88% governance-incident rate on agentic deployments.
+                    Gartner projected 40% of multi-agent projects would be cancelled by 2027, with weak governance
+                    cited as the primary cause. And in November 2025 Anthropic disclosed the first
+                    AI-orchestrated cyber-espionage campaign &mdash; an agent acting with 80&ndash;90% autonomy in
+                    an attack scenario. The argument that governance is a phase-2 concern died with that disclosure.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The five Governance patterns &mdash; one row, five topologies</h2>
+                <div class="aggregation-patterns">
+
+                    <div class="agg-pattern">
+                        <h3><a href="/research/dual-axis/patterns/approval-gate/">Approval Gate</a></h3>
+                        <div class="agg-coord">Governance × Route</div>
+                        <p>
+                            A policy-driven gate that routes high-stakes actions to human approval. The route rule
+                            (read pass, write confirm, delete escalate) is the design surface. Deployed correctly
+                            it is the load-bearing element of agent safety; deployed wrong it is rubber-stamp
+                            theatre. The pattern with the cleanest production reference (Claude Code&rsquo;s 5+1
+                            permission modes).
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3>Progressive Commitment</h3>
+                        <div class="agg-coord">Governance × Parallel <span style="color: var(--color-text-faint); font-style: italic;">(pattern page forthcoming)</span></div>
+                        <p>
+                            Trust earned in stages. The agent first operates with read-only authority; success
+                            promotes it to write-with-confirmation; further success promotes to write-with-audit-only;
+                            the highest tier still records but no longer interrupts. Stages run in parallel for
+                            different action categories &mdash; the agent can be trusted with formatting while still
+                            requiring approval for billing. The CSA Agentic Trust Framework&rsquo;s five-gate model
+                            is the strongest enterprise reference.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3><a href="/research/dual-axis/patterns/observability-harness/">Observability Harness</a></h3>
+                        <div class="agg-coord">Governance × Orchestrate</div>
+                        <p>
+                            Four signal tiers orchestrated into a single surface: latency, cost, quality, behaviour
+                            drift. Tier 4 &mdash; trajectory slope &mdash; is the conceptual contribution that
+                            distinguishes agent SRE from traditional SRE. Without it, snapshot dashboards miss the
+                            slow drift that produces 88% of cascade failures.
+                        </p>
+                    </div>
+
+                    <div class="agg-pattern">
+                        <h3>Blast Radius Control</h3>
+                        <div class="agg-coord">Governance × Hierarchy <span style="color: var(--color-text-faint); font-style: italic;">(pattern page forthcoming)</span></div>
+                        <p>
+                            Bounded failure scope by design. Inspired directly by Erlang/OTP bulkhead isolation
+                            and Kubernetes namespace bounds. Hierarchical because failure must be contained
+                            at each level of the agent tree &mdash; a leaf failure should not destroy a sub-tree;
+                            a sub-tree failure should not destroy the manager. The 2026 OWASP Agentic guidance
+                            cites Blast Radius Control as the most under-implemented pattern across surveyed
+                            production deployments.
+                        </p>
+                    </div>
+
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-top: 1.5rem;">
+                    Five filled cells, two empty cells in this row. <em>Governance × Chain</em> and
+                    <em>Governance × Loop</em> are structurally vacant: chain-shaped governance reduces to a
+                    sequence of gates which is just Approval Gate composed; loop-shaped governance reduces to
+                    repeated observability checks which is just Observability Harness in motion. The empty cells
+                    are not a gap &mdash; they are a design judgment.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>How topology choice changes Governance behaviour</h2>
+                <p>
+                    The same cognitive intent &mdash; &ldquo;stay accountable&rdquo; &mdash; produces four very different
+                    operational profiles depending on the topology:
+                </p>
+                <ul style="list-style: disc; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Route</strong> (Approval Gate) &mdash; <em>point-in-time</em>, blocking. Latency cost paid per gated action; decision lives in a verdict log.</li>
+                    <li><strong>Parallel</strong> (Progressive Commitment) &mdash; <em>time-extended</em>, non-blocking. Trust evolves over weeks; no single decision is gated, but the threshold for the next tier is observable.</li>
+                    <li><strong>Orchestrate</strong> (Observability Harness) &mdash; <em>continuous</em>, passive. The harness records and aggregates; alerting routes through the SLO orchestrator, not at every step.</li>
+                    <li><strong>Hierarchy</strong> (Blast Radius Control) &mdash; <em>structural</em>, designed in. Failure containment is a property of the system topology itself, not a runtime decision.</li>
+                </ul>
+                <p>
+                    Reading the row this way makes the topology axis useful as a checklist: a serious production
+                    deployment uses Governance patterns from <em>multiple</em> topology cells. Approval Gate alone
+                    is not enough &mdash; without Observability Harness you cannot audit it; without Blast Radius
+                    Control a single bypass cascades; without Progressive Commitment the agent never earns its
+                    way out of supervised mode.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Cross-cutting reading &mdash; engineering &amp; policy</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://owasp.org/www-project-agentic-ai-top-10/" target="_blank" rel="noopener">OWASP Agentic AI Top 10</a></span>
+                        <span class="res-meta">OWASP · 2025-2026</span>
+                        <span class="res-blurb">The reference list for agent-specific risks. Each entry maps onto one or more Governance patterns; useful as a checklist when defending Governance investment.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://cloudsecurityalliance.org/agentic-trust-framework" target="_blank" rel="noopener">CSA Agentic Trust Framework</a></span>
+                        <span class="res-meta">Cloud Security Alliance · 2025</span>
+                        <span class="res-blurb">Five-gate promotion model from dev to production. Anchors Progressive Commitment in enterprise governance vocabulary.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/news/cyber-disruption-claude" target="_blank" rel="noopener">First AI-orchestrated cyber espionage campaign — Anthropic</a></span>
+                        <span class="res-meta">Anthropic · November 2025</span>
+                        <span class="res-blurb">The case that turned Governance from optional to load-bearing. Cited in every governance proposal in regulated industries from late 2025 onward.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2509.01217" target="_blank" rel="noopener">Least Agency: Permission Scoping for Long-Horizon Agents</a></span>
+                        <span class="res-meta">arXiv:2509.01217 · September 2025</span>
+                        <span class="res-blurb">The formal academic argument behind &ldquo;least agency&rdquo; — the principle that ties together all five Governance patterns into one design discipline.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this row is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 9 (Governance), all sections.</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.7-4.8 plus the &ldquo;authority &rarr; governance&rdquo; law in §5.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/topologies/route/">Route column (orthogonal view) →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

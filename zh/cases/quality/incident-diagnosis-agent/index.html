@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨系统故障诊断 Agent — 质量工程 Agent 案例</title>
+    <meta name="description" content="一个故障诊断 Agent：从日志、指标、部署和配置中收集证据，再通过可证伪假设逐步收敛。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/quality/incident-diagnosis-agent/">
+    <meta property="og:title" content="跨系统故障诊断 Agent — 质量工程 Agent 案例">
+    <meta property="og:description" content="一个故障诊断 Agent：从日志、指标、部署和配置中收集证据，再通过可证伪假设逐步收敛。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/quality/incident-diagnosis-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">质量工程 Demo</p><h1>跨系统故障诊断 Agent</h1><p class="lede">一个故障诊断 Agent：从日志、指标、部署和配置中收集证据，再通过可证伪假设逐步收敛。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop3-incident-diagnosis</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/quality/">返回质量工程案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop3-incident-diagnosis-blueprint.png" alt="跨系统故障诊断 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Cross-System Incident Diagnosis Agent", "subtitle": "alert -> logs/metrics/config fan-out -> hypothesis loop -> evidence report", "steps": [["Ingest alert", "Context Triage", "Keep incident time window and service boundary explicit."], ["Fan out queries", "Fan-out/Gather", "Read logs, metrics, deploy events, and config in parallel."], ["Fuse evidence", "Multi-Modal Fusion", "Normalize heterogeneous evidence into one timeline."], ["Form hypothesis", "Iterative Hypothesis", "Generate the most likely root cause and a test."], ["Falsify or refine", "Iterative Hypothesis", "Reject weak hypotheses and converge on evidence-backed cause."], ["Publish report", "Observability Harness", "Return timeline, confidence, next action, and unresolved risk."]], "scenarios": [{"name": "Checkout latency spike", "headline": "Root cause: connection pool regression after deploy, confidence 0.86", "verdict": "ROOT_CAUSE_FOUND", "cards": {"MTTD": "4 min", "Sources": "4", "Hypotheses": "3", "Confidence": "0.86"}, "log": ["fanout: logs, metrics, deployment history, config fetched", "hypothesis-1: database outage rejected by healthy db metrics", "hypothesis-2: connection pool regression supported by deploy diff", "report: rollback config and raise pool-size guardrail"]}, {"name": "Cache error burst", "headline": "Root cause uncertain, escalate with two competing hypotheses", "verdict": "ESCALATE", "cards": {"MTTD": "7 min", "Sources": "3", "Hypotheses": "2", "Confidence": "0.58"}, "log": ["fanout: cache logs missing two shards", "hypothesis-1: shard eviction pressure remains plausible", "hypothesis-2: client retry storm remains plausible", "gate: confidence below threshold, escalate to SRE"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>接入告警</h3><p>明确事故时间窗和服务边界。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>并行查询</h3><p>并行读取日志、指标、部署事件和配置。</p><span class="pattern-chip">扇出/汇聚</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>融合证据</h3><p>把异构证据规范成同一条时间线。</p><span class="pattern-chip">多模态融合</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>形成假设</h3><p>提出最可能根因和验证动作。</p><span class="pattern-chip">迭代假设</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>证伪/收敛</h3><p>拒绝弱假设，收敛到证据支持的原因。</p><span class="pattern-chip">迭代假设</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>发布报告</h3><p>输出时间线、置信度、下一步和未解风险。</p><span class="pattern-chip">可观测性 Harness</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop3-incident-diagnosis-terminal.png" alt="命令行输出：证据扇出、假设循环、置信度和下一步行动。"><figcaption>命令行输出：证据扇出、假设循环、置信度和下一步行动。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>扇出/汇聚</td><td>事故证据分散在多个系统，可并行查询。</td></tr>
+<tr><td>多模态融合</td><td>日志、指标和配置要变成一条可比较时间线。</td></tr>
+<tr><td>迭代假设</td><td>Agent 要测试并拒绝假设，而不只是复述症状。</td></tr>
+<tr><td>可观测性 Harness</td><td>每个诊断都要有轨迹、置信度和未解风险。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>诊断不是搜索</h3><p>更多日志本身没有意义，除非 Agent 有假设循环。</p></article>
+<article class="insight-card"><h3>只读也可以很强</h3><p>诊断 Agent 不执行修复，只输出证据和下一步，也能很安全。</p></article>
+<article class="insight-card"><h3>置信度是路由信号</h3><p>低置信度应该触发升级，而不是生成一段貌似自信的话。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop3-incident-diagnosis
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop3-incident-diagnosis/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop3-incident-diagnosis-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-System Incident Diagnosis Agent — Quality Engineering Agent Demo</title>
+    <meta name="description" content="An incident agent that gathers logs, metrics, deployment and config evidence, then converges through falsifiable hypotheses.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/training/quality/incident-diagnosis-agent/">
+    <meta property="og:title" content="Cross-System Incident Diagnosis Agent — Quality Engineering Agent Demo">
+    <meta property="og:description" content="An incident agent that gathers logs, metrics, deployment and config evidence, then converges through falsifiable hypotheses.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/training/quality/incident-diagnosis-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/" class="site-brand">Jia&nbsp;Huang</a><nav class="site-nav"><a href="/writing/">Writing</a><a href="/research/">Research</a><a href="/books/">Books</a><a href="/training/">Training</a><a href="/about/">About</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/zh/cases/" class="lang-switch">中文</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">Quality Engineering Demo</p><h1>Cross-System Incident Diagnosis Agent</h1><p class="lede">An incident agent that gathers logs, metrics, deployment and config evidence, then converges through falsifiable hypotheses.</p><p class="demo-meta">Runnable demo · Repo path: <code>workshops/workshop3-incident-diagnosis</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">Open GitHub repo</a><a class="btn btn-secondary" href="/training/quality/">Back to quality engineering</a></div></section>
+<section class="block training-section"><h2>Structure Blueprint</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop3-incident-diagnosis-blueprint.png" alt="Cross-System Incident Diagnosis Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">Clickable pattern simulator</p><h2>Interactive Browser Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="Scenario"></select><button id="run-demo" type="button">Run Demo</button><button id="next-step" type="button">Next Step</button><button id="reset-demo" type="button">Reset</button></div></div><p class="sim-note">This simulator does not replace the CLI run, but it makes each step, state, log, gate and final output visible in the browser.</p><div class="sim-grid"><div><h3>Live pipeline</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>State inspector</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>Execution log</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>Current output</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Cross-System Incident Diagnosis Agent", "subtitle": "alert -> logs/metrics/config fan-out -> hypothesis loop -> evidence report", "steps": [["Ingest alert", "Context Triage", "Keep incident time window and service boundary explicit."], ["Fan out queries", "Fan-out/Gather", "Read logs, metrics, deploy events, and config in parallel."], ["Fuse evidence", "Multi-Modal Fusion", "Normalize heterogeneous evidence into one timeline."], ["Form hypothesis", "Iterative Hypothesis", "Generate the most likely root cause and a test."], ["Falsify or refine", "Iterative Hypothesis", "Reject weak hypotheses and converge on evidence-backed cause."], ["Publish report", "Observability Harness", "Return timeline, confidence, next action, and unresolved risk."]], "scenarios": [{"name": "Checkout latency spike", "headline": "Root cause: connection pool regression after deploy, confidence 0.86", "verdict": "ROOT_CAUSE_FOUND", "cards": {"MTTD": "4 min", "Sources": "4", "Hypotheses": "3", "Confidence": "0.86"}, "log": ["fanout: logs, metrics, deployment history, config fetched", "hypothesis-1: database outage rejected by healthy db metrics", "hypothesis-2: connection pool regression supported by deploy diff", "report: rollback config and raise pool-size guardrail"]}, {"name": "Cache error burst", "headline": "Root cause uncertain, escalate with two competing hypotheses", "verdict": "ESCALATE", "cards": {"MTTD": "7 min", "Sources": "3", "Hypotheses": "2", "Confidence": "0.58"}, "log": ["fanout: cache logs missing two shards", "hypothesis-1: shard eviction pressure remains plausible", "hypothesis-2: client retry storm remains plausible", "gate: confidence below threshold, escalate to SRE"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>Step-by-step Design</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>Ingest alert</h3><p>Keep incident window and service boundary explicit.</p><span class="pattern-chip">Context Triage</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>Fan out queries</h3><p>Read logs, metrics, deploy events and config in parallel.</p><span class="pattern-chip">Fan-out/Gather</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>Fuse evidence</h3><p>Normalize heterogeneous evidence into one timeline.</p><span class="pattern-chip">Multi-Modal Fusion</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Form hypothesis</h3><p>Generate the likely root cause and a test.</p><span class="pattern-chip">Iterative Hypothesis</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>Falsify/refine</h3><p>Reject weak hypotheses and converge on evidence.</p><span class="pattern-chip">Iterative Hypothesis</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>Publish report</h3><p>Return timeline, confidence, next action and unresolved risk.</p><span class="pattern-chip">Observability Harness</span></article></div></section>
+<section class="block training-section"><h2>Screenshots</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop3-incident-diagnosis-terminal.png" alt="Terminal output: evidence fan-out, hypothesis loop, confidence and next action."><figcaption>Terminal output: evidence fan-out, hypothesis loop, confidence and next action.</figcaption></figure></div></section>
+<section class="block training-section"><h2>Pattern Mapping</h2><table class="pattern-table"><thead><tr><th>Pattern</th><th>Design role</th></tr></thead><tbody><tr><td>Fan-out/Gather</td><td>Incident evidence lives in multiple systems and can be queried in parallel.</td></tr>
+<tr><td>Multi-Modal Fusion</td><td>Logs, metrics and config must become one comparable timeline.</td></tr>
+<tr><td>Iterative Hypothesis</td><td>The agent should test and reject hypotheses, not just narrate symptoms.</td></tr>
+<tr><td>Observability Harness</td><td>Every diagnosis needs trace, confidence and unresolved risk.</td></tr></tbody></table></section>
+<section class="block training-section"><h2>Design Insights</h2><div class="insight-grid"><article class="insight-card"><h3>Diagnosis is not search</h3><p>More logs do not help unless the agent has a hypothesis loop.</p></article>
+<article class="insight-card"><h3>Read-only can still be powerful</h3><p>A diagnostic agent can be safe by producing evidence and next actions without executing fixes.</p></article>
+<article class="insight-card"><h3>Confidence is a routing signal</h3><p>Low confidence should trigger escalation, not a confident-sounding paragraph.</p></article></div></section>
+<section class="block training-section"><h2>Run Path</h2><div class="run-box"><code>cd workshops/workshop3-incident-diagnosis
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop3-incident-diagnosis/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop3-incident-diagnosis-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

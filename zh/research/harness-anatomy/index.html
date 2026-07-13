@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harness 解剖 · 八大 agent 框架横切分析 — 黄佳</title>
+    <meta name="description" content="八个工业级 agent harness 横切分析：覆盖 7 个认知功能的热力图 + 拆任何 agent 源码的逆向五步法。框架：Claude Code / Codex CLI / Aider / OpenCode / OpenClaw / Hermes Agent / DeerFlow / OpenHands。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/harness-anatomy/">
+    <meta property="og:title" content="Harness 解剖 · 八大 agent 框架横切分析">
+    <meta property="og:description" content="8 个 harness × 7 个认知功能的覆盖热力图，附逆向五步法。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/harness-anatomy/">
+    <meta property="og:locale" content="zh_CN">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../research/harness-anatomy/harness.css">
+</head>
+<body class="page-research">
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/zh/" class="nav-logo">咖哥AI</a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="/zh/#books" class="nav-link">书籍</a></li>
+                <li><a href="/zh/#courses" class="nav-link">课程</a></li>
+                <li><a href="/zh/interviews/" class="nav-link">访谈</a></li>
+                <li><a href="/zh/#wechat" class="nav-link">公众号</a></li>
+                <li><a href="/zh/#planet" class="nav-link">星球</a></li>
+                <li><a href="/zh/research/" class="nav-link nav-link-active">研究</a></li>
+                <li><a href="/research/harness-anatomy/" class="nav-link nav-lang">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container content" style="padding-top: 2rem;">
+        <article>
+            <h1 class="ha-title">Harness 解剖 · 八大 agent 框架的横切分析</h1>
+
+            <p class="lede">
+                八个工业级 agent harness，放在同一张图上看。不是当框架来学，是<em>当标本看</em>。
+                这一页的核心是热力图——看每个 harness 选择把哪几格做深、哪几格留薄，
+                以及横切之后整个领域的轮廓。
+            </p>
+
+            <p>
+                这一页跟
+                <a href="/zh/research/dual-axis/">双轴框架</a>、
+                <a href="/zh/research/pattern-evolution/">模式演进图</a>、
+                <a href="/zh/research/paradigm-evolution/">范式演进时间线</a>
+                并列。四者在四个尺度上问同一个问题——
+                <strong>范式</strong>是工程师怎么看世界，
+                <strong>模式</strong>是某个范式里被命名的解法，
+                <strong>双轴矩阵</strong>是 agent 这个范式的结构解剖，
+                而<strong>harness</strong>就是这套结构在 2026 年的具体实现。
+                矩阵是地图，harness 是疆土。
+            </p>
+
+            <p class="ha-meta">
+                <strong>怎么读这一页</strong>：下面那张热力图是中心。行是 harness，
+                列是认知功能，格子是 0-3 的覆盖深度。点任何一个框架名或任何一个格子，
+                右边会滑出详情面板——主循环位置、定位、在哪几格做得深。
+                名单不封闭——这套方法可以再加任何新框架。
+            </p>
+
+            <h2 class="ha-section-h">覆盖热力图 · 8 harness × 7 认知功能</h2>
+            <p class="ha-section-sub">
+                横看一行，看一个 harness 的轮廓。竖看一列，看整个领域哪些能力已经成熟
+                （行动列全亮 = 工业必备），哪些还是 2026 的投资前沿（治理列大半空白）。
+                颜色深浅代表工程深度，不是『有没有这个功能』。
+            </p>
+            <div id="ha-heatmap"></div>
+
+            <h2 class="ha-section-h">画出这张热力图的五步法</h2>
+            <p class="ha-section-sub">
+                上面这张图不是观点，是一个固定流程跑出来的结果。五步。每个框架两到三天，
+                可重复。矩阵里每一个格子都有源码文件 + 行号定锚，颜色深浅来自代码本身长什么样，
+                不是来自这个框架自己的宣传。
+            </p>
+            <div id="ha-steps"></div>
+
+            <h2 class="ha-section-h">五个共同祖宗</h2>
+            <p class="ha-section-sub">
+                把八个 harness 横着摆，会发现同样的五个工程思想在反复出现。没有一个是新的。
+                没有一个是 agent 专属的。它们是软件工程这五十年来攒下的东西，
+                只是从 agent 的角度看才像是新问题。
+            </p>
+            <ul id="ha-ancestors" class="ha-ancestors"></ul>
+
+            <h2 class="ha-section-h">这张热力图能看到的三件事</h2>
+            <p class="ha-section-sub" style="max-width: 50rem;">
+                第一，每个 harness 都有主循环，结构都一样——它们是『概率版本的收敛循环』。
+                第二，整个领域已经在『行动』上标准化了，差异都集中在其它六列。
+                第三，覆盖最广的那两家不是开发者工具——是个人 AI 和多 agent harness，
+                因为它们的需求把每一个认知功能都强行拉了进来。
+            </p>
+
+            <aside id="ha-detail" class="ha-detail" data-open="false">
+                <button class="ha-detail-close" aria-label="关闭">×</button>
+                <div class="ha-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-brand">咖哥AI &middot; kage-ai.com</p>
+                <div class="footer-links">
+                    <a href="/zh/">中文首页</a>
+                    <a href="/research/harness-anatomy/">EN</a>
+                    <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                </div>
+                <p class="footer-copy">&copy; 2026 黄佳. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../../research/harness-anatomy/harness.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.HarnessAnatomy.init({
+                lang: 'zh',
+                dataUrl: '../../../research/harness-anatomy/data.json'
+            });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

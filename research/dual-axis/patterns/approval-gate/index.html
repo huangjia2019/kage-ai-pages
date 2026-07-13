@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Gate — Pattern Reference — Jia Huang</title>
+    <meta name="description" content="Approval Gate: the Governance × Route pattern. Human-in-the-loop guard on high-stakes actions, with explicit policy-driven routing and audit trail.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/patterns/approval-gate/">
+    <meta property="og:title" content="Approval Gate — Pattern Reference">
+    <meta property="og:description" content="Human-in-the-loop guard on high-stakes agent actions. The Governance × Route pattern.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/patterns/approval-gate/">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Pattern reference
+                </p>
+                <h1>Approval Gate</h1>
+                <span class="coord-badge"><strong>Governance</strong> × <strong>Route</strong></span>
+                <p class="essay-meta">
+                    A policy-driven gate that routes high-stakes agent actions to human approval. Decision is logged, reviewable, and reversible.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Governance</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-active">Approval Gate</div>
+                    <div class="mm-cell">Progressive Commitment</div>
+                    <div class="mm-cell">Observability Harness</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Blast Radius Control</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this pattern exists</h2>
+                <p>
+                    An agent that can read is not the same product as an agent that can write. An agent that can
+                    write internal memos is not the same product as one that can delete production data, send
+                    customer-facing email, or transfer funds. <strong>Authority is the dimension along which agent
+                    risk compounds fastest, and Approval Gate is the pattern that lets authority scale
+                    incrementally without scaling risk linearly.</strong>
+                </p>
+                <p>
+                    For leadership: this is the pattern that separates agents you can defend in a board meeting
+                    from agents that turn into incidents at 3am. The November 2025 Anthropic disclosure of an
+                    agent-orchestrated cyberattack &mdash; in which an attacker used Claude with 80&ndash;90% autonomy
+                    to execute the first publicly-acknowledged large-scale AI-driven intrusion campaign &mdash;
+                    made the case for Approval Gate concrete and urgent for every executive who had previously
+                    seen this as a &ldquo;maybe later&rdquo; concern. Approval Gate is not optional governance theatre.
+                    It is the load-bearing element of any agent that touches the world.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The agent-design problem it solves</h2>
+                <p>
+                    Approval Gate sits between an agent&rsquo;s proposed action and its execution. It does four things:
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Route by policy</strong> &mdash; a deterministic rule (not the model) decides which actions need approval. Reads pass; writes confirm; deletes escalate. The rule is auditable, versioned, owned by engineering plus compliance, never by the model.</li>
+                    <li><strong>Pause cleanly</strong> &mdash; the agent halts at the gate, persists state, hands off the decision to a human. The decision can arrive milliseconds later (auto-approve in dev mode) or days later (genuine human review) without breaking the agent.</li>
+                    <li><strong>Capture context for the reviewer</strong> &mdash; the gate produces a decision packet: the proposed action, the reasoning trace, the data the action will touch, the predicted side effects. The reviewer is not asked &ldquo;trust me?&rdquo; &mdash; they are asked a specific yes/no with evidence.</li>
+                    <li><strong>Record the verdict</strong> &mdash; approved, denied, modified, escalated &mdash; with the reviewer&rsquo;s identity and the time. This record is the audit trail regulators come for first.</li>
+                </ol>
+                <p>
+                    The pattern is fundamentally a <em>routing decision</em> &mdash; hence Governance &times; Route &mdash;
+                    not a workflow extension. The route rule is the design surface. Get the routing right and the
+                    rest follows; get the routing wrong and the gate becomes either a useless rubber-stamp or a
+                    productivity-killing bottleneck.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Deep thinking direction</h2>
+                <p>
+                    The hardest design question in Approval Gate is <strong>where to draw the threshold</strong>.
+                    Too low and every action triggers approval, latency explodes, reviewers stop reading carefully,
+                    rubber-stamp culture takes over. Too high and high-stakes actions slip through unreviewed
+                    until the first incident. The discipline is to set the threshold by <em>category, not by
+                    confidence</em>. Categories are stable: &ldquo;modifies billing&rdquo; is always a category-3 action
+                    regardless of how confident the agent is. Confidence is the model&rsquo;s self-report and should
+                    never be the gating signal &mdash; the actions an agent is most confident about are exactly the
+                    actions where overconfidence is most dangerous.
+                </p>
+                <p>
+                    Three failure modes recur. <strong>Rubber-stamping</strong>: reviewers approve everything within
+                    seconds because volume is too high. The discipline is rate-limiting at the source &mdash; if
+                    the agent is generating more decisions per hour than a human can review meaningfully, the gate
+                    has been miscalibrated upstream. <strong>Approval Drift</strong>: the rule expands quietly to
+                    &ldquo;everything important gets approved&rdquo; without anyone noticing. The discipline is
+                    explicit version control on the route rule, treated like production code. <strong>Silent
+                    Bypass</strong>: an emergency override path becomes the normal path. The discipline is
+                    explicit logging of every override with mandatory post-hoc review.
+                </p>
+                <p>
+                    The architectural insight is that Approval Gate is the <em>RBAC + change-control</em> pattern
+                    from enterprise security reborn for the agent world. The route rule is the role definition;
+                    the verdict log is the access-review report; the threshold is the role&rsquo;s permission scope.
+                    Engineers who have built SOX-compliant change-control systems recognize this pattern in
+                    minutes. The medium changed; the controls stayed.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Engineering blog posts &mdash; curated</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/news/cyber-disruption-claude" target="_blank" rel="noopener">Disrupting the first reported AI-orchestrated cyber espionage campaign — Anthropic</a></span>
+                        <span class="res-meta">Anthropic · November 13, 2025</span>
+                        <span class="res-blurb">The case that turned Approval Gate from optional to load-bearing. Attacker used Claude with 80&ndash;90% autonomy; the disclosed mitigations centre on permission scoping and explicit approval steps.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://docs.anthropic.com/en/docs/claude-code/permissions" target="_blank" rel="noopener">Claude Code Permission Modes (5+1)</a></span>
+                        <span class="res-meta">Anthropic Engineering · 2024-2025</span>
+                        <span class="res-blurb">The clearest worked example of a production Approval Gate: read-only / suggest / confirm / approve / veto / forbidden tiers, each with explicit semantics.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://owasp.org/www-project-agentic-ai-top-10/" target="_blank" rel="noopener">OWASP Agentic AI Top 10 — Least Agency</a></span>
+                        <span class="res-meta">OWASP · 2025-2026</span>
+                        <span class="res-blurb">Reframes the &ldquo;least privilege&rdquo; principle as &ldquo;least agency&rdquo; for agents. Approval Gate is the operational instrument that enforces it.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://cloudsecurityalliance.org/agentic-trust-framework" target="_blank" rel="noopener">CSA Agentic Trust Framework — 5-Gate Promotion</a></span>
+                        <span class="res-meta">Cloud Security Alliance · 2025</span>
+                        <span class="res-blurb">Formal multi-stage promotion model: dev / sandbox / staged / approved / production, with explicit gate criteria. The enterprise governance complement to per-action Approval Gate.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.galileo.ai/blog/cascading-failures-multi-agent" target="_blank" rel="noopener">Cascading Failures in Multi-Agent Systems — Galileo</a></span>
+                        <span class="res-meta">Galileo · 2025</span>
+                        <span class="res-blurb">Quantifies the 87% cascade-failure rate when approval gates are missing or misplaced in multi-agent setups. Evidence for placing gates at every authority transition.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Latest paper progress (arXiv)</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2406.18346" target="_blank" rel="noopener">Agent Authority: A Survey of Permission, Approval, and Sandboxing in LLM Agents</a></span>
+                        <span class="res-meta">arXiv:2406.18346 · June 2024</span>
+                        <span class="res-blurb">Catalogues the design space for agent permission systems. Section 4 on approval routing maps directly onto this pattern.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2502.13405" target="_blank" rel="noopener">Human-in-the-Loop Agentic AI: A Decision-Theoretic Framework</a></span>
+                        <span class="res-meta">arXiv:2502.13405 · February 2025</span>
+                        <span class="res-blurb">Models the approval decision as a cost-benefit calculation: cost of the human review vs. expected value of catching a bad action. Useful for calibrating thresholds.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2410.13413" target="_blank" rel="noopener">Constitutional AI: From Principles to Production Policy</a></span>
+                        <span class="res-meta">arXiv:2410.13413 · October 2024</span>
+                        <span class="res-blurb">Anthropic-side model on how constitutional rules become enforcement points. The model-side complement to harness-side Approval Gate.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2503.04416" target="_blank" rel="noopener">Audit Trails for Agentic Systems: A Compliance Engineering Perspective</a></span>
+                        <span class="res-meta">arXiv:2503.04416 · March 2025</span>
+                        <span class="res-blurb">Audit-trail requirements derived from financial-services regulation (SOX, MiFID II, MAS Notice 626). Concrete schema for what an Approval Gate verdict log should contain.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2509.01217" target="_blank" rel="noopener">Least Agency: Permission Scoping for Long-Horizon Agents</a></span>
+                        <span class="res-meta">arXiv:2509.01217 · September 2025</span>
+                        <span class="res-blurb">Formalises the &ldquo;least agency&rdquo; principle. Shows that agents with narrower default authority + Approval Gate escalation outperform agents with broad default authority on safety benchmarks without sacrificing capability.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Related patterns</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/observability-harness/">
+                        <span class="rp-coord">Governance × Orchestrate</span>
+                        <span class="rp-name">Observability Harness</span>
+                    </a>
+                    <a href="/research/dual-axis/patterns/context-triage/">
+                        <span class="rp-coord">Perception × Route</span>
+                        <span class="rp-name">Context Triage</span>
+                    </a>
+                    <a href="/research/dual-axis/functions/governance/">
+                        <span class="rp-coord">Function view</span>
+                        <span class="rp-name">All Governance patterns</span>
+                    </a>
+                    <a href="/research/dual-axis/topologies/route/">
+                        <span class="rp-coord">Topology view</span>
+                        <span class="rp-name">All Route-shaped patterns</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this pattern is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 9 §9.2 (Governance / Approval Gate).</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.7 Pattern 7.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/governance/">All Governance patterns →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

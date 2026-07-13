@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>认知功能 × 执行拓扑 · 黄佳 / 咖哥</title>
+    <meta name="description" content="两条正交的轴。Agent 在做什么 × 工作长什么形状。相交之后，是 28 个命名模式落座的坐标系。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/cognitive-function-x-execution-topology/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/cognitive-function-x-execution-topology/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/cognitive-function-x-execution-topology/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/cognitive-function-x-execution-topology/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>认知功能 × 执行拓扑
+            </p>
+
+            <h1>认知功能 × 执行拓扑</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                两条正交的轴。Agent 在做什么 × 工作长什么形状。相交之后，是 28 个命名模式落座的坐标系。
+            </p>
+
+            <h2>定义</h2>
+            <p>
+                一个 Agent 设计是两条轴的交点。<strong>认知功能</strong>是 agent 在试图做什么——
+                感知、记忆、推理、行动、反思、协作、治理（7 类）。
+                <strong>执行拓扑</strong>是工作长什么形状——链式、路由、并行、循环、层级、编排（6 种）。
+                相交形成 7×6 = 42 格，28 格落有命名模式，14 格有意空白。
+            </p>
+
+            <h2>它命名了什么问题</h2>
+            <p style="color: var(--color-text-muted); font-style: italic;">
+                [TODO · 咖哥本人填这段：为什么 "flat list of patterns" 不够。
+                工程团队拿到 ReAct / Reflection / Multi-Agent / Tree of Thoughts 一长串名字之后，
+                还是不知道自己问题在哪一格。坐标系给的是"我的失败属于哪条轴"这个能问出的问题。]
+            </p>
+
+            <h2>它如何改变设计决策</h2>
+            <p>
+                模式选型变成了坐标选型。"我们需要一个反思模式"是欠定的；
+                "我们需要反思 × 循环，并配一个确定性的退出信号"是一次设计。
+                两个工程师都说"我们用 Plan-and-Execute"，可能指向两个不同的格子——
+                行动 × 链式（线性 plan）或行动 × 编排（动态 replanning）——
+                而这个选择会带来真实的架构后果。坐标让这些选择在变成生产 bug 之前就可见。
+            </p>
+
+            <h2>谱系</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Christopher Alexander</strong>——模式作为正交的生成轴，不是一张清单</li>
+                <li><strong>GoF (1994)</strong>——模式矩阵结构：创建型/结构型/行为型 × 类/对象</li>
+                <li><strong>云架构目录</strong>——Microsoft / AWS 参考架构按场景 × 拓扑组织</li>
+            </ul>
+
+            <h2>它<em>不</em>是什么</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>不是框架的分类法。</strong>LangChain / AutoGen / CrewAI 是机制；矩阵讲的是你<em>用</em>这些机制组合出来的设计。</li>
+                <li><strong>不是 28 个模式的扁平清单。</strong>清单是矩阵的扁平化结果；矩阵才是源头。</li>
+                <li><strong>不是成熟度记分牌。</strong>格子之间没有高下，简单格子并不比复杂格子轻。</li>
+            </ul>
+
+            <h2>在哪里展开</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>立场论文：<a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a></li>
+                <li>书：<em>Designing AI Agents</em>（Manning, 2026）—— 矩阵贯穿全书</li>
+                <li>完整目录：<a href="https://adpsagent.com/zh/patterns/">adpsagent.com/zh/patterns/</a> —— 33 篇白皮书，一格一篇</li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 认知功能 × 执行拓扑.
+                <a href="https://kage-ai.com/zh/concepts/cognitive-function-x-execution-topology/">kage-ai.com/zh/concepts/cognitive-function-x-execution-topology/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型在花钱，Harness 在控预算 · 黄佳 / 咖哥</title>
+    <meta name="description" content="Agent 架构本质是不确定性下的有界资源分配。模型在花钱，Harness 在控预算。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/model-spends-harness-budgets/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/model-spends-harness-budgets/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/model-spends-harness-budgets/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/model-spends-harness-budgets/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>模型在花钱，Harness 在控预算
+            </p>
+
+            <h1>模型在花钱，Harness 在控预算</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                Agent 架构本质是不确定性下的有界资源分配。模型在花钱，Harness 在控预算。
+            </p>
+
+            <h2>定义</h2>
+            <p>
+                模型是一个开放型支出者——花上下文窗口、花 token、花延迟、花副作用、花钱。
+                Harness 是工程上设的天花板，决定模型可以花什么、花多少、什么时候花、谁授权花。
+                真正的设计工作发生在 Harness 里，不在 prompt 里。
+            </p>
+
+            <h2>它命名了什么问题</h2>
+            <p>
+                过去两年的 Agent 生产事故有一个反复出现的形状：<strong>失败几乎全部来自 Harness 缺位，而不是 prompt 写错</strong>。
+                工程师把绝大多数注意力放在 prompt 上——因为 prompt 是 IDE 里能看到、能改、能立刻看到效果的东西。
+                但事故真的发生时，复盘报告写出来基本上是同一组句子：
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>一个客户问题触发了 retry loop，单次对话烧掉了原本一周的 token 预算。<strong>没有 budget 上限</strong>。</li>
+                <li>Agent 被授予 <code>bash</code> 工具用来"做代码分析"，在某次任务中执行了 <code>rm -rf</code>。<strong>没有 tool scope</strong>。</li>
+                <li>数据修复 Agent 拿到生产数据库写权限，半小时内污染三张表。<strong>没有 human-in-loop 卡在 destructive 操作上</strong>。</li>
+                <li>长跑 Agent 上下文涨到 180k token，推理开始漂移。<strong>没有 auto-compaction 或 reset 政策</strong>。</li>
+                <li>Agent 在某一步幻觉了一个 tool 返回结果，下游所有动作基于虚构数据，6 小时后才被发现。<strong>没有 side-channel 校验或 anomaly detection</strong>。</li>
+            </ul>
+            <p>
+                把这些事故并排看，模式很清楚：<em>调过的部分没出事，没调的部分全出事</em>。
+                Prompt 被反复 iterate 过，所以 prompt 层的失败被提前消化了。
+                Harness 的几个关键边界——预算、scope、blast radius、escalation、observability——因为不在 IDE 里可见，所以从来没被显式设计，事故就从这里漏出。
+            </p>
+            <p>
+                这是一个有先例的范式失衡。Web 工程早期，工程师调 CSS 和 JS，而 production outage 全部来自缺失的 observability。
+                DBA 调查询，而 prod 事故来自没设的连接池上限。<strong>能被看到的工作被精修，作为基础设施的工作被忽略，直到它在凌晨 3 点把人叫起来</strong>。
+                Agent 系统现在正处在同一个阶段。这条主张要命名的，正是这个失衡。
+            </p>
+
+            <h2>它如何改变设计决策</h2>
+            <p>
+                一旦接受"模型是支出者"，每一个架构决策就都变成了预算决策。
+                <strong>上下文窗口</strong>不是"模型能读多少"，而是"我怎么把稀缺的 token 容量分配到相互竞争的输入上"。
+                <strong>工具 scope</strong> 不是"agent 能做什么"，而是"我愿意让它碰什么表面"。
+                <strong>推理深度</strong>不是质量旋钮，是成本旋钮。
+                Harness 的工作是<em>在模型决定之前</em>把这些天花板设好。
+            </p>
+
+            <h2>谱系</h2>
+            <p>这不是新东西。在系统工程的几十年里，这个模式反复出现：</p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>OS 进程调度</strong>——进程都想要全部 CPU，调度器决定谁能拿多少</li>
+                <li><strong>JVM 垃圾回收</strong>——应用自由分配，GC 来控制暂停时间和堆容量</li>
+                <li><strong>CDN 限流</strong>——客户端想要无限带宽，边缘节点设定每租户上限</li>
+                <li><strong>Linux cgroups</strong>——工作负载共享主机，内核执行 CPU / 内存 / IO 预算</li>
+                <li><strong>SRE Error Budget</strong>——团队想自由发布，预算决定发布速度</li>
+            </ul>
+            <p>Agent 时代的版本是：<em>LLM 是工作负载，Harness 是 kernel。</em></p>
+
+            <h2>它<em>不</em>是什么</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>不是在批评 LLM。</strong>模型作为支出者是它设计的事实，不是失败。</li>
+                <li><strong>不是"Harness 取代模型"。</strong>没有要控的支出，Harness 无意义；没有要控的东西，模型很危险。</li>
+                <li><strong>不只是可观测性。</strong>可观测性告诉你花了什么。预算决定<em>允许</em>花什么。</li>
+                <li><strong>不是 prompt 工程。</strong>Prompt 坐在 Harness 的一格里，Harness 设计的是这一格本身。</li>
+            </ul>
+
+            <h2>在哪里展开</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>立场论文：<a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a></li>
+                <li>书：<em>Designing AI Agents</em>（Manning, 2026）—— 全书贯穿，Ch1 / Ch7 治理层 / Ch10 生产 Harness 显式展开</li>
+                <li>具体模式：<a href="https://adpsagent.com/zh/patterns/g2-blast-radius-control/">G2 爆炸半径控制</a> · <a href="https://adpsagent.com/zh/patterns/g5-observability-harness/">G5 可观测性</a> · <a href="https://adpsagent.com/zh/patterns/p1-context-triage/">P1 上下文分诊</a></li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 模型在花钱，Harness 在控预算.
+                <a href="https://kage-ai.com/zh/concepts/model-spends-harness-budgets/">kage-ai.com/zh/concepts/model-spends-harness-budgets/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

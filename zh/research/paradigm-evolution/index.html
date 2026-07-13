@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>范式演进：从结构化编程到 Agent 时代 — 黄佳</title>
+    <meta name="description" content="一张可交互的范式演进时间线——从结构化编程、OOP、模式语言、GoF，到分布式、CAP、REST、微服务、云原生、数据密集型思维，再到 Agent 架构和 Harness 工程学。点开任一范式，看它解决了什么、关键洞察是什么、带来了什么思维转变。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/research/paradigm-evolution/">
+    <meta property="og:title" content="范式演进：从结构化编程到 Agent 时代">
+    <meta property="og:description" content="六个时代的大范式时间线。每一次范式更替，都是为了消化上一代留下的新型不确定性。">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/zh/research/paradigm-evolution/">
+    <meta property="og:locale" content="zh_CN">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../research/paradigm-evolution/paradigm.css">
+</head>
+<body>
+
+    <!-- Navigation (same shell as /zh/ home) -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/zh/" class="nav-logo">咖哥AI</a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="/zh/#books" class="nav-link">书籍</a></li>
+                <li><a href="/zh/#courses" class="nav-link">课程</a></li>
+                <li><a href="/zh/interviews/" class="nav-link">访谈</a></li>
+                <li><a href="/zh/#wechat" class="nav-link">公众号</a></li>
+                <li><a href="/zh/#planet" class="nav-link">星球</a></li>
+                <li><a href="/zh/research/" class="nav-link nav-link-active">研究</a></li>
+                <li><a href="/research/paradigm-evolution/" class="nav-link nav-lang">EN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container content" style="padding-top: 2rem;">
+        <article>
+            <h1 class="para-title">范式演进：从结构化编程到 Agent 时代</h1>
+
+            <p class="lede">
+                软件工程是一场跟复杂度的连续作战。这张时间线上的每一代范式，
+                都不是来取代上一代的——而是因为某种新型的<em>不确定性</em>变得无法忍受、
+                上一代的工具箱悄悄地不够用了。每一次转变都在前一次的基础上叠加。
+                Agent 时代继承了它下面的一切。
+            </p>
+
+            <p>
+                这一页跟
+                <a href="/zh/research/dual-axis/">双轴框架</a>
+                和
+                <a href="/zh/research/pattern-evolution/">模式演进图</a>
+                并列。三者用同一个问题问了三层——
+                <strong>范式</strong>是最大的单位（工程师怎么看世界），
+                <strong>模式</strong>是中间的单位（某个范式内部被命名的解法），
+                <strong>双轴矩阵</strong>是某一个具体范式（也就是 Agent 时代）的结构解剖。
+            </p>
+
+            <p class="para-meta">
+                <strong>怎么读这一页</strong>：每张卡片是一个大范式。
+                点开任何一张，右边会滑出三段内容——它回应了什么问题、关键洞察是什么、
+                它给工程界带来了怎样的思维转变。这份名单刻意短：
+                只有真正在 CAP / 微服务这个级别上改变了工程词汇的范式才进得来。
+                小一级的设计模式住在
+                <a href="/zh/research/pattern-evolution/">模式演进页</a>。
+            </p>
+
+            <section class="para-crisis-map" aria-labelledby="crisis-map-title">
+                <h2 id="crisis-map-title">复杂度危机地图</h2>
+                <p>
+                    在进入具体 Era 之前，先用一张压缩表看清主线：
+                    每一代范式，都是为了消化当时最难忍受的那类复杂度。
+                </p>
+                <div class="para-crisis-table-wrap">
+                    <table class="para-crisis-table">
+                        <thead>
+                            <tr>
+                                <th>时代</th>
+                                <th>复杂度危机</th>
+                                <th>新范式</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1970s</td>
+                                <td>流程失控</td>
+                                <td>Structured Programming</td>
+                            </tr>
+                            <tr>
+                                <td>1980s</td>
+                                <td>状态失控</td>
+                                <td>OOP</td>
+                            </tr>
+                            <tr>
+                                <td>1990s</td>
+                                <td>对象协作失控</td>
+                                <td>GoF Patterns</td>
+                            </tr>
+                            <tr>
+                                <td>2000s</td>
+                                <td>Web 系统失控</td>
+                                <td>MVC</td>
+                            </tr>
+                            <tr>
+                                <td>2010s</td>
+                                <td>分布式失控</td>
+                                <td>CAP / Saga</td>
+                            </tr>
+                            <tr>
+                                <td>2015+</td>
+                                <td>组织扩展失控</td>
+                                <td>Microservices</td>
+                            </tr>
+                            <tr>
+                                <td>2017+</td>
+                                <td>数据权衡失控</td>
+                                <td>Data-Intensive Thinking</td>
+                            </tr>
+                            <tr>
+                                <td>2020+</td>
+                                <td>AI 认知失控</td>
+                                <td>Agent Architecture</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div id="para-timeline"></div>
+
+            <section style="margin-top: 3rem;">
+                <h2 style="font-family: var(--font-serif); font-size: 1.45rem;">一句话收口</h2>
+                <blockquote style="background: var(--color-quote-bg); border-left: 3px solid var(--color-link); padding: 0.9rem 1.15rem; font-size: 1rem; line-height: 1.55; margin: 1rem 0;">
+                    每一代范式都吸收了一种新型不确定性，把它变得可控——
+                    从<em>人能不能读懂代码</em>，
+                    到<em>团队之间能不能各自交付而不互相卡住</em>，
+                    再到<em>一个不可靠的模型能不能在一个可靠的系统里行动</em>。
+                    工程直觉是一样的。不可靠的那个节点，一层一层往上走。
+                </blockquote>
+            </section>
+
+            <aside id="para-detail" class="para-detail" data-open="false" aria-hidden="true">
+                <button class="para-detail-close" aria-label="关闭">×</button>
+                <div class="para-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-brand">咖哥AI &middot; kage-ai.com</p>
+                <div class="footer-links">
+                    <a href="/zh/">中文首页</a>
+                    <a href="/research/paradigm-evolution/">EN</a>
+                    <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                </div>
+                <p class="footer-copy">&copy; 2026 黄佳. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../../research/paradigm-evolution/paradigm.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ParadigmEvolution.init({
+                lang: 'zh',
+                dataUrl: '../../../research/paradigm-evolution/data.json'
+            });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

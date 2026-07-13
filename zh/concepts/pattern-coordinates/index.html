@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模式坐标 · 黄佳 / 咖哥</title>
+    <meta name="description" content="没有坐标的模式名，是一个标签，不是一次设计决策。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/pattern-coordinates/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/pattern-coordinates/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/pattern-coordinates/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/pattern-coordinates/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>模式坐标
+            </p>
+
+            <h1>模式坐标</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                没有坐标的模式名，是一个标签，不是一次设计决策。
+            </p>
+
+            <h2>定义</h2>
+            <p>
+                模式坐标是把一个模式锚定到设计矩阵中具体一格的（认知功能，执行拓扑）二元组。
+                没有坐标，模式名让人能"用同一个名字"达成共识，却"在不同设计上"产生分歧。
+                有了坐标，两个工程师能在一句话之内确认他们说的是不是同一回事。
+            </p>
+
+            <h2>它命名了什么问题</h2>
+            <p style="color: var(--color-text-muted); font-style: italic;">
+                [TODO · 咖哥本人填这段：那个标志性的例子。两个工程师都说 "we used Plan-and-Execute"，
+                结果一个做的是 Action × Chain（线性 plan 执行），另一个做的是 Action × Orchestrate
+                （动态 replanning）—— 同一个名字，两个完全不同的系统，bug 也完全不同。
+                Pattern name 不够，坐标才够。]
+            </p>
+
+            <h2>它如何改变设计决策</h2>
+            <ol style="margin: 0.5rem 0 1rem 1.5rem; list-style: decimal;">
+                <li><strong>Code review 变具体。</strong>"这像 反思 × 循环，但缺退出条件——是有意的吗？"
+                    胜过 "这块反思做得对吗？"</li>
+                <li><strong>模式选型变成检索。</strong>"我需要一个 记忆 × 路由 的东西"返回一个候选（分层保留）；
+                    "我需要一个记忆模式"返回五个。</li>
+                <li><strong>架构债务变得可命名。</strong>"我们有一个 推理 × 并行 在做本该是 推理 × 循环 的事"
+                    是一个 refactor 提案。"我们的推理太乱"不是。</li>
+            </ol>
+
+            <h2>谱系</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>软件架构作为"设计空间中的一个点"</strong>（Shaw &amp; Garlan, 1990s）</li>
+                <li><strong>GoF 模式 + 分类</strong>——单说 "Builder" 是歧义的，"Builder (creational, object)" 才把它锚定</li>
+                <li><strong>云架构参考目录</strong>——每条模式都带上下文坐标（场景 × 部署拓扑）</li>
+            </ul>
+
+            <h2>它<em>不</em>是什么</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>不是官僚化。</strong>坐标只是两个短 token，不是一张表格。</li>
+                <li><strong>不是"再加一层分类"。</strong>坐标比新加一个模式名的承诺更小。</li>
+                <li><strong>不是模式本身的替代品。</strong>坐标定位模式，模式还是要去做工作。</li>
+            </ul>
+
+            <h2>在哪里展开</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>书：<em>Designing AI Agents</em>（Manning, 2026）—— Ch2 显式引入，全书贯穿使用</li>
+                <li>模式选项卡（Pattern Selection Card）方法论：从问题陈述 → 坐标 → 候选模式</li>
+                <li>完整坐标目录：<a href="https://adpsagent.com/zh/patterns/">adpsagent.com/zh/patterns/</a></li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 模式坐标.
+                <a href="https://kage-ai.com/zh/concepts/pattern-coordinates/">kage-ai.com/zh/concepts/pattern-coordinates/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

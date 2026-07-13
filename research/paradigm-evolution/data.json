@@ -1,0 +1,298 @@
+{
+  "eras": [
+    {
+      "id": "structured",
+      "name_en": "I. Structured Era · 1960s–1970s",
+      "name_zh": "一、结构化时代 · 1960s–1970s",
+      "sub_en": "The first paradigm to put theoretical limits on flexibility for the sake of clarity. Code stops being a free path and becomes a composition of sequence, selection, and iteration.",
+      "sub_zh": "第一次为了清晰，主动给灵活性设上限。代码从随意跳转，变成顺序、判断、循环的组合。",
+      "paradigms": [
+        {
+          "id": "structured-programming",
+          "name_en": "Structured Programming",
+          "name_zh": "结构化编程",
+          "year": "1968",
+          "by": "Dijkstra",
+          "summary_en": "Programs should be built from a small set of disciplined control structures — sequence, selection, iteration — not arbitrary jumps.",
+          "summary_zh": "程序应该由少数几种被约束的控制结构组成：顺序、选择、循环。不能用任意跳转。",
+          "problem_en": "Unrestricted goto produced programs that no human could reliably reason about. Bug fixes broke distant code. Correctness was a matter of luck.",
+          "problem_zh": "无限制的 goto 导致程序失去可读性，没人能完整把它在脑子里跑一遍。改一个 bug 经常把另一段代码弄坏。正确性靠运气。",
+          "insight_en": "Voluntarily giving up expressiveness can buy a far more valuable property: the ability to reason about a program by reading it.",
+          "insight_zh": "主动放弃一些表达能力，能换来更值钱的东西——程序可以被阅读和推理。",
+          "shift_en": "Engineering becomes about voluntary constraints, not just what the machine allows. The first principle of modern software was set: clarity beats cleverness.",
+          "shift_zh": "工程从此开始关心『主动约束』，而不只是『机器允许什么』。现代软件的第一条原则被立下：清晰胜过聪明。"
+        }
+      ]
+    },
+    {
+      "id": "modeling",
+      "name_en": "II. Abstract Modeling Era · 1970s–1990s",
+      "name_zh": "二、抽象建模时代 · 1970s–1990s",
+      "sub_en": "Software discovered modeling. Not the machine, not the algorithm — the domain. Objects, patterns, and separation of concerns become the shared language of design.",
+      "sub_zh": "软件开始关心建模——不是机器，不是算法，而是要解决的领域本身。对象、模式、关注点分离，成为设计的共同语言。",
+      "paradigms": [
+        {
+          "id": "oop",
+          "name_en": "Object-Oriented Programming",
+          "name_zh": "面向对象编程",
+          "year": "1972",
+          "by": "Smalltalk · Kay & colleagues",
+          "summary_en": "Software is built from objects — entities that bundle state with the behavior that operates on it — communicating by passing messages.",
+          "summary_zh": "软件由对象构成——每个对象把状态和操作它的行为打包在一起，通过传递消息来通信。",
+          "problem_en": "Procedural code coupled data and procedures spatially but not conceptually. Reuse was hard; large systems became tangled because data structures had no protective boundary.",
+          "problem_zh": "面向过程的代码把数据和函数放在一起，但概念上没有边界。复用很难，系统一大就乱，因为数据结构没有保护层。",
+          "insight_en": "Encapsulation is not a syntactic feature. It is a design discipline: objects own their state, others must ask, and what is asked can evolve while what is told stays stable.",
+          "insight_zh": "封装不是语法特性，是设计纪律：对象拥有自己的状态，别人必须问而不能直接动；问什么可以演化，看到的东西保持稳定。",
+          "shift_en": "Engineering shifts from procedures plus data to entities with behavior. The vocabulary of design moves closer to the language of the domain it models.",
+          "shift_zh": "工程从『过程 + 数据』转向『带行为的实体』。设计的词汇从此更靠近它建模的那个领域。"
+        },
+        {
+          "id": "pattern-language",
+          "name_en": "Pattern Language",
+          "name_zh": "模式语言",
+          "year": "1977",
+          "by": "Christopher Alexander",
+          "summary_en": "Recurring problems have recurring solutions. Naming those solutions lets a community share, recombine, and build on design knowledge.",
+          "summary_zh": "重复出现的问题有重复出现的解法。给这些解法命名，社群就可以共享、重组、在彼此的设计经验上继续往前走。",
+          "problem_en": "Design knowledge lived in apprenticeship — invisible, untransferable, lost when an experienced designer left. Younger engineers re-discovered the same answers, badly.",
+          "problem_zh": "设计知识只活在师徒之间——看不见、传不出去、随老人离去而散失。年轻工程师只能把同样的答案重新摸索一遍，而且摸得很糟。",
+          "insight_en": "A name plus a problem-context-solution triple is enough to turn tacit craft into transmissible vocabulary. The unit of progress becomes the named pattern.",
+          "insight_zh": "一个名字 + 一组 问题-情境-解法，就足以把隐性的手艺，变成可以传递的词汇。进步的单位从此变成『一个被命名的模式』。",
+          "shift_en": "Design becomes a language. The pattern, not the artifact, is what gets carried forward. Software borrows this wholesale a generation later.",
+          "shift_zh": "设计变成了一种语言。被往下传的不是某个作品，而是模式本身。软件界一代人之后，把这套思路整整批发了过来。"
+        },
+        {
+          "id": "mvc",
+          "name_en": "MVC",
+          "name_zh": "MVC",
+          "year": "1979",
+          "by": "Reenskaug · Smalltalk-80",
+          "summary_en": "Split a system into Model (domain state), View (presentation), and Controller (input handling). Each part knows the others only through narrow contracts.",
+          "summary_zh": "把系统切成 Model（领域状态）/ View（呈现）/ Controller（输入处理）。三者之间只通过窄接口互相依赖。",
+          "problem_en": "Early interactive systems mixed display code, state, and logic into one knot. A change to the screen rippled into the data layer; a change to the data leaked into how things were drawn.",
+          "problem_zh": "早期交互系统把显示、状态、逻辑搅成一团。改个界面会牵动数据层，改个数据又会泄漏到显示逻辑里。",
+          "insight_en": "Concerns that change at different rates should be physically separated. Coupling along the wrong seam costs orders of magnitude more than along the right one.",
+          "insight_zh": "变化节奏不同的关注点，要在物理上分开。在错的接缝处耦合，成本是在对的接缝处的几十倍。",
+          "shift_en": "Separation of concerns moves from a slogan to an architectural default. Every UI framework for the next forty years pays tribute, even when it redraws the lines.",
+          "shift_zh": "『关注点分离』从口号变成默认架构。之后四十年里所有 UI 框架，哪怕重新划线，也都得先向它致敬。"
+        },
+        {
+          "id": "gof",
+          "name_en": "GoF Design Patterns",
+          "name_zh": "GoF 设计模式",
+          "year": "1994",
+          "by": "Gamma · Helm · Johnson · Vlissides",
+          "summary_en": "Twenty-three recurring object-oriented designs, each named and described in a uniform problem-solution form. Software's first widely-shared pattern catalog.",
+          "summary_zh": "二十三个反复出现的面向对象设计，每一个都被命名，并按统一的『问题-解法』格式描述。软件界第一份被广泛接受的模式目录。",
+          "problem_en": "Every OOP project rediscovered the same handful of object compositions, then debated them under different names. There was no shared vocabulary for 'this is a Strategy' or 'that is an Observer'.",
+          "problem_zh": "每个 OOP 项目都在重新发现那几种对象组合，然后用各自的名字反复争论。说不出『这是个 Strategy』或者『那是个 Observer』。",
+          "insight_en": "What matters is less the patterns themselves than the act of naming. Once a community can say Strategy and mean the same thing, design conversations compress by an order of magnitude.",
+          "insight_zh": "重要的不是这二十三个模式本身，而是『命名』这个动作。一旦社群说 Strategy 都指同一件事，设计对话的密度立刻提升一个数量级。",
+          "shift_en": "Pattern thinking enters mainstream engineering. Decades later the catalog is dated, but the move — solve a recurring problem, name the solution, share it — survives every paradigm shift.",
+          "shift_zh": "模式思维进入主流工程。几十年后这份目录本身已经过时，但那个动作——把反复出现的解法命名、共享——熬过了一次又一次范式更替。"
+        }
+      ]
+    },
+    {
+      "id": "distributed",
+      "name_en": "III. Distributed Era · 1990s–2010s",
+      "name_zh": "三、分布式纪元 · 1990s–2010s",
+      "sub_en": "The machine is no longer one machine. Networks lie, partitions happen, services fail independently. Engineering rewrites itself around things you cannot trust to be there.",
+      "sub_zh": "机器不再是一台。网络会撒谎，分区会发生，服务会各自挂掉。工程围绕『不能假设它在』这件事重写了一遍。",
+      "paradigms": [
+        {
+          "id": "rest",
+          "name_en": "REST",
+          "name_zh": "REST",
+          "year": "2000",
+          "by": "Roy Fielding",
+          "summary_en": "An architectural style for networked applications: resources identified by URIs, manipulated through a uniform set of verbs, statelessly, with cacheable representations.",
+          "summary_zh": "一种面向网络应用的架构风格：用 URI 标识资源，用一组统一动词操作，无状态，表示可以被缓存。",
+          "problem_en": "Custom RPC protocols proliferated. Every service needed its own stub, its own serialization, its own error model. The Web itself was already a working distributed system; nothing else scaled like it.",
+          "problem_zh": "各种自定义 RPC 协议泛滥，每个服务都要自己的桩、自己的序列化、自己的错误模型。其实 Web 本身已经是一个能跑的分布式系统，没有别的东西能像它一样扩展。",
+          "insight_en": "If a style was strong enough to scale the Web, the same constraints — uniform interface, statelessness, cacheability — should be the default for any service that wanted to live on it.",
+          "insight_zh": "既然某一套约束能把 Web 撑那么大，那么任何想活在 Web 上的服务，都该默认用这一套：统一接口、无状态、可缓存。",
+          "shift_en": "Service design stops being protocol design. Architecture aligns with the grain of the network it runs on, instead of fighting it.",
+          "shift_zh": "服务设计不再等同于协议设计。架构开始顺着所在网络的纹理走，而不是逆着它干。"
+        },
+        {
+          "id": "cap",
+          "name_en": "CAP Theorem",
+          "name_zh": "CAP 定理",
+          "year": "2000",
+          "by": "Eric Brewer",
+          "summary_en": "In a system that may face network partitions, you cannot simultaneously guarantee strong consistency and full availability. Pick the trade-off honestly.",
+          "summary_zh": "在可能发生网络分区的系统里，强一致性和高可用性不能同时给满。要诚实地选择一边。",
+          "problem_en": "Distributed databases were marketed as if they offered everything at once. Engineers expected ACID over the network for free. Failures revealed the bill nobody had read.",
+          "problem_zh": "分布式数据库一开始被宣传成『要啥有啥』，工程师以为可以免费拿到跨网络的 ACID。直到故障发生，才看到那张没人读过的账单。",
+          "insight_en": "Some constraints are not engineering choices but laws of the medium. The medium is the network; the law is partition. Pretending otherwise is how systems silently corrupt.",
+          "insight_zh": "有些约束不是工程选项，是介质的物理规律。介质是网络，规律是分区。假装它不存在，系统就会悄悄地烂在那里。",
+          "shift_en": "Architects accept fundamental trade-offs as part of the design surface. BASE emerges as a deliberate alternative to ACID, and a generation of NoSQL systems is born around the trade-offs you choose explicitly.",
+          "shift_zh": "架构师把『根本性权衡』当成设计面的一部分。BASE 作为对 ACID 的有意替代登场，整整一代 NoSQL 系统围绕『你主动选的权衡』而生。"
+        },
+        {
+          "id": "ddd",
+          "name_en": "Domain-Driven Design",
+          "name_zh": "领域驱动设计",
+          "year": "2003",
+          "by": "Eric Evans",
+          "summary_en": "Model the business domain explicitly, in a language shared by developers and domain experts. Carve the system along bounded contexts where that language stays consistent.",
+          "summary_zh": "把业务领域显式地建模出来，使用开发者和业务方共同的语言。系统沿着『语言在哪里保持一致』的边界来切，这些边界叫做限界上下文。",
+          "problem_en": "Large enterprise systems decayed because code and business drifted apart. Engineers built abstractions that did not match what the business actually meant; both sides argued past each other.",
+          "problem_zh": "大型企业系统会烂掉，因为代码和业务慢慢漂离。工程师建的抽象跟业务真正的意思对不上，两边各说各话。",
+          "insight_en": "The hardest part of large systems is not technology — it is keeping the model honest about the business. A ubiquitous language is not a documentation effort; it is the architecture's spine.",
+          "insight_zh": "大系统最难的地方不是技术，而是让模型对业务保持诚实。统一语言不是文档工作，是架构的脊梁。",
+          "shift_en": "Architecture becomes about strategic design before tactical design. Bounded contexts and context maps reframe how teams split work, long before microservices give the same idea a popular name.",
+          "shift_zh": "架构开始把『战略设计』放在『战术设计』前面。限界上下文和上下文映射，给团队怎么分工提供了新的框架——比微服务给同样的思想起一个流行名字，早了十年。"
+        },
+        {
+          "id": "event-sourcing-cqrs",
+          "name_en": "Event Sourcing & CQRS",
+          "name_zh": "事件溯源与 CQRS",
+          "year": "2010",
+          "by": "Greg Young · Fowler",
+          "summary_en": "Store the sequence of events as the source of truth; derive state by replaying them. Separate the write model from the read model so each can be optimized independently.",
+          "summary_zh": "把发生过的事件序列当作真相来源，状态由重放事件得到。写模型和读模型分开，让两边各自优化。",
+          "problem_en": "Conventional databases keep only the current state; the history is whatever survives in audit tables. Reconstructing why a system reached a state, or fixing it retroactively, is rarely possible.",
+          "problem_zh": "传统数据库只存当前状态，历史只剩下审计表里残存的那一点。系统怎么走到这一步、能不能回头修，往往无解。",
+          "insight_en": "State is a projection; events are the truth. Once you accept this, time travel, audit, and replay stop being heroics and become a property of the architecture.",
+          "insight_zh": "状态只是投影，事件才是真相。一旦接受这一点，时间回溯、审计、重放就不再是英雄壮举，而是架构自带的属性。",
+          "shift_en": "Engineering starts to treat the change log as a first-class citizen, not a side effect. Stream processing, exactly-once semantics, and the modern data-intensive playbook all draw water from this well.",
+          "shift_zh": "工程开始把『变更日志』当一等公民，而不是副作用。流处理、精确一次语义、整套数据密集型应用方法论，都从这口井里打水。"
+        }
+      ]
+    },
+    {
+      "id": "cloud-native",
+      "name_en": "IV. Cloud Native Era · 2010s",
+      "name_zh": "四、云原生时代 · 2010s",
+      "sub_en": "Infrastructure becomes code. Services become disposable. The unit of deployment shrinks faster than the unit of value, and architecture absorbs that whole change at once.",
+      "sub_zh": "基础设施变成代码，服务变成一次性的。部署单元缩得比业务单元更快，整个架构一口气消化掉这件事。",
+      "paradigms": [
+        {
+          "id": "reactive",
+          "name_en": "Reactive Manifesto",
+          "name_zh": "响应式宣言",
+          "year": "2014",
+          "by": "Bonér · Farley · Kuhn · Thompson",
+          "summary_en": "Systems should be responsive, resilient, elastic, and message-driven — four properties that together describe systems that survive load and failure as a matter of course.",
+          "summary_zh": "系统应当是响应式、弹性恢复、可弹性扩展、消息驱动的——这四条放在一起，描述的是那种把负载和故障当成日常的系统。",
+          "problem_en": "Synchronous, thread-per-request architectures collapsed under modern load. Failures cascaded because every call was a hidden coupling. The mental model of 'function call, but over the network' was the bug.",
+          "problem_zh": "同步、每请求一线程的架构在现代负载下垮掉。故障会级联，因为每一个调用都是一次隐藏的耦合。问题就在『把网络调用当成函数调用』这个心智模型本身。",
+          "insight_en": "Asynchrony is not an optimization, it is a design stance. Once messages are the unit of interaction, back-pressure, retries, and isolation become properties of the architecture, not features bolted on.",
+          "insight_zh": "异步不是优化，是设计立场。一旦把『消息』当成交互的单位，背压、重试、隔离就成了架构自带的属性，而不是后加的功能。",
+          "shift_en": "Async-first thinking moves from niche to mainstream. The next decade of mainstream frameworks — from Akka to RxJS to async/await — quietly assumes this.",
+          "shift_zh": "异步优先从小众变成主流。之后十年里 Akka、RxJS、async/await，整套主流框架都在默默接受这条假设。"
+        },
+        {
+          "id": "microservices",
+          "name_en": "Microservices",
+          "name_zh": "微服务",
+          "year": "2014",
+          "by": "Lewis & Fowler",
+          "summary_en": "Decompose an application into small, independently deployable services aligned with business capabilities. Each owns its data; communication happens across narrow contracts.",
+          "summary_zh": "把应用拆成一组小的、能独立部署的服务，每个服务对齐一项业务能力。各自拥有自己的数据，通过窄接口通信。",
+          "problem_en": "Monoliths that started clean drifted into coupled balls of mud. Teams blocked each other on deployment, on data, on language choices. Conway's Law was punishing organizations that ignored it.",
+          "problem_zh": "起初干净的单体，慢慢漂成一团耦合的泥球。团队在部署、数据、语言选择上互相卡。康威定律在惩罚那些假装看不见它的组织。",
+          "insight_en": "Software architecture must align with team structure to ship. The service boundary is not a technical question first; it is the question of which team can move without asking permission.",
+          "insight_zh": "架构必须跟团队结构对齐才能交付。服务边界首先不是技术问题，而是『哪个团队能不问别人就动手』这件事。",
+          "shift_en": "Conway's Law inverts: architecture is now designed to shape team structure. Service boundaries become organizational decisions, with all the costs and benefits that implies.",
+          "shift_zh": "康威定律被倒着用：架构开始反过来塑造团队结构。服务边界变成组织决策，连带它所有的代价和好处。"
+        },
+        {
+          "id": "cloud-native",
+          "name_en": "Cloud Native",
+          "name_zh": "云原生",
+          "year": "2015",
+          "by": "CNCF · Kubernetes",
+          "summary_en": "Build applications as portable containers, orchestrated declaratively, observable by default. Infrastructure becomes code; desired state, not steps, becomes the operating contract.",
+          "summary_zh": "把应用做成可移植的容器，按声明式编排，默认可观测。基础设施变成代码；操作契约变成『目标状态』而不是『操作步骤』。",
+          "problem_en": "Apps that worked on a laptop broke in production. Operations was a separate craft, manual and brittle. Scaling, failover, and rollout were one-off scripts that aged badly.",
+          "problem_zh": "在笔记本上跑得好好的应用，到生产就崩。运维是另一门手艺，手工、脆弱。扩容、切换、上线全是一次性脚本，老化得很快。",
+          "insight_en": "If you describe the desired state precisely enough, the platform can drive toward it. The artifact stops being a server config — it becomes a manifest that any platform can honor.",
+          "insight_zh": "只要把『想要的状态』描述得足够精确，平台就可以自己把系统驱动过去。产物不再是某台服务器的配置，而是一份任何平台都能尊重的清单。",
+          "shift_en": "Operations becomes platform engineering. The boundary between dev and ops blurs because both sides now speak in the same declarative tongue.",
+          "shift_zh": "运维变成平台工程。开发和运维的边界开始模糊——双方都在用同一种声明式的话说话。"
+        }
+      ]
+    },
+    {
+      "id": "data-intensive",
+      "name_en": "V. Data-Intensive Era · 2017–2022",
+      "name_zh": "五、数据密集时代 · 2017–2022",
+      "sub_en": "Reasoning about data systems is reframed as a first-class engineering skill, not a database choice. The book that names this becomes the unspoken standard for senior engineering thinking.",
+      "sub_zh": "对数据系统的推理，被重新定义成一项一等工程能力，而不是『选哪个数据库』。把这件事命名的那本书，悄悄地变成了高级工程师思维的默认参考。",
+      "paradigms": [
+        {
+          "id": "ddia",
+          "name_en": "Data-Intensive Thinking",
+          "name_zh": "数据密集型思维",
+          "year": "2017",
+          "by": "Martin Kleppmann · DDIA",
+          "summary_en": "Reliable, scalable, maintainable data systems are designed by reasoning about replication, partitioning, consistency, and fault tolerance — together, as a single design surface.",
+          "summary_zh": "可靠、可扩展、可维护的数据系统，不是靠选型选出来的，而是把复制、分区、一致性、容错放在同一张设计面上一起推理出来的。",
+          "problem_en": "Engineers shopped for databases by feature checklist. Trade-offs were invisible until production. The whole field had no shared way to ask 'is this the right system for what we're doing?'",
+          "problem_zh": "工程师按功能清单挑数据库。权衡要等到生产环境才看得见。整个行业没有一种共同的方式去问：『这是不是我们这事该用的系统？』",
+          "insight_en": "What looks like 'choosing technology' is really designing for a data lifecycle: how it is written, replicated, partitioned, queried, and reconciled. The choice is a consequence of that design, not the start of it.",
+          "insight_zh": "看起来是『选技术』，其实是在设计『数据的一生』：怎么写、怎么复制、怎么分区、怎么查询、怎么对齐。技术选型只是这个设计的结果，不是起点。",
+          "shift_en": "A whole generation of senior engineers absorbs a shared way of reasoning about data systems. The framework is invisible in their writing the way grammar is invisible — present everywhere, named nowhere.",
+          "shift_zh": "整整一代高级工程师吸收了一种共同的推理方式。这个框架在他们写的东西里像语法一样隐形——到处都在用，但很少被点名。"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "name_en": "VI. Agent Era · 2022–now",
+      "name_zh": "六、Agent 时代 · 2022–现在",
+      "sub_en": "The unreliable component is no longer the network or the service — it is the model itself. Software engineering rebuilds its toolkit around a node that hallucinates, drifts, and improvises.",
+      "sub_zh": "不可靠的那个组件，不再是网络，也不再是服务——是模型本身。软件工程围绕一个会幻觉、会漂移、会即兴发挥的节点，重新装备自己。",
+      "paradigms": [
+        {
+          "id": "llm-era",
+          "name_en": "LLM-as-Interface",
+          "name_zh": "大模型即接口",
+          "year": "2022",
+          "by": "ChatGPT · OpenAI",
+          "summary_en": "Large pretrained models become a general-purpose interface to computation. Natural language is no longer a thin client over a system — it is the system's entry point.",
+          "summary_zh": "大型预训练模型变成了通用计算接口。自然语言不再是覆盖在系统外面的一层薄客户端，而是系统的入口。",
+          "problem_en": "Specialized models were brittle, expensive to train, and narrow. Every new task needed its own dataset, its own pipeline, its own deployment. Most useful AI was locked behind specialist effort.",
+          "problem_zh": "专用模型脆弱、训练昂贵、能力窄。每个新任务都要单独的数据集、单独的流水线、单独的部署。大多数有用的 AI 被锁在专家工作之后。",
+          "insight_en": "A model trained on enough of the world can be steered at inference time, without re-training. The leverage shifts from 'collect a dataset' to 'shape a prompt and a context'.",
+          "insight_zh": "在足够多的世界知识上训练出来的模型，可以在推理时被引导，不需要重新训练。杠杆从『收集数据集』转移到了『设计 prompt 和上下文』。",
+          "shift_en": "AI engineering decouples from model training. A new layer of work appears — prompts, retrieval, tools, evaluation — and the engineer who masters it does not need a PhD in optimization.",
+          "shift_zh": "AI 工程跟模型训练解耦。一个新的工作层冒出来——prompt、检索、工具、评估——掌握这一层的工程师，不需要会做优化的博士。"
+        },
+        {
+          "id": "agent-architecture",
+          "name_en": "Agent Architecture",
+          "name_zh": "Agent 架构",
+          "year": "2023",
+          "by": "ReAct · AutoGPT · the community",
+          "summary_en": "Wrap the model in a loop with memory, tools, planning, and reflection. The model proposes; the harness around it decides what is safe to do, observes the result, and feeds it back.",
+          "summary_zh": "把模型包在一个循环里，加上记忆、工具、规划、反思。模型负责提出，外面的 harness 负责判断哪些动作安全、看结果、再喂回去。",
+          "problem_en": "A model on its own answers questions but cannot act. Hooking it to tools without structure produces systems that wander, repeat themselves, and fail without explanation.",
+          "problem_zh": "模型自己只能答题，不能行动。直接把它接到工具上又没有结构的话，结果就是系统打转、重复自己、莫名其妙地失败。",
+          "insight_en": "The unreliable component has moved one layer up. Distributed systems learned to coordinate unreliable services; agent systems must coordinate an unreliable reasoner. Same instincts, new node.",
+          "insight_zh": "不可靠的那个组件上移了一层。分布式系统学会了协调不可靠的服务；Agent 系统要协调的，是一个不可靠的推理器。一样的工程直觉，新的不可靠节点。",
+          "shift_en": "Engineering attention moves from prompting a model to designing the structure that contains it. Patterns, topologies, and governance start to crystallize the way they did for distributed systems two decades earlier.",
+          "shift_zh": "工程的注意力从『怎么 prompt 一个模型』，转向『怎么设计装它的那个结构』。模式、拓扑、治理开始结晶——和二十年前分布式系统经历的那一步一样。"
+        },
+        {
+          "id": "harness-engineering",
+          "name_en": "Harness Engineering",
+          "name_zh": "Harness 工程学",
+          "year": "2024–2026",
+          "by": "current frontier",
+          "summary_en": "Agent architecture is the design of bounded resource allocation under uncertainty. The model spends; the harness budgets. Tokens, time, permissions, and trust are the units the harness allocates.",
+          "summary_zh": "Agent 架构，是在不确定性下做『有界的资源分配』。模型负责花，harness 负责定预算。token、时间、权限、信任，是 harness 要分配的单位。",
+          "problem_en": "Without a budget, an agent will spend whatever it can — tokens, calls, time, permissions — until it succeeds, fails, or runs out. Most production failures are not reasoning failures; they are allocation failures.",
+          "problem_zh": "没有预算的话，一个 Agent 会一直花——token、调用、时间、权限——直到成功、失败、或者用光。绝大多数生产故障不是推理故障，是分配故障。",
+          "insight_en": "Engineering an agent system is engineering its budgets. Cognitive function says what kind of work is being done; execution topology says who does it; governance and bounded allocation decide how much of each scarce resource that work is allowed to consume.",
+          "insight_zh": "做 Agent 系统的工程，就是做它的预算工程。认知功能说『在做哪一类工作』，执行拓扑说『谁来做』，治理和有界分配决定『这件事可以花多少种稀缺资源』。",
+          "shift_en": "The frontier reframes engineering from algorithmic correctness to budgetary discipline. The next decade of agent systems will be measured less by what they can do, and more by what they refuse to spend.",
+          "shift_zh": "前沿把工程的关注点从『算法正确』，转向『预算纪律』。下一个十年的 Agent 系统，被衡量的不是它能做什么，而是它拒绝花掉的是什么。"
+        }
+      ]
+    }
+  ]
+}

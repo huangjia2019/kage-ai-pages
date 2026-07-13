@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Long-Lived Thinking Principles — Jia Huang</title>
+    <meta name="description" content="A cross-era map of durable human thinking principles: Socratic questioning, first principles, wu wei, Occam's razor, falsifiability, systems thinking, the Pyramid Principle, deliberate practice, dark time, and more.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/thinking-principles/">
+    <meta property="og:title" content="Long-Lived Thinking Principles">
+    <meta property="og:description" content="A reading map for principles that changed how humans inquire, decide, learn, explain, and act.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/thinking-principles/">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="principles.css">
+</head>
+<body class="page-research page-thinking-principles">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/thinking-principles/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <p class="eyebrow">Reading map</p>
+            <h1 class="tp-title">Long-lived thinking principles</h1>
+
+            <p class="lede">
+                Technical fields have design patterns. Human thought has something older:
+                durable principles for inquiry, judgment, learning, explanation, action, and strategy.
+                This page collects principles that keep coming back because they still change decisions.
+            </p>
+
+            <p>
+                It sits beside the
+                <a href="/research/classic-insights/">classic technical books and papers map</a>.
+                That page asks what made a technical work field-defining. This page asks what made
+                a thinking move survive across fields and centuries.
+            </p>
+
+            <p class="tp-meta">
+                <strong>How to use this page</strong>: scan the "Reversal" and "Practice question" columns.
+                If a principle changes what you would ask next, it is alive. This is an entry map,
+                not a canon and not a private philosophy. The point is to make good thinking moves easier
+                to notice, name, and practice.
+            </p>
+
+            <div id="tp-criteria" class="tp-criteria" aria-label="Selection criteria"></div>
+
+            <section aria-labelledby="tp-table-title">
+                <h2 id="tp-table-title" style="font-family: var(--font-serif); font-size: 1.45rem; margin-bottom: 0.5rem;">The table</h2>
+                <p class="lede" style="margin-bottom: 0.8rem;">
+                    The list intentionally crosses civilizations and disciplines. A principle earns its place here
+                    when it can be practiced as a question, not merely admired as a quote.
+                </p>
+
+                <div class="tp-controls">
+                    <div class="tp-control">
+                        <label for="tp-search">Search</label>
+                        <input id="tp-search" type="search" placeholder="principle, thinker, problem, practice...">
+                    </div>
+                    <div class="tp-control">
+                        <label for="tp-era">Era</label>
+                        <select id="tp-era"></select>
+                    </div>
+                    <div class="tp-control">
+                        <label for="tp-domain">Domain</label>
+                        <select id="tp-domain"></select>
+                    </div>
+                </div>
+
+                <p id="tp-count" class="tp-count"></p>
+                <div id="tp-table-root"></div>
+            </section>
+
+            <section class="tp-closing">
+                <h2>The useful test</h2>
+                <p>
+                    A principle is alive when it becomes a better next question. First principles asks
+                    what must be true. Inversion asks what would make this fail. Dark time asks what
+                    question deserves to stay loaded in the mind. The power is not in collecting them;
+                    it is in choosing the one that changes the next move.
+                </p>
+            </section>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script src="principles.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.ThinkingPrinciples.init({ lang: 'en', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Spends, Harness Budgets — Jia Huang</title>
+    <meta name="description" content="Agent architecture is the design of bounded resource allocation under uncertainty. The model spends. The harness budgets.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/model-spends-harness-budgets/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/model-spends-harness-budgets/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/model-spends-harness-budgets/">
+    <meta property="og:title" content="Model Spends, Harness Budgets">
+    <meta property="og:description" content="The model spends. The harness budgets. Agent architecture is the design of bounded resource allocation under uncertainty.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/model-spends-harness-budgets/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/model-spends-harness-budgets/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Model Spends, Harness Budgets
+            </p>
+
+            <h1>Model Spends, Harness Budgets</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                Agent architecture is the design of bounded resource allocation under uncertainty. The model spends. The harness budgets.
+            </p>
+
+            <h2>Definition</h2>
+            <p>
+                The model is an open-ended spender — of context window, tokens, latency, side
+                effects, money. The harness is the engineered ceiling that decides what the model
+                is allowed to spend, on what, when, and under whose authority. The interesting
+                design work happens in the harness, not in the prompt.
+            </p>
+
+            <h2>The problem it names</h2>
+            <p>
+                Two years of agent incidents in production have a recurring shape: <strong>almost none of the failures are prompt-writing failures. They are harness-missing failures.</strong>
+                Engineers spend the bulk of their attention on prompts because prompts are visible in the IDE — readable, editable, with feedback in seconds.
+                When an incident actually fires, the postmortems read like the same sentence over and over:
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>A customer question triggers a retry loop that burns a week of token budget in a single conversation. <strong>No upper bound.</strong></li>
+                <li>An agent granted <code>bash</code> for "code analysis" eventually runs <code>rm -rf</code> on a development tree. <strong>No tool scope.</strong></li>
+                <li>A data-repair agent with production write access corrupts three tables in thirty minutes. <strong>No human-in-the-loop on destructive operations.</strong></li>
+                <li>A long-running agent's context grows to 180k tokens and its reasoning begins to drift. <strong>No auto-compaction or reset policy.</strong></li>
+                <li>An agent hallucinates a tool result; every downstream action runs on the fabricated data; the incident surfaces six hours later. <strong>No side-channel verification.</strong></li>
+            </ul>
+            <p>
+                Lined up, the pattern is unambiguous: <em>the parts that got iterated never failed; the parts that were never designed broke everything.</em>
+                Prompts got tuned, so prompt-layer failures were absorbed early. The harness boundaries — budgets, scopes, blast radius, escalation, observability — were not in the IDE and so were never explicitly designed. The incidents leaked through there.
+            </p>
+            <p>
+                This imbalance has a precedent. Early web engineering spent its attention on CSS and JS while outages came from missing observability. DBAs tuned queries while production incidents came from absent connection-pool limits. <strong>The visible work gets polished. The infrastructure work gets neglected, until it wakes someone up at 3 AM.</strong>
+                Agent systems are at the same stage now. This claim names that imbalance.
+            </p>
+
+            <h2>How it changes design decisions</h2>
+            <p>
+                Once you accept that the model is a spender, every architectural decision becomes
+                a budget decision. <strong>Context window</strong> is not "how much can the model
+                read" but "how do I allocate scarce token capacity across competing inputs."
+                <strong>Tool scope</strong> is not "what can the agent do" but "what surface am I
+                willing to let it touch." <strong>Reasoning depth</strong> is not a quality knob
+                but a cost knob. The job of the harness is to set those ceilings <em>before</em>
+                the model gets to decide.
+            </p>
+
+            <h2>Lineage</h2>
+            <p>
+                Not new. The pattern recurs across decades of systems engineering:
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>OS process scheduling</strong> — processes want all the CPU; the scheduler decides who gets it</li>
+                <li><strong>JVM garbage collection</strong> — application allocates freely; GC budgets pause time and heap</li>
+                <li><strong>CDN rate limiting</strong> — clients want unlimited bandwidth; the edge sets per-tenant ceilings</li>
+                <li><strong>Linux cgroups</strong> — workloads share a host; the kernel enforces CPU / memory / IO budgets</li>
+                <li><strong>SRE error budgets</strong> — teams want to ship freely; the budget gates release velocity</li>
+            </ul>
+            <p>
+                The agent-era version says: <em>the LLM is the workload; the harness is the kernel.</em>
+            </p>
+
+            <h2>What it is NOT</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Not a critique of LLMs.</strong> The model being a spender is a fact of its design, not a failure.</li>
+                <li><strong>Not "the harness replaces the model."</strong> The harness is uninteresting without something to budget for; the model is dangerous without something to budget it.</li>
+                <li><strong>Not just observability.</strong> Observability tells you what was spent. Budgeting decides what is allowed to be spent.</li>
+                <li><strong>Not prompt engineering.</strong> The prompt sits inside one cell of the harness; the harness designs the cell.</li>
+            </ul>
+
+            <h2>Where it's developed further</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>Position paper: <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">A Two-Dimensional Framework for AI Agent Design Patterns</a> (Huang &amp; Zhou, 2026)</li>
+                <li>Book treatment: <em>Designing AI Agents</em> (Manning, 2026) — runs as the through-line of the whole book; explicit in Ch1, Ch7 governance layer, Ch10 production harness</li>
+                <li>Concrete patterns: <a href="https://adpsagent.com/zh/patterns/g2-blast-radius-control/">G2 Blast Radius Control</a>, <a href="https://adpsagent.com/zh/patterns/g5-observability-harness/">G5 Observability Harness</a>, <a href="https://adpsagent.com/zh/patterns/p1-context-triage/">P1 Context Triage</a></li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Model Spends, Harness Budgets.
+                <a href="https://kage-ai.com/concepts/model-spends-harness-budgets/">kage-ai.com/concepts/model-spends-harness-budgets/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

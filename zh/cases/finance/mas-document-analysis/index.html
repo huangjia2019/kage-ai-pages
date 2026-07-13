@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS 文档分析流水线 — 金融 Agent 案例</title>
+    <meta name="description" content="一个五步合规分析工作流：读取 MAS 新规、版本对比、抽取义务、映射产品、生成影响评估报告。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/finance/mas-document-analysis/">
+    <meta property="og:title" content="MAS 文档分析流水线 — 金融 Agent 案例">
+    <meta property="og:description" content="一个五步合规分析工作流：读取 MAS 新规、版本对比、抽取义务、映射产品、生成影响评估报告。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/finance/mas-document-analysis/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">金融 Demo</p><h1>MAS 文档分析流水线</h1><p class="lede">一个五步合规分析工作流：读取 MAS 新规、版本对比、抽取义务、映射产品、生成影响评估报告。</p><p class="demo-meta">Streamlit 展示 demo · 仓库路径: <code>showcases/finance/demo-doc-analysis</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/finance/">返回金融案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/mas-document-analysis-blueprint.png" alt="MAS 文档分析流水线 blueprint"></figure></section>
+
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>通知接入</h3><p>规范化修订版通知，并保留章节级来源锚点。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>版本差异</h3><p>和历史基线对比，隔离真正重要的变化。</p><span class="pattern-chip">语义压缩</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>义务抽取</h3><p>把变化转成义务、期限、负责人和证据。</p><span class="pattern-chip">提示链</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>产品映射</h3><p>把义务连接到产品线、客户、控制点和运营团队。</p><span class="pattern-chip">RAG 管道</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>影响报告</h3><p>生成准备度评分、风险矩阵、摘要和行动登记表。</p><span class="pattern-chip">进度跟踪</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>复核闭环</h3><p>模糊或高影响发现保持可复核、可追溯。</p><span class="pattern-chip">审批门控</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-01-challenge.png" alt="业务背景和五步 Agent 流水线。"><figcaption>业务背景和五步 Agent 流水线。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-02-step1-ingestion.png" alt="第 1 步：文档接入和章节映射。"><figcaption>第 1 步：文档接入和章节映射。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-03-step2-comparison.png" alt="第 2 步：新旧版本对比和结构化变化。"><figcaption>第 2 步：新旧版本对比和结构化变化。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-04-step5-report-top.png" alt="第 5 步：摘要、准备度评分和风险矩阵。"><figcaption>第 5 步：摘要、准备度评分和风险矩阵。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-doc-analysis-05-step5-report-bottom.png" alt="行动清单和报告尾部。"><figcaption>行动清单和报告尾部。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>上下文分诊</td><td>区分来源章节、变化条款和背景上下文。</td></tr>
+<tr><td>语义压缩</td><td>把长通知转成可复核的变化和义务。</td></tr>
+<tr><td>进度跟踪</td><td>显式呈现准备度评分、风险矩阵和行动清单。</td></tr>
+<tr><td>审批门控</td><td>模糊或高影响变化保留人工复核。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>文档变化必须变成产品影响</h3><p>金融团队行动的是受影响产品和控制点，不是原始段落。</p></article>
+<article class="insight-card"><h3>进度可见很重要</h3><p>合规工作是多人协作，状态和行动归属必须可见。</p></article>
+<article class="insight-card"><h3>流水线本身就是解释</h3><p>每一步可检查，最终报告才更可信。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd showcases/finance/demo-doc-analysis
+streamlit run app.py</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>showcases/finance/demo-doc-analysis/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/mas-document-analysis-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

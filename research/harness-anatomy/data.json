@@ -1,0 +1,189 @@
+{
+  "functions": [
+    { "id": "perception",    "en": "Perception",    "zh": "感知" },
+    { "id": "memory",        "en": "Memory",        "zh": "记忆" },
+    { "id": "reasoning",     "en": "Reasoning",     "zh": "推理" },
+    { "id": "action",        "en": "Action",        "zh": "行动" },
+    { "id": "reflection",    "en": "Reflection",    "zh": "反思" },
+    { "id": "collaboration", "en": "Collaboration", "zh": "协作" },
+    { "id": "governance",    "en": "Governance",    "zh": "治理" }
+  ],
+  "scale_labels": {
+    "en": { "0": "—", "1": "Present", "2": "Solid", "3": "Deep" },
+    "zh": { "0": "—", "1": "有", "2": "扎实", "3": "深度" }
+  },
+  "frameworks": [
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "vendor": "Anthropic",
+      "lang": "TypeScript (Rust port in progress)",
+      "battlefield_en": "Dev tool / CLI agent",
+      "battlefield_zh": "开发者工具 / CLI agent",
+      "main_loop_en": "src/utils/agent.ts",
+      "main_loop_zh": "src/utils/agent.ts",
+      "summary_en": "The reference dev-tool harness. A small AI core wrapped in a deep stack of deterministic plumbing — typed tool registry, permission gating, context compaction, transcript replay.",
+      "summary_zh": "开发者工具方向的标杆 harness。小 AI 核心 + 厚重的确定性基础设施——类型化工具注册、权限门控、上下文压缩、对话回放。",
+      "strengths_en": "Permission Gate · Tool Dispatch · Context Compaction (engineering depth, not breadth)",
+      "strengths_zh": "权限门 · 工具调度 · 上下文压缩（赢在深度而非广度）",
+      "coverage": { "perception": 3, "memory": 2, "reasoning": 3, "action": 3, "reflection": 2, "collaboration": 1, "governance": 3 },
+      "total": 17
+    },
+    {
+      "id": "codex-cli",
+      "name": "Codex CLI",
+      "vendor": "OpenAI",
+      "lang": "Rust (~95%, ported from TS)",
+      "battlefield_en": "Dev agent · multi-surface",
+      "battlefield_zh": "开发者 agent · 多 surface",
+      "main_loop_en": "codex-rs/core/src/codex.rs",
+      "main_loop_zh": "codex-rs/core/src/codex.rs",
+      "summary_en": "JSON-RPC over stdio gives one core, many surfaces (CLI, IDE, web). Rust gives the disposable per-request safety guarantees the agent loop needs.",
+      "summary_zh": "JSON-RPC over stdio 让一个内核接多种入口（CLI / IDE / Web）。选 Rust 是因为 agent 主循环天然需要"每请求可丢弃"的安全保证。",
+      "strengths_en": "Sandbox · multi-surface coordination · MCP integration",
+      "strengths_zh": "沙箱 · 多 surface 协同 · MCP 集成",
+      "coverage": { "perception": 2, "memory": 2, "reasoning": 2, "action": 3, "reflection": 1, "collaboration": 2, "governance": 2 },
+      "total": 14
+    },
+    {
+      "id": "aider",
+      "name": "Aider",
+      "vendor": "open source · Python",
+      "lang": "Python",
+      "battlefield_en": "Git-native code agent",
+      "battlefield_zh": "Git 原生 code agent",
+      "main_loop_en": "aider/coders/base_coder.py",
+      "main_loop_zh": "aider/coders/base_coder.py",
+      "summary_en": "Git is the source of truth. Every change lands as an atomic commit; the repository map is what the model sees. Minimalism by conviction.",
+      "summary_zh": "把 Git 当真相来源。每次改动都是原子 commit；模型看到的是 repository map。极简是一种主张，不是缺陷。",
+      "strengths_en": "Git atomic commits · Repository Map · test-fix-retest self-heal",
+      "strengths_zh": "Git 原子提交 · 仓库地图 · 测试-修复-复测的自愈循环",
+      "coverage": { "perception": 2, "memory": 1, "reasoning": 2, "action": 3, "reflection": 3, "collaboration": 0, "governance": 1 },
+      "total": 12
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "vendor": "SST",
+      "lang": "TypeScript + Bun",
+      "battlefield_en": "Dev agent · multi-client",
+      "battlefield_zh": "开发者 agent · 多客户端",
+      "main_loop_en": "packages/opencode/src/session/prompt.ts (SessionPrompt)",
+      "main_loop_zh": "packages/opencode/src/session/prompt.ts (SessionPrompt 类)",
+      "summary_en": "Central server, many clients. A unified provider abstraction over 75+ LLMs, LSP integration for 30+ languages, four named agent personas, all in one monorepo.",
+      "summary_zh": "中央 server + 多客户端的架构。75+ LLM 统一抽象、30+ 语言的 LSP 集成、四种命名 agent 角色，全部装在一个 monorepo 里。",
+      "strengths_en": "LSP integration · provider abstraction · agent personas",
+      "strengths_zh": "LSP 集成 · provider 抽象 · 多 agent 角色",
+      "coverage": { "perception": 2, "memory": 1, "reasoning": 2, "action": 3, "reflection": 2, "collaboration": 2, "governance": 1 },
+      "total": 13
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "vendor": "open source",
+      "lang": "polyglot · Docker",
+      "battlefield_en": "Personal AI · multi-channel",
+      "battlefield_zh": "个人 AI · 多 channel",
+      "main_loop_en": "agent/runtime/",
+      "main_loop_zh": "agent/runtime/",
+      "summary_en": "A different posture from dev tools — a local Gateway that fans out across 20+ messaging channels, voice, and canvas. The interface is wherever the user already is.",
+      "summary_zh": "跟前面那批开发者工具是完全不同的姿态——本地 Gateway 扇出到 20+ 消息渠道、语音、画布。入口就在用户原本就在的地方。",
+      "strengths_en": "Local Gateway · channel integrations · Voice + Canvas",
+      "strengths_zh": "本地 Gateway · 多 channel 集成 · 语音 + 画布",
+      "coverage": { "perception": 2, "memory": 2, "reasoning": 2, "action": 3, "reflection": 1, "collaboration": 3, "governance": 2 },
+      "total": 15
+    },
+    {
+      "id": "hermes",
+      "name": "Hermes Agent",
+      "vendor": "Nous Research",
+      "lang": "Python",
+      "battlefield_en": "Personal AI · self-improving",
+      "battlefield_zh": "个人 AI · 自我进化",
+      "main_loop_en": "agent/ entry",
+      "main_loop_zh": "agent/ 入口",
+      "summary_en": "Self-improvement is the design center, not a feature bolted on. Three-tier memory (SQLite FTS5 + procedural skills + episodic), experience replay, and a skill package format that earns its complexity.",
+      "summary_zh": "自我进化是设计中心，不是附加功能。三层记忆（SQLite FTS5 + 程序性技能 + 情景记忆）、经验回放、对得起这个复杂度的 skill package 格式。",
+      "strengths_en": "Three-tier memory · skill packages · experience replay (deepest agent stack here)",
+      "strengths_zh": "三层记忆 · 技能包 · 经验回放（这八家里 agent 栈最深的一个）",
+      "coverage": { "perception": 3, "memory": 3, "reasoning": 3, "action": 2, "reflection": 3, "collaboration": 2, "governance": 2 },
+      "total": 18
+    },
+    {
+      "id": "deerflow",
+      "name": "DeerFlow",
+      "vendor": "ByteDance",
+      "lang": "Python (LangGraph)",
+      "battlefield_en": "Multi-agent harness",
+      "battlefield_zh": "多 agent harness",
+      "main_loop_en": "backend/packages/harness/deerflow/runtime/runs/worker.py",
+      "main_loop_zh": "backend/packages/harness/deerflow/runtime/runs/worker.py",
+      "summary_en": "Lead Agent + Sub-Agent topology as default. AIO Sandbox for execution, a modular skill system, persistent memory — built for coordination, not just code.",
+      "summary_zh": "默认就是 Lead Agent + Sub-Agent 的拓扑。AIO Sandbox 跑执行环境、模块化 Skill System、持久化 memory——是为协作而不是只为写码设计的。",
+      "strengths_en": "Lead+Sub topology · AIO Sandbox · skill system · persistent memory",
+      "strengths_zh": "Lead+Sub 拓扑 · AIO Sandbox · 技能系统 · 持久化记忆",
+      "coverage": { "perception": 2, "memory": 3, "reasoning": 3, "action": 3, "reflection": 2, "collaboration": 3, "governance": 2 },
+      "total": 18
+    },
+    {
+      "id": "openhands",
+      "name": "OpenHands",
+      "vendor": "All-Hands-AI",
+      "lang": "Python",
+      "battlefield_en": "Sandbox-heavy code agent",
+      "battlefield_zh": "重沙箱 code agent",
+      "main_loop_en": "core/conversation.py (Conversation.step)",
+      "main_loop_zh": "core/conversation.py (Conversation 类的 step 方法)",
+      "summary_en": "Stateless Agent + append-only EventLog: the agent has no internal state worth preserving — the log does. Replay, parallel agents, and optional isolation fall out of that one decision.",
+      "summary_zh": "Stateless Agent + 仅追加的 EventLog：agent 自己没有值得保留的内部状态——日志才有。重放、并行 agent、可选隔离，都是这一个决策的副产品。",
+      "strengths_en": "Stateless agent · EventLog replay · optional isolation · parallel multi-agent",
+      "strengths_zh": "无状态 agent · EventLog 重放 · 可选隔离 · 并行多 agent",
+      "coverage": { "perception": 2, "memory": 2, "reasoning": 2, "action": 3, "reflection": 2, "collaboration": 2, "governance": 3 },
+      "total": 16
+    }
+  ],
+  "five_step": [
+    {
+      "id": "detect",
+      "title_en": "1 · Detect — find the main loop",
+      "title_zh": "1 · Detect · 找主循环",
+      "body_en": "Every harness has a heart: an input → PRA → output loop. Grep for while/loop/step, follow the entry function. The main loop is your anchor — everything else is downstream.",
+      "body_zh": "每个 harness 都有一颗心脏：input → PRA → output 的主循环。grep while / loop / step，顺着入口函数追下去。找到主循环，其它东西都是它的下游。"
+    },
+    {
+      "id": "classify",
+      "title_en": "2 · Classify — what each component is",
+      "title_zh": "2 · Classify · 识别组件",
+      "body_en": "Look at what the main loop calls — context handling (Perception), state management (Memory), LLM dispatch (Reasoning), tool calling (Action). Map each call to a cell on the 7 × 6 cognitive function × execution topology grid.",
+      "body_zh": "看主循环调了什么——context 处理（感知）、状态管理（记忆）、LLM 调用（推理）、工具调度（行动）。把每个调用映射到 7 × 6（认知功能 × 执行拓扑）矩阵里的一个格子。"
+    },
+    {
+      "id": "filter",
+      "title_en": "3 · Filter — drop the boilerplate",
+      "title_zh": "3 · Filter · 滤掉 boilerplate",
+      "body_en": "About 70% of any framework is logger, config, type definitions, serialization. Skip it. Stay on the business spine: how the agent decides, how state flows, how tools get picked.",
+      "body_zh": "任何 framework 大约 70% 是 logger / config / 类型定义 / 序列化。跳过。盯住业务主干：agent 怎么决策、状态怎么传、工具怎么选。"
+    },
+    {
+      "id": "map",
+      "title_en": "4 · Map — place onto the dual-axis matrix",
+      "title_zh": "4 · Map · 落到双轴矩阵",
+      "body_en": "Each surviving component takes a cell on the 7 × 6 matrix. The cells the framework fills become its coverage heatmap — the print-ready artifact for the framework.",
+      "body_zh": "把活下来的每个组件填到 7 × 6 矩阵的一个格子里。被填满的格子拼成这个框架的覆盖热力图——一张可以打印的工程档案。"
+    },
+    {
+      "id": "verify",
+      "title_en": "5 · Verify — pin every claim to source",
+      "title_zh": "5 · Verify · 源码定锚",
+      "body_en": "Every judgment must be backed by file path + line number + function name. If you cannot link the claim to source, it isn't engineering knowledge yet — it's still impression.",
+      "body_zh": "每一个判断都要有文件路径 + 行号 + 函数名做支撑。如果你说不出源码出处，那还不是工程知识——只是印象。"
+    }
+  ],
+  "common_ancestors": [
+    { "name": "Unix Philosophy",        "year": "1970s",      "summary_en": "Small tools, standard I/O. Lives in tool registries and JSON-RPC over stdio.",                  "summary_zh": "小工具 + 标准 I/O。活在工具注册表和 stdio 上的 JSON-RPC 里。" },
+    { "name": "Plan 9",                 "year": "1980s–90s",  "summary_en": "Everything is a file. Lives in unified typed tool interfaces and provider abstractions.",      "summary_zh": "一切皆文件。活在统一的类型化工具接口和 provider 抽象里。" },
+    { "name": "Erlang / OTP",           "year": "1986",       "summary_en": "Let it crash + supervisor tree. Lives in stateless agents and self-healing loops.",            "summary_zh": "let it crash + supervisor tree。活在无状态 agent 和自愈循环里。" },
+    { "name": "Kubernetes",             "year": "2014",       "summary_en": "Declarative spec + reconciliation. Lives in the agent main loop, the probabilistic version.",  "summary_zh": "声明式 spec + 收敛循环。活在 agent 主循环里——概率版本的同一件事。" },
+    { "name": "Smalltalk",              "year": "1972",       "summary_en": "Objects send each other messages. Lives in A2A handoffs and inter-agent event logs.",          "summary_zh": "对象之间发消息。活在 A2A handoff 和 agent 间的事件日志里。" }
+  ]
+}

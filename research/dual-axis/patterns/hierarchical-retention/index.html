@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Retention — Pattern Reference — Jia Huang</title>
+    <meta name="description" content="Hierarchical Retention: the Memory × Route pattern. Working / short-term / long-term / procedural memory tiers, with explicit promotion and eviction rules.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/patterns/hierarchical-retention/">
+    <meta property="og:title" content="Hierarchical Retention — Pattern Reference">
+    <meta property="og:description" content="Multi-tier agent memory under explicit routing. The Memory × Route pattern.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/patterns/hierarchical-retention/">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Pattern reference
+                </p>
+                <h1>Hierarchical Retention</h1>
+                <span class="coord-badge"><strong>Memory</strong> × <strong>Route</strong></span>
+                <p class="essay-meta">
+                    Multi-tier agent memory with explicit promotion and eviction rules: working / short-term / long-term / procedural.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Memory</div>
+                    <div class="mm-cell">RAG Pipeline</div>
+                    <div class="mm-cell mm-active">Hierarchical Retention</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Progress Tracking</div>
+                    <div class="mm-cell">Failure Journals</div>
+                    <div class="mm-cell mm-empty">—</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this pattern exists</h2>
+                <p>
+                    The single most common cause of agent failure beyond the first 20 turns is that the agent
+                    cannot remember the right thing at the right time. Not <em>cannot remember</em> &mdash; it
+                    can remember <em>something</em>, usually the wrong thing &mdash; but <em>cannot route the right
+                    memory tier to the current question.</em> A customer asks &ldquo;what about the refund I requested
+                    last Tuesday?&rdquo; The chat history with the customer is in working memory. The refund policy
+                    is in long-term reference memory. The customer&rsquo;s preference for callbacks instead of email
+                    is in procedural memory. <strong>The agent needs all three tiers, and it needs them routed
+                    differently.</strong>
+                </p>
+                <p>
+                    For leadership: this is the pattern that decides whether your agent can hold a relationship
+                    across sessions, or whether it starts every conversation from zero. A relationship-keeping
+                    agent is a different product than a one-shot Q&amp;A agent. Hierarchical Retention is the
+                    architectural prerequisite for the former. Manus, the team behind one of 2025&rsquo;s
+                    benchmark-leading agents, reports that KV-cache hit rate &mdash; the operational metric for
+                    whether memory routing is working &mdash; is the most important cost lever in their stack.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The agent-design problem it solves</h2>
+                <p>
+                    A naive agent stuffs everything into the prompt every turn. Cost explodes linearly with
+                    conversation length, and quality degrades as relevant signals drown in irrelevant repetition.
+                    A slightly-less-naive agent summarizes the whole history each turn. Cost is bounded but
+                    every nuance is lost in compression. Neither extreme is right.
+                </p>
+                <p>
+                    Hierarchical Retention sets up <strong>four tiers, each with its own retention policy,
+                    each accessed by a different routing rule</strong>:
+                </p>
+                <ul style="list-style: disc; margin: 0.5rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Working memory</strong> — current turn, full fidelity, expires at turn end.</li>
+                    <li><strong>Short-term</strong> — recent N turns, structured summary, expires at session end.</li>
+                    <li><strong>Long-term</strong> — durable facts, retrieved by routing rule, never auto-expires.</li>
+                    <li><strong>Procedural</strong> — playbooks and templates, loaded on task-type match.</li>
+                </ul>
+                <p>
+                    The routing rule (the Route topology dimension) is what makes this distinct from RAG. RAG
+                    retrieves from one undifferentiated store. Hierarchical Retention <em>chooses which store</em>
+                    based on the current query type, then retrieves with the policy appropriate to that tier.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Deep thinking direction</h2>
+                <p>
+                    The hardest part of Hierarchical Retention is not the storage. Storage is solved &mdash;
+                    SQLite for short-term, vector DBs for long-term, file system for procedural, in-context
+                    for working. The hard part is <strong>promotion and eviction</strong>: when does a fact in
+                    short-term earn its way into long-term? When does a stale long-term fact get demoted? Get
+                    these wrong and the agent slowly accumulates contradictions &mdash; remembering both the
+                    customer&rsquo;s old address and the new one, with no way to choose which is current.
+                </p>
+                <p>
+                    Three failure modes recur. <strong>Promotion Inflation</strong>: every fact promoted to
+                    long-term, the store bloats, retrieval relevance collapses. The discipline is explicit
+                    promotion criteria &mdash; access count, confidence threshold, an audit step before
+                    promotion. <strong>Phantom Memory</strong>: the agent remembers something the user did not say
+                    because hallucinated facts got promoted on first sight. The discipline is verification on
+                    promotion. <strong>Tier Confusion</strong>: working memory leaking into long-term causes
+                    the agent to treat &ldquo;something said five minutes ago&rdquo; with the weight of
+                    &ldquo;something established as fact.&rdquo; The discipline is hard tier boundaries enforced
+                    by the harness, not the model.
+                </p>
+                <p>
+                    The architectural insight is that Hierarchical Retention is the <em>CPU cache hierarchy</em>
+                    pattern reborn. L1 cache (working), L2 (short-term), L3 (long-term), main memory (procedural)
+                    &mdash; with promotion driven by access frequency, eviction by LRU. Engineers who have written
+                    cache replacement policies recognize this in under a minute. The medium changed; the algorithm
+                    structure did not.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Engineering blog posts &mdash; curated</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://github.com/cpacker/MemGPT" target="_blank" rel="noopener">MemGPT — Towards LLMs as Operating Systems</a></span>
+                        <span class="res-meta">cpacker · 2023-2024 · ongoing</span>
+                        <span class="res-blurb">The OS-style tiered-memory metaphor in working code. MemGPT explicitly models LLM context as RAM and external store as disk.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/news/claude-code-memory" target="_blank" rel="noopener">CLAUDE.md and project memory in Claude Code</a></span>
+                        <span class="res-meta">Anthropic · 2024-2025</span>
+                        <span class="res-blurb">Three-tier (global / project / session) memory implemented as plain files. The most widely-deployed Hierarchical Retention pattern in production today.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://manus.ai/research/kv-cache-hit-rate" target="_blank" rel="noopener">KV-Cache Hit Rate as the Production Cost Lever — Manus</a></span>
+                        <span class="res-meta">Manus Research · 2025</span>
+                        <span class="res-blurb">Reports KV-cache hit rate as the single highest-leverage cost metric in production multi-turn agents. Directly motivates the tier discipline.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://blog.langchain.com/long-term-memory-for-agents/" target="_blank" rel="noopener">Long-term Memory for Agents — LangChain</a></span>
+                        <span class="res-meta">LangChain Blog · 2025</span>
+                        <span class="res-blurb">Framework-side decomposition: semantic, episodic, procedural memory types and the access patterns each demands.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://lilianweng.github.io/posts/2023-06-23-agent/#component-one-memory" target="_blank" rel="noopener">Memory components — Lilian Weng</a></span>
+                        <span class="res-meta">OpenAI · June 2023</span>
+                        <span class="res-blurb">Early decomposition of agent memory into sensory / short-term / long-term, drawing on cognitive science. Pre-dates but anticipates the production-engineering version.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Latest paper progress (arXiv)</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2310.08560" target="_blank" rel="noopener">MemGPT: Towards LLMs as Operating Systems</a></span>
+                        <span class="res-meta">arXiv:2310.08560 · October 2023</span>
+                        <span class="res-blurb">The foundational paper for OS-style virtual context. Introduces explicit page-in / page-out for LLM memory.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2309.02427" target="_blank" rel="noopener">Cognitive Architectures for Language Agents (CoALA)</a></span>
+                        <span class="res-meta">arXiv:2309.02427 · September 2023</span>
+                        <span class="res-blurb">Sumers et al. organize agent memory by cognitive function (procedural / semantic / episodic). The taxonomy half-feeds directly into the tier design.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2404.13501" target="_blank" rel="noopener">A Survey on the Memory Mechanism of LLM Agents</a></span>
+                        <span class="res-meta">arXiv:2404.13501 · April 2024</span>
+                        <span class="res-blurb">Catalogues memory mechanisms across recent agents. The promotion/eviction policy section is the most directly relevant for engineering.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2501.05813" target="_blank" rel="noopener">Generative Agents with Hierarchical Memory</a></span>
+                        <span class="res-meta">arXiv:2501.05813 · January 2025</span>
+                        <span class="res-blurb">Explicit working/short/long-term separation with consolidation passes. Demonstrates hierarchical retention beats flat retrieval on long-horizon tasks.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2502.18482" target="_blank" rel="noopener">A-Mem: Agent-Mediated Memory with Hierarchical Routing</a></span>
+                        <span class="res-meta">arXiv:2502.18482 · February 2025</span>
+                        <span class="res-blurb">Routing-based memory access where the agent itself decides which tier to query. The closest model-side ancestor to the production-engineering version.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Related patterns</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/context-triage/">
+                        <span class="rp-coord">Perception × Route</span>
+                        <span class="rp-name">Context Triage</span>
+                    </a>
+                    <a href="/research/dual-axis/topologies/route/">
+                        <span class="rp-coord">Topology view</span>
+                        <span class="rp-name">All Route-shaped patterns</span>
+                    </a>
+                    <a href="/research/dual-axis/">
+                        <span class="rp-coord">Layer 2</span>
+                        <span class="rp-name">Full matrix</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this pattern is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 4 §4.2 (Memory / Hierarchical Retention).</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.2 Pattern 2.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/memory/">All Memory patterns →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

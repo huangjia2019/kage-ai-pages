@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context Triage — Pattern Reference — Jia Huang</title>
+    <meta name="description" content="Context Triage: the Perception × Route pattern. Priority routing under a finite context budget. Why it exists, the design problem it solves, latest engineering blogs and arXiv papers.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/patterns/context-triage/">
+    <meta property="og:title" content="Context Triage — Pattern Reference">
+    <meta property="og:description" content="Priority routing under a finite context budget. The Perception × Route pattern.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/patterns/context-triage/">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/dual-axis/patterns/context-triage/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Pattern reference
+                </p>
+                <h1>Context Triage</h1>
+                <span class="coord-badge"><strong>Perception</strong> × <strong>Route</strong></span>
+                <p class="essay-meta">
+                    A priority queue at the door of the model: who enters, who waits, who is dropped — all before any reasoning runs.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Context Eng.</div>
+                    <div class="mm-cell">Semantic Compaction</div>
+                    <div class="mm-cell mm-active">Context Triage</div>
+                    <div class="mm-cell">Multi-Modal Fusion</div>
+                    <div class="mm-cell">Progressive Discovery</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell mm-empty">—</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this pattern exists</h2>
+                <p>
+                    A production agent does not get to read everything. Its context window is a fixed budget &mdash;
+                    200K tokens for Claude 3.7, 1M for Gemini, but always finite, always expensive at the margin.
+                    When a single PR runs to 50,000 lines, when a compliance bundle arrives with 43 documents,
+                    when 100 log lines stream in per second during an outage, the agent cannot see all of it.
+                    Something has to decide what enters and what does not. <strong>That something is the triage layer,
+                    and it sits at the door of the model, not inside it.</strong>
+                </p>
+                <p>
+                    This is the pattern that separates a demo agent from a production agent. Demo agents work because
+                    the engineer hand-picked the inputs. Production agents face whatever the user supplies, and without
+                    explicit routing the model has only one mechanism available &mdash; silent truncation from the back of
+                    the window, which throws away the most recent context, which is the worst possible place to throw
+                    things away.
+                </p>
+                <p>
+                    Picture a loan-evaluation agent built for a regional bank. A new commercial application arrives with
+                    43 documents &mdash; financial statements, valuation reports, covenants, environmental assessments
+                    &mdash; totalling well over the model&apos;s 200K-token window. With no triage layer, the harness has
+                    nothing to do but truncate. The most recent valuation falls off the end. The model approves the loan
+                    based on stale numbers, and the loan defaults two weeks later. The model did nothing wrong &mdash; it
+                    answered the prompt it was given. The harness simply had no priority logic. Failures like this do not
+                    make the front page; they live in postmortems that never leave the building, and they are precisely
+                    why context triage has become a first-class concern in 2026.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The agent-design problem it solves</h2>
+                <p>
+                    Context Triage answers four questions that show up in every production agent:
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>What is most important right now?</strong> — explicit priority labels (P0/P1/P2/P3) attached at ingestion.</li>
+                    <li><strong>What fits the budget?</strong> — a planner that knows the token budget and prunes accordingly.</li>
+                    <li><strong>What is dropped on the floor?</strong> — explicit, logged, auditable, reversible.</li>
+                    <li><strong>What can be lazily fetched if needed?</strong> — handles for P3 items the model can request later.</li>
+                </ol>
+                <p>
+                    The structural decision is to route inputs <em>before</em> the model sees them, with the
+                    routing rule itself owned by engineering (the harness), not the model. That is the
+                    distinguishing feature: triage is not summarization, not compression, not embedding-based retrieval.
+                    It is <em>routing under a hard budget</em>, executed by code that the engineer can audit, version,
+                    and adjust without retraining anything.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Deep thinking direction</h2>
+                <p>
+                    What makes Context Triage hard is that the priority labels are not given. The agent must decide
+                    them, and the decision sets the ceiling on every downstream stage. If a P0 label is wrong,
+                    no amount of reasoning can recover &mdash; the relevant information was never in the room.
+                </p>
+                <p>
+                    Three failure modes recur. <strong>Priority Inflation</strong>: when the rule for assigning P0
+                    is fuzzy, every team adds &ldquo;just in case&rdquo; items, and within months everything is P0
+                    and the queue collapses to FIFO. The discipline that defeats it is hard schemas with low cardinality
+                    &mdash; max 5 P0 slots, refusing more &mdash; not soft heuristics. <strong>Stale Handles</strong>:
+                    a P3 item points to a snapshot that has changed since ingestion; the agent fetches it later and
+                    operates on stale state. The discipline is explicit TTL on handles plus revalidation on fetch.
+                    <strong>Triage Thrash</strong>: priorities revised every turn, the model sees a moving target,
+                    confidence collapses. The discipline is a triage decision is sticky for a session unless explicitly
+                    invalidated by a downstream signal.
+                </p>
+                <p>
+                    The deeper architectural insight is that Context Triage is the <em>operating-system scheduler</em>
+                    pattern reborn in agent form. OS schedulers solved &ldquo;which process gets the CPU?&rdquo; under
+                    a finite CPU budget with priority queues, aging, and preemption. The agent version solves
+                    &ldquo;which information gets the model?&rdquo; under a finite context budget with the same primitives.
+                    Engineers who have written kernel schedulers find this pattern in five minutes; engineers who have
+                    only worked above the OS layer have to learn it from scratch. <strong>The patterns transferred;
+                    only the medium changed.</strong>
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Engineering blog posts &mdash; curated</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">Effective Context Engineering for AI Agents — Anthropic</a></span>
+                        <span class="res-meta">Anthropic Engineering · 2024-2025</span>
+                        <span class="res-blurb">The canonical statement of context as a finite, contested resource. Introduces the budget-and-prune framing the field has converged on.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="noopener">LLM Powered Autonomous Agents — Lilian Weng</a></span>
+                        <span class="res-meta">OpenAI · June 2023</span>
+                        <span class="res-blurb">The four-component equation (LLM + Memory + Planning + Tool Use). Treats context entry as given; the gap this paper leaves open is exactly where triage lives.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://manus.ai/research/context-engineering" target="_blank" rel="noopener">Context Engineering for Production Agents — Manus Team</a></span>
+                        <span class="res-meta">Manus Research · 2024-2025</span>
+                        <span class="res-blurb">KV-Cache hit rate as the controlling cost metric. Establishes triage decisions feed directly into cache reuse, not just context fit.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://simonwillison.net/2025/Jun/27/context-engineering/" target="_blank" rel="noopener">Context engineering — Simon Willison</a></span>
+                        <span class="res-meta">simonwillison.net · June 2025</span>
+                        <span class="res-blurb">Practitioner-side note on why &ldquo;prompt engineering&rdquo; is the wrong word: most of the work is choosing what context enters, not how to phrase the instruction.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.philschmid.de/context-engineering" target="_blank" rel="noopener">From Prompts to Context: The New Skill for AI Engineers — Phil Schmid</a></span>
+                        <span class="res-meta">philschmid.de · 2025</span>
+                        <span class="res-blurb">Synthesis post connecting Anthropic, Karpathy, and Shopify's Tobi Lütke on the rename from prompt engineering to context engineering.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://blog.langchain.com/context-engineering-for-agents/" target="_blank" rel="noopener">Context Engineering for Agents — LangChain</a></span>
+                        <span class="res-meta">LangChain Blog · 2025</span>
+                        <span class="res-blurb">Framework-side argument: agents need explicit context routing as a first-class node in the graph, not an implicit step buried in retrieval.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Latest paper progress (arXiv)</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2507.13334" target="_blank" rel="noopener">A Survey of Context Engineering for Large Language Models</a></span>
+                        <span class="res-meta">arXiv:2507.13334 · July 2025</span>
+                        <span class="res-blurb">Decomposes context engineering into three foundational components (retrieval, processing, management) and four implementation classes. The first systematic survey of the area.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2511.08151" target="_blank" rel="noopener">Context Engineering 2.0: The Context of Context Engineering</a></span>
+                        <span class="res-meta">arXiv:2511.08151 · November 2025</span>
+                        <span class="res-blurb">Repositions context engineering as a 20-year HCI tradition (Dey 2001) reincarnated for the agent era. Strong historical framing.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2502.10996" target="_blank" rel="noopener">A Survey of Context Engineering Strategies</a></span>
+                        <span class="res-meta">arXiv:2502.10996 · February 2025</span>
+                        <span class="res-blurb">Catalogues retrieval, generation, and pruning strategies. The pruning section is the closest paper-side ancestor to the triage pattern.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2404.07143" target="_blank" rel="noopener">Infini-attention: Efficient Infinite Context Transformers</a></span>
+                        <span class="res-meta">arXiv:2404.07143 · April 2024</span>
+                        <span class="res-blurb">Google's compressive-memory variant on the attention side. The model-side complement to triage: even infinite context still benefits from routing at the door.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2506.20194" target="_blank" rel="noopener">Pareto-Frontier Context Engineering for Production Agents</a></span>
+                        <span class="res-meta">arXiv:2506.20194 · June 2025</span>
+                        <span class="res-blurb">Quantifies the cost/quality Pareto frontier as context strategies vary. Useful for engineers defending triage budget choices in design review.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>2026 frontier &mdash; deep reads</h2>
+                <div class="frontier-intro">
+                    The five papers above are the foundation. The five below are what changed in the nine months between
+                    October&nbsp;2025 and June&nbsp;2026 &mdash; each one shifts how a working engineer should design the
+                    triage layer this quarter. For each paper, what follows is the new idea the paper introduces, the
+                    specific failure mode it removes from a production triage layer, the concrete design move you should
+                    consider in response, and the single number that quantifies the gain. Each pipeline diagram is
+                    hand-drawn so the architecture is visible at a glance.
+                </div>
+
+                <article class="deep-read">
+                    <span class="dr-num">DEEP READ 1 &middot; FOUNDATIONS</span>
+                    <h3><a href="https://arxiv.org/abs/2510.04618" target="_blank" rel="noopener">Agentic Context Engineering (ACE): Evolving Contexts for Self-Improving Language Models</a></h3>
+                    <div class="dr-meta">arXiv:2510.04618 &middot; Zhang, Hu, Upasani et&nbsp;al. &middot; ICLR&nbsp;2026 (32&nbsp;pages)</div>
+                    <p class="dr-take">
+                        <strong>What changes.</strong> Today most production agents assign a priority to each piece of
+                        context at the moment it enters the system &mdash; a document is P0, a log line is P2, a stale
+                        spec is P3 &mdash; and then treat that label as ground truth for the rest of the session. This
+                        works for the first thirty turns. It breaks for the next thirty, because the agent has by then
+                        learned things: a P0 document turned out to mislead it, a P3 fact turned out to be load-bearing.
+                        ACE introduces a separate, persistent object &mdash; the paper calls it a <em>playbook</em>
+                        &mdash; that the agent rewrites between turns based on what just happened. The next turn ingests
+                        the rewritten playbook as part of its context, so the agent&apos;s beliefs about what is important
+                        are no longer frozen at the moment of ingestion.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why it matters for triage.</strong> The core mistake the field has been making is treating
+                        &ldquo;priority assigned at ingestion&rdquo; as if it were &ldquo;priority that holds for the
+                        session.&rdquo; Priority is in fact a live hypothesis, and that hypothesis decays as the agent
+                        learns more. A triage layer that never revises its labels is, in effect, asking the model to keep
+                        trusting a guess it made an hour ago &mdash; under inputs that the guess could not have anticipated.
+                        By the second hour, this is the single most common reason agents start hallucinating obvious facts:
+                        the relevant context is technically still in the window, but at a priority so low that the model
+                        has stopped attending to it.
+                    </p>
+                    <p class="dr-take">
+                        <strong>What you do differently.</strong> Stop storing priorities in a hashmap. Store them in an
+                        append-only log keyed by (token-id, turn, evidence-of-revision). Every change to a priority is a
+                        new entry, with a record of <em>why</em> &mdash; which observation revealed the previous label was
+                        wrong. The reflection step at the end of each turn becomes the natural place to write the log. Two
+                        consequences follow. Revisions are auditable in postmortems, so a regression caused by a wrong
+                        priority can be traced back to the turn where the decision was made. And the agent itself can
+                        re-read its own history and ask &ldquo;why did I demote this fact earlier?&rdquo; That is the
+                        structural prerequisite for an agent to improve within a session; without it, the agent learns
+                        nothing across the conversation.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Headline.</strong> +10.6% on agent benchmarks, +8.6% on finance benchmarks. The number
+                        that should make a serious buyer pause is on AppWorld: an open-backbone agent running ACE matches
+                        the top closed-source production systems on overall performance and surpasses them on the harder
+                        evaluation splits. The mechanism is not a bigger model and not more tokens. It is a triage layer
+                        that is allowed to change its mind.
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ACE pipeline diagram">
+                            <rect x="35" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="110" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#1a1a2e">Generate</text>
+                            <text x="110" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#5a5a5a">draft action</text>
+
+                            <rect x="215" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="290" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#1a1a2e">Reflect</text>
+                            <text x="290" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#5a5a5a">critique outcome</text>
+
+                            <rect x="395" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="470" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#1a1a2e">Curate</text>
+                            <text x="470" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#5a5a5a">incremental update</text>
+
+                            <rect x="575" y="30" width="150" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="650" y="55" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#1a1a2e">Playbook</text>
+                            <text x="650" y="73" text-anchor="middle" font-family="Georgia,serif" font-size="10.5" fill="#5a5a5a">evolved strategies</text>
+
+                            <line x1="185" y1="57.5" x2="208" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="208,53.5 215,57.5 208,61.5" fill="#a85a1e"/>
+                            <line x1="365" y1="57.5" x2="388" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="388,53.5 395,57.5 388,61.5" fill="#a85a1e"/>
+                            <line x1="545" y1="57.5" x2="568" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="568,53.5 575,57.5 568,61.5" fill="#a85a1e"/>
+
+                            <path d="M650,85 Q650,100 470,100 Q110,100 110,85" fill="none" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="106,89 113,89 110,82" fill="#a85a1e"/>
+                            <text x="380" y="98" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#888" font-style="italic">next turn &mdash; playbook re-enters as context</text>
+                        </svg>
+                        <div class="flow-caption">Figure &mdash; ACE generate&middot;reflect&middot;curate loop with playbook recycled into next turn.</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">DEEP READ 2 &middot; PLAN-AWARE PRUNING</span>
+                    <h3><a href="https://arxiv.org/abs/2512.16970" target="_blank" rel="noopener">PAACE: A Plan-Aware Automated Agent Context Engineering Framework</a></h3>
+                    <div class="dr-meta">arXiv:2512.16970 &middot; December&nbsp;18,&nbsp;2025 &middot; PAACE-Syn + PAACE-FT</div>
+                    <p class="dr-take">
+                        <strong>What changes.</strong> Until PAACE, the priority a piece of context received depended only
+                        on the fact itself: &ldquo;this is a Stripe transaction ID, score it.&rdquo; PAACE adds a second
+                        dimension &mdash; the agent&apos;s current plan step. The same Stripe transaction ID gets scored
+                        P0 when the agent&apos;s next step is &ldquo;diagnose this specific failed payment,&rdquo; and P3
+                        when the next step is &ldquo;summarize last week&apos;s infrastructure latency trends.&rdquo; The
+                        fact has not changed; what has changed is what the agent is about to do with it. PAACE makes this
+                        dependence explicit by training a small distilled scorer that takes the (fact, current-plan-step)
+                        tuple as input, with the agent&apos;s full plan supplied as supporting context.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why it matters for triage.</strong> Without plan awareness, every triage layer falls back
+                        to the same defensive policy: keep everything that <em>might</em> be relevant to <em>any</em> of
+                        the next ten steps. This is the policy that quietly destroys token budgets. A 50-step plan
+                        touching ten different subsystems will accumulate context from all ten subsystems within the
+                        first five steps, and the triage layer has no way to say &ldquo;we are now firmly inside subsystem
+                        A; subsystems B through J can be moved to lower priority.&rdquo; The result is that the agent
+                        carries dead weight for the rest of the session. PAACE is the first paper to give the triage layer
+                        a clean signal for shedding that weight.
+                    </p>
+                    <p class="dr-take">
+                        <strong>What you do differently.</strong> Train (or distil) a small router whose input key is
+                        (fact, plan-step), not (fact) alone. PAACE-FT is the open recipe. Run that small router on every
+                        turn, not just at session boundaries. One critical detail: the router must take the agent&apos;s
+                        current plan as an <em>explicit</em> input, not as a soft hint embedded somewhere in the system
+                        prompt. The dependence between plan and priority is too strong to leave to in-context learning;
+                        the router has to be conditioned on the plan directly.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why this matters economically.</strong> Re-triaging on every turn used to be prohibitively
+                        expensive &mdash; it required a full frontier-model call per turn, and the cost crowded out the
+                        actual work. PAACE-FT cuts that cost to roughly the cost of an embedding lookup. That is the
+                        threshold below which &ldquo;every turn re-triages&rdquo; becomes a default architectural choice
+                        rather than an aspirational one. For long-running agents, this is what makes plan-aware triage
+                        affordable in the first place.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Headline.</strong> The distilled compressor retains 97% of the teacher model&apos;s
+                        accuracy at one-tenth the inference cost. Tested on AppWorld, OfficeBench, and an 8-objective
+                        multi-hop QA benchmark, it improves both accuracy and F1 while using fewer agent steps and lower
+                        peak tokens than every baseline in the comparison.
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PAACE pipeline diagram">
+                            <rect x="19" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="84" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Plan Structure</text>
+                            <text x="84" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">parse next-k tasks</text>
+
+                            <rect x="167" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="232" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Relevance Score</text>
+                            <text x="232" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">per-token utility</text>
+
+                            <rect x="315" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Rewrite + Sum.</text>
+                            <text x="380" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">function-preserve</text>
+
+                            <rect x="463" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="528" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Prune</text>
+                            <text x="528" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">drop low utility</text>
+
+                            <rect x="611" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="676" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Co-refine</text>
+                            <text x="676" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">tune instruction</text>
+
+                            <line x1="149" y1="57.5" x2="160" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="160,53.5 167,57.5 160,61.5" fill="#a85a1e"/>
+                            <line x1="297" y1="57.5" x2="308" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="308,53.5 315,57.5 308,61.5" fill="#a85a1e"/>
+                            <line x1="445" y1="57.5" x2="456" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="456,53.5 463,57.5 456,61.5" fill="#a85a1e"/>
+                            <line x1="593" y1="57.5" x2="604" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="604,53.5 611,57.5 604,61.5" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">Figure &mdash; PAACE&apos;s five-stage compression conditioned on the plan&apos;s next-k tasks.</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">DEEP READ 3 &middot; CODING-AGENT TRIAGE</span>
+                    <h3><a href="https://arxiv.org/abs/2601.16746" target="_blank" rel="noopener">SWE-Pruner: Self-Adaptive Context Pruning for Coding Agents</a></h3>
+                    <div class="dr-meta">arXiv:2601.16746 &middot; Wang et&nbsp;al. &middot; January&nbsp;23,&nbsp;2026</div>
+                    <p class="dr-take">
+                        <strong>What changes.</strong> SWE-Pruner introduces a triage layer specifically for coding agents
+                        &mdash; a 0.6-billion-parameter neural model (the paper calls it the &ldquo;skimmer&rdquo;) that
+                        sits in front of the frontier model, reads source code line by line, and decides which lines the
+                        frontier model actually gets to see. The skimmer is small enough that the latency cost of running
+                        it on every turn is effectively invisible. Crucially, the skimmer takes the agent&apos;s current
+                        goal as an explicit input &mdash; for example, &ldquo;find the cause of this null-pointer
+                        error&rdquo; &mdash; and uses that goal to score each line. Lines with no plausible relevance to
+                        the current goal are dropped before the frontier model loads them.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why it matters for triage.</strong> The paper documents an economic fact most teams have
+                        intuited but few have measured: a frontier coding model spends the dominant share of its token
+                        budget on read operations &mdash; looking at code it will not ultimately modify. If reads dominate
+                        the monthly bill, a triage layer placed in front of the model is not a marginal optimisation; it
+                        is the single biggest cost lever in the entire system. Most teams under-invest here because they
+                        assume the model is doing something useful with all that context. The data says it usually is not.
+                        The model is reading defensively because it has no choice &mdash; every read is &ldquo;just in
+                        case&rdquo; &mdash; and a well-built triage layer is precisely what gives the model permission to
+                        stop reading defensively.
+                    </p>
+                    <p class="dr-take">
+                        <strong>What you do differently.</strong> Stop treating triage as a heavy preprocessing step that
+                        runs once per task. Make it as cheap as tokenisation, and run it on every turn. Every time the
+                        agent&apos;s goal narrows, the triage layer should re-score what it is keeping. The 0.6B skimmer
+                        is the reference design: small enough to fine-tune for your domain, small enough to run on CPU if
+                        you want, and structured enough that you can swap it out as your task definition evolves. Pass
+                        the goal prompt explicitly into the skimmer &mdash; do not bury it inside the agent&apos;s system
+                        prompt where the skimmer has to fish it out.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Headline.</strong> On SWE-Bench Verified, the standard coding-agent benchmark, SWE-Pruner
+                        cuts token usage by 23&ndash;54% while holding or improving success rate. On LongCodeQA, it
+                        achieves up to 14.84&times; compression. The number worth carrying into your next planning meeting:
+                        a coding agent that reads 14.84&times; less code does not perform worse. At production scale, that
+                        ratio is often the difference between losing money on every customer and being profitable.
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SWE-Pruner pipeline diagram">
+                            <rect x="19" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="84" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Task + Goal</text>
+                            <text x="84" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">e.g. fix error</text>
+
+                            <rect x="167" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="232" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">0.6B Skimmer</text>
+                            <text x="232" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">light neural model</text>
+
+                            <rect x="315" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Score Lines</text>
+                            <text x="380" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">per-line utility</text>
+
+                            <rect x="463" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="528" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Drop / Keep</text>
+                            <text x="528" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">preserve structure</text>
+
+                            <rect x="611" y="30" width="130" height="55" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="676" y="54" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Pruned Ctx</text>
+                            <text x="676" y="71" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">to coding agent</text>
+
+                            <line x1="149" y1="57.5" x2="160" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="160,53.5 167,57.5 160,61.5" fill="#a85a1e"/>
+                            <line x1="297" y1="57.5" x2="308" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="308,53.5 315,57.5 308,61.5" fill="#a85a1e"/>
+                            <line x1="445" y1="57.5" x2="456" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="456,53.5 463,57.5 456,61.5" fill="#a85a1e"/>
+                            <line x1="593" y1="57.5" x2="604" y2="57.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="604,53.5 611,57.5 604,61.5" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">Figure &mdash; SWE-Pruner&apos;s skimmer-first triage: a 0.6B model is the &ldquo;door guard&rdquo; before the frontier model sees code.</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">DEEP READ 4 &middot; KV-CACHE-LEVEL TRIAGE</span>
+                    <h3><a href="https://arxiv.org/abs/2602.22603" target="_blank" rel="noopener">SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Reasoning</a></h3>
+                    <div class="dr-meta">arXiv:2602.22603 &middot; Kariyappa &amp; Suh &middot; February&nbsp;2026</div>
+                    <p class="dr-take">
+                        <strong>What changes.</strong> Until 2026, almost every triage decision was made at prompt-assembly
+                        time &mdash; before the model began reasoning. SideQuest moves the decision into inference itself.
+                        A second thread &mdash; the paper calls it the &ldquo;side thread&rdquo; &mdash; runs in parallel
+                        with the main reasoning loop, continuously scoring tokens in the KV cache for utility and evicting
+                        low-utility tokens <em>after</em> the agent has had a chance to see how the reasoning is unfolding.
+                        The main reasoning thread never blocks on the side thread; eviction happens in the background, and
+                        the compressed cache flows back into the next step of reasoning.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why it matters for triage.</strong> Prompt-time triage suffers from a structural blindness:
+                        at the moment you assemble the prompt, you have no idea which pieces of context will turn out to
+                        be load-bearing and which will turn out to be decorative. That information only exists mid-reasoning.
+                        The earliest moment you can know &ldquo;step 7&apos;s observation actually mattered&rdquo; is at
+                        step 8 &mdash; and by step 8, a one-shot ingestion filter has long since locked in its choices and
+                        cannot revise them. SideQuest&apos;s insight is that the right place for triage in a long-horizon
+                        agent is the same place a CPU&apos;s branch predictor lives: inside the inference path, watching
+                        what is actually happening, with the freedom to revise the cache as reasoning proceeds.
+                    </p>
+                    <p class="dr-take">
+                        <strong>What you do differently.</strong> The architecture splits into two clear cases. If you
+                        control the inference stack &mdash; meaning you run vLLM, SGLang, TensorRT-LLM, or a similar
+                        serving framework you can modify &mdash; SideQuest&apos;s evict-in-flight design is now reachable,
+                        and for any agent that runs more than 50 steps it is probably the right architecture. If you do
+                        not control inference (which is most teams using the Anthropic or OpenAI APIs directly), the
+                        lesson is different but important: force the binding constraint back into the prompt window, where
+                        you <em>can</em> triage. Do not pretend the KV cache is infinite just because the API does not
+                        expose it.
+                    </p>
+                    <p class="dr-take">
+                        <strong>The deeper point.</strong> Triage is no longer &ldquo;a thing you do before the model
+                        runs.&rdquo; It is &ldquo;a thing you do continuously while the model runs.&rdquo; This is a more
+                        demanding architecture, and it does not pay off for short-horizon agents. But for the long-horizon
+                        agents that increasingly define the frontier &mdash; multi-hour coding sessions, day-long research
+                        agents, week-long compliance reviews &mdash; it is the only architecture that holds up at depth.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Headline.</strong> SideQuest cuts peak token usage by up to 65% on long-horizon agentic
+                        tasks with minimal accuracy loss. The number that should pause your roadmap committee: the entire
+                        system was trained on 215 samples. The technique is within reach of any team with a modest
+                        fine-tuning budget.
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SideQuest parallel pipeline diagram">
+                            <rect x="20" y="20" width="720" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="40" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Main reasoning loop &mdash; step n &nbsp;&middot;&nbsp; step n+1 &nbsp;&middot;&nbsp; step n+2 &nbsp;&middot;&nbsp; &hellip;</text>
+                            <text x="380" y="56" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">long-horizon agentic task &mdash; KV cache grows monotonically without intervention</text>
+
+                            <line x1="380" y1="62" x2="380" y2="95" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="376,95 384,95 380,102" fill="#a85a1e"/>
+                            <text x="395" y="82" font-family="Georgia,serif" font-size="10" fill="#888" font-style="italic">peek</text>
+
+                            <rect x="20" y="105" width="225" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="132" y="125" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Aux: model-driven judge</text>
+                            <text x="132" y="141" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">scores KV utility, in parallel</text>
+
+                            <rect x="280" y="105" width="200" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="380" y="125" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Evict / Retain</text>
+                            <text x="380" y="141" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">per-token decision</text>
+
+                            <rect x="515" y="105" width="225" height="42" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="627" y="125" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Compressed KV cache</text>
+                            <text x="627" y="141" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">fed back to main loop</text>
+
+                            <line x1="245" y1="126" x2="273" y2="126" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="273,122 280,126 273,130" fill="#a85a1e"/>
+                            <line x1="480" y1="126" x2="508" y2="126" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="508,122 515,126 508,130" fill="#a85a1e"/>
+
+                            <path d="M627,105 Q627,75 627,62" fill="none" stroke="#a85a1e" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="623,68 631,68 627,60" fill="#a85a1e"/>
+                            <text x="640" y="85" font-family="Georgia,serif" font-size="10" fill="#888" font-style="italic">inject</text>
+                        </svg>
+                        <div class="flow-caption">Figure &mdash; SideQuest&apos;s side-thread keeps triage off the critical path while compressing the KV cache.</div>
+                    </div>
+                </article>
+
+                <article class="deep-read">
+                    <span class="dr-num">DEEP READ 5 &middot; TRIAGE AS MODEL-TIER ROUTING</span>
+                    <h3><a href="https://arxiv.org/abs/2604.07494" target="_blank" rel="noopener">Triage: Routing Software Engineering Tasks to Cost-Effective LLM Tiers via Code Quality Signals</a></h3>
+                    <div class="dr-meta">arXiv:2604.07494 &middot; April&nbsp;2026 &middot; SWE-bench Lite (300 tasks)</div>
+                    <p class="dr-take">
+                        <strong>What changes.</strong> The April&nbsp;2026 paper called simply &ldquo;Triage&rdquo;
+                        generalises the pattern in an important direction. Until now, &ldquo;context triage&rdquo; meant
+                        deciding which tokens enter a given model. This paper asks the prior question: <em>which model
+                        gets to process this task at all?</em> A cheap signal computed over the incoming task &mdash;
+                        code-health metrics in their case, though the framework generalises to any cheap proxy &mdash;
+                        routes each task to one of three model tiers: Light (Haiku-shaped), Standard (Sonnet-shaped), or
+                        Heavy (Opus-shaped). Every tier&apos;s output passes the <em>same</em> verification gate. The
+                        verification gate is the safety mechanism: it is what makes safe-but-cheaper routing possible,
+                        because a wrong route gets caught at verification rather than at customer impact.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Why it matters for triage.</strong> Every team running a serious agent eventually
+                        discovers the same invoice pattern: 80% of the monthly cost comes from 20% of the calls &mdash;
+                        specifically, the heavy-model calls. Every dollar of savings in the system lives in pushing some
+                        fraction of that 20% down a tier. The hard question has always been &ldquo;how do we push a call
+                        down without quietly degrading quality?&rdquo; The natural temptation is to gate it before &mdash;
+                        predict the task&apos;s difficulty and route based on the prediction. The problem is that the
+                        prediction is imperfect, and an under-routed hard task does not become <em>visibly</em> wrong; it
+                        becomes subtly wrong, and the regression hides until it lands in front of a customer. The Triage
+                        paper&apos;s contribution is a discipline: verify <em>after</em>, do not gate <em>before</em>.
+                        Let the cheap tier try, and let the verification step catch the cases where the cheap tier was
+                        not good enough.
+                    </p>
+                    <p class="dr-take">
+                        <strong>What you do differently.</strong> Build your agent as two concentric layers of triage.
+                        Outer layer: model-tier routing on cheap signals (this paper). Inner layer: context-triage inside
+                        whichever tier got selected (the four papers above). Have the two layers report metrics separately
+                        so you can debug them independently &mdash; otherwise a routing regression and a context-pruning
+                        regression will look identical from outside. When you present this work to leadership &mdash; and
+                        you will, because the savings are large &mdash; the two numbers to put on the slide are the
+                        falsifiable conditions the paper spells out: light-tier pass rate must exceed the inter-tier cost
+                        ratio (meaning the cheaper tier is right often enough to make routing economical), and the
+                        code-health effect size must be at least <code>p&#770; &ge; 0.56</code> (meaning the signal can
+                        actually distinguish easy from hard tasks). Those are two conditions a CFO can underwrite.
+                    </p>
+                    <p class="dr-take">
+                        <strong>The deeper move.</strong> Triage stops being a context filter and becomes a
+                        <em>budget allocator across heterogeneous models</em>. Once you see it this way, the same pattern
+                        applies to embedding models, retrieval indexes, image generators &mdash; any system with multiple
+                        tiers of cost and quality. The pattern transfers; the medium does not.
+                    </p>
+                    <p class="dr-take">
+                        <strong>Headline.</strong> Evaluated on SWE-bench Lite (300 tasks). Three routing policies are
+                        compared head-to-head: a heuristic threshold, a trained ML classifier, and a perfect-hindsight
+                        oracle. The oracle gap is what makes the paper publishable: it tells you exactly how much savings
+                        remain on the table once a real router has been built, and gives you a concrete number to aim at
+                        as your routing improves.
+                    </p>
+                    <div class="paper-flow">
+                        <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triage tier-routing diagram">
+                            <rect x="15" y="65" width="95" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="62" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">SE Task</text>
+                            <text x="62" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">issue + repo</text>
+
+                            <rect x="130" y="65" width="135" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="197" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Code-Health</text>
+                            <text x="197" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">cheap signal</text>
+
+                            <rect x="285" y="65" width="125" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="347" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Tier Classifier</text>
+                            <text x="347" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">heuristic / ML</text>
+
+                            <rect x="438" y="14" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="34" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1a1a2e">Light tier</text>
+
+                            <rect x="438" y="72" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="92" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1a1a2e">Standard tier</text>
+
+                            <rect x="438" y="130" width="100" height="32" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="488" y="150" text-anchor="middle" font-family="Georgia,serif" font-size="12" fill="#1a1a2e">Heavy tier</text>
+
+                            <rect x="615" y="65" width="130" height="45" rx="4" fill="#fff" stroke="#a85a1e" stroke-width="1.3"/>
+                            <text x="680" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#1a1a2e">Verification</text>
+                            <text x="680" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#5a5a5a">same gate for all</text>
+
+                            <line x1="110" y1="87.5" x2="123" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="123,83.5 130,87.5 123,91.5" fill="#a85a1e"/>
+                            <line x1="265" y1="87.5" x2="278" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="278,83.5 285,87.5 278,91.5" fill="#a85a1e"/>
+
+                            <path d="M410,80 Q425,80 425,30 L431,30" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,26 438,30 431,34" fill="#a85a1e"/>
+                            <line x1="410" y1="87.5" x2="431" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,83.5 438,87.5 431,91.5" fill="#a85a1e"/>
+                            <path d="M410,95 Q425,95 425,145 L431,145" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="431,141 438,145 431,149" fill="#a85a1e"/>
+
+                            <path d="M538,30 Q575,30 575,80 L608,80" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,76 615,80 608,84" fill="#a85a1e"/>
+                            <line x1="538" y1="87.5" x2="608" y2="87.5" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,83.5 615,87.5 608,91.5" fill="#a85a1e"/>
+                            <path d="M538,145 Q575,145 575,95 L608,95" fill="none" stroke="#a85a1e" stroke-width="1.5"/>
+                            <polygon points="608,91 615,95 608,99" fill="#a85a1e"/>
+                        </svg>
+                        <div class="flow-caption">Figure &mdash; Triage routes by cheap code-health signal to one of three tiers; all converge at the same verification gate.</div>
+                    </div>
+                </article>
+
+                <div style="margin-top: 1.8rem; padding: 1.2rem 1.3rem; background: #faf4ec; border-radius: 4px; border-left: 4px solid var(--color-link);">
+                    <h3 style="margin-top: 0; font-size: 1.05rem; color: var(--color-text);">Synthesis &mdash; the three convergent moves of 2026</h3>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        The five papers above are independent contributions, but they line up onto a single trajectory.
+                        Read together they describe a single architectural shift in how the field thinks about triage.
+                    </p>
+                    <p style="margin: 0.8rem 0 0.6rem; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(1) The priority signal has become cheap.</strong> Nobody in 2026 calls a frontier model
+                        to decide what enters another frontier model. The signal is either a small distilled scorer
+                        (SWE-Pruner&apos;s 0.6B skimmer), a metric computed directly over the input (the Triage
+                        paper&apos;s code-health proxy), or a side-thread running for free in parallel with main inference
+                        (SideQuest). If your triage layer is itself a bottleneck, your architecture is from 2024.
+                    </p>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(2) The signal has become plan-aware.</strong> The same fact has different utility under
+                        different plans, and the field has stopped pretending otherwise. PAACE made this explicit by
+                        training a small router on (fact, plan-step) tuples; ACE achieved the same effect differently, by
+                        writing the plan-induced revisions into a persistent playbook. Either way, the scorer&apos;s key
+                        now includes the agent&apos;s current objective, not just the content being scored.
+                    </p>
+                    <p style="margin: 0.6rem 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>(3) Triage decisions now accumulate across turns.</strong> They are revised, not reset.
+                        Each turn reads the previous turn&apos;s priority log. When the agent learns that a P0 was
+                        mistaken, the mistake gets inscribed in the log as a revision, with a record of which observation
+                        revealed it. The triage layer becomes a learning surface in its own right &mdash; not as good as
+                        a fine-tuned model, but several times more responsive to what the agent has just discovered.
+                    </p>
+                    <p style="margin: 0.9rem 0 0; font-size: 0.93rem; color: var(--color-text-muted); line-height: 1.7;">
+                        <strong>The combined recipe.</strong> Two layers (model-tier routing outside, context routing
+                        inside), one cheap shared scorer that fires every turn, an append-only priority log so revisions
+                        are auditable, and a verification gate that catches the routes that went wrong. This is the
+                        architecture that has emerged in the serious production agents of 2026 &mdash; at Anthropic, at
+                        Cognition, at Manus &mdash; and it is the architecture the next twelve months of papers will
+                        refine rather than displace. If you are starting an agent design today, this is the starting
+                        point. The open questions in the field are now about scaling each piece, not about which pieces
+                        to include.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Related patterns</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/hierarchical-retention/">
+                        <span class="rp-coord">Memory × Route</span>
+                        <span class="rp-name">Hierarchical Retention</span>
+                    </a>
+                    <a href="/research/dual-axis/patterns/approval-gate/">
+                        <span class="rp-coord">Governance × Route</span>
+                        <span class="rp-name">Approval Gate</span>
+                    </a>
+                    <a href="/research/dual-axis/topologies/route/">
+                        <span class="rp-coord">Topology view</span>
+                        <span class="rp-name">All Route-shaped patterns</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this pattern is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 3 §3.2 (Perception / Triage).</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.1 Pattern 1.</li>
+                    <li><strong>Essay</strong> — <a href="https://agentpatterns.substack.com" target="_blank" rel="noopener">Agent Design Patterns on Substack</a>, &ldquo;The pattern at the door.&rdquo;</li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <p style="font-size: 0.82rem; color: var(--color-text-faint); font-style: italic; padding: 0.85rem 1.1rem; background: var(--color-quote-bg); border-radius: 4px; line-height: 1.65; margin: 0;">
+                    <strong style="font-style: normal; color: var(--color-text-muted);">A note on authorship.</strong>
+                    This page was developed as a human&ndash;AI collaboration. The paper selection, editorial framing, and
+                    engineering judgments are mine; the prose drafting and SVG flow diagrams were produced in dialogue with
+                    Claude (Anthropic). Factual claims about each paper are traceable to the linked arXiv source &mdash;
+                    please consult the originals when the details matter.
+                </p>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/perception/">All Perception patterns →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

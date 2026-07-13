@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&quot;Build Me an Agent&quot; — The Most Dangerous Sentence in Software — Jia Huang</title>
+    <meta name="description" content="Four months and a quarter-million dollars in compute later, the multi-agent system was stripped back to a single ReAct loop with three tools. Latency dropped 7×, cost down 90%. It was not a bad build — it was a build for the wrong problem.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/writing/build-me-an-agent.html">
+    <meta property="og:title" content="&quot;Build Me an Agent&quot; — The Most Dangerous Sentence in Software">
+    <meta property="og:description" content="Four months and a quarter-million dollars in compute later, the multi-agent system was stripped back to a single ReAct loop with three tools. Latency dropped 7×, cost down 90%. It was not a bad build — it was a build for the wrong problem.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/writing/build-me-an-agent.html">
+    <meta property="article:published_time" content="2026-05-01">
+    <meta property="article:author" content="Jia Huang">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <h1>&quot;Build Me an Agent&quot; — The Most Dangerous Sentence in Software</h1>
+                <p class="essay-meta">
+                    <time datetime="2026-05-01">May 1, 2026</time>
+                    &middot; by <a href="/about/">Jia Huang</a>
+                    &middot; <a href="https://agentpatterns.substack.com/p/build-me-an-agent" target="_blank" rel="noopener">Originally on Substack</a>
+                </p>
+            </header>
+
+<p>Four months building a multi-agent system: a planner, an executor, a critic, a coordinator. Clean codebase. Reasonable architecture. The demo worked on three carefully chosen inputs.</p>
+<p>The project began with a single instruction: <em>&ldquo;we should build an agent for this.&rdquo;</em> Nobody had asked <em>what kind</em> of agent. Nobody had asked what cognitive capability the task actually required. The team moved straight from <em>agent</em> to <em>multi-agent</em> because that was what the framework tutorials suggested.</p>
+<p>Four months and roughly a quarter-million dollars in compute later, the system was stripped back to a single ReAct loop with three tools. Latency dropped from 45 seconds to 6. Cost per query down 90%.</p>
+<p>It was not a bad build. It was a build for the wrong problem.</p>
+<p>This pattern recurs. The names change. The numbers change. The framework changes. The shape repeats.</p>
+<h2>The six things &ldquo;build me an agent&rdquo; could mean</h2>
+<p>When someone says <em>&ldquo;build me an agent,&rdquo;</em> they might mean any of these, and they probably have not thought about which:</p>
+<p><strong>A smart API call.</strong> The task has a fixed input, a fixed output, and the LLM parses or generates text in the middle. This is not an agent. It is a function call with a language model inside. No tools, no memory, no loops. The right asset is a prompt, not an architecture.</p>
+<p><strong>A single-turn tool caller.</strong> The LLM receives a query, decides which tool to call, calls it, and returns the result. One decision, one action. Think: <em>&ldquo;look up this customer&rsquo;s order status.&rdquo;</em> The entire &ldquo;agent&rdquo; is an if-else that the model handles instead of your code.</p>
+<p><strong>A ReAct loop.</strong> The model reasons, acts, observes the result, reasons again, repeats until done. This is the first thing that actually deserves the word <em>agent</em>. It has a feedback loop. Most tasks called &ldquo;agentic&rdquo; belong here, and most of them need nothing more complex.</p>
+<p><strong>A planner-executor.</strong> The model first creates a multi-step plan, then executes each step. This adds a planning dimension that a simple ReAct loop does not have. Required when the task has dependencies between steps, i.e. when step 3 depends on the output of step 1 and the model needs to know that before it starts.</p>
+<p><strong>A reflective agent.</strong> The model executes, then evaluates its own output, then revises. Adds a self-critique layer. Required when the task has quality standards that cannot be verified by a simple tool call, i.e. when the agent needs to ask itself <em>&ldquo;is this actually good?&rdquo;</em></p>
+<p><strong>A multi-agent system.</strong> Multiple models with different roles coordinate on a shared task. Required when the task genuinely demands different expertise or perspectives that cannot fit in a single context window. Almost nothing does. This is the most over-deployed pattern in the field.</p>
+<p>Six very different architectures. The same five-word sentence could mean any of them. The cost difference between picking right and picking wrong is not incremental. It is often 10× in compute, 5× in latency, and months in development time.</p>
+<h2>The real question is not &ldquo;what can the agent do?&rdquo; It is &ldquo;what does the task need?&rdquo;</h2>
+<p>Most agent projects start from the technology: <em>&ldquo;We have this framework, what can we build with it?&rdquo;</em> That is backwards. It is like choosing a database before understanding the data model.</p>
+<p>The right starting point is the task. Specifically, three questions:</p>
+<p><strong>How many cognitive steps does the task require?</strong> If the answer is one (parse this, classify that, extract this), an agent is not needed. A prompt is. If the answer is <em>&ldquo;it depends on what happens at each step,&rdquo;</em> a loop is needed. If the answer is <em>&ldquo;multiple steps with dependencies,&rdquo;</em> planning is needed.</p>
+<p><strong>Does the task require the system to evaluate its own output?</strong> If yes, the system needs reflection. If not, reflection only adds latency and cost. In one project, a critic agent was layered on top of a deterministic validator that already produced the same check. The critic added latency, occasionally hallucinated problems that did not exist, and contributed nothing the validator did not already provide.</p>
+<p><strong>Does the task require multiple distinct perspectives or knowledge bases that cannot fit in one context?</strong> If genuinely yes (not <em>&ldquo;it would be nice&rdquo;</em>), multi-agent is on the table. If no, a single agent with good tools will outperform a multi-agent system every time. Coordination overhead is real, and most teams underestimate it.</p>
+<p>These three questions absorb roughly 80% of the architectural mistakes that show up in agent projects.</p>
+<h2>Design inversion</h2>
+<p>Agent systems invert a long-standing relationship between specification and implementation.</p>
+<p>In traditional software, vague specs are recoverable mistakes. The code is deterministic: if it works once, it works every time. Sloppy specifications can be refactored, retrofitted with tests, salvaged through iteration. The implementation is forgiving. A decade of enterprise architecture work, SAP transformations where requirements arrive as PDFs and code is written against them, relied quietly on this property.</p>
+<p>Agent systems do not have it. Model behavior is non-deterministic. The same input may produce different outputs. A vague specification (what the agent should do, what it should not, what tools it has, what <em>done</em> looks like) does not get patched by good implementation. It produces a system that demos well and fails unpredictably in production.</p>
+<p>This is the design inversion: in traditional software, implementation is 80% of the work; in agent systems, specification is 80% of the work. Getting the prompt right, defining tool boundaries, constraining the action space, specifying success criteria. That is where the real engineering happens. The code connecting it all is often trivially simple.</p>
+<p>The teams that struggle most with agents are often the ones with the strongest traditional engineering instincts. The instinct to write code, build abstractions, design class hierarchies, exactly the instincts an agent does not reward. The agent cares about its prompt, its tools, its constraints. Engineering effort spent elsewhere is engineering effort wasted.</p>
+<h2>Five questions that absorb the conversation</h2>
+<p>Five questions, asked early enough, absorb most of the rework that hits later:</p>
+<ol>
+<li>
+<p><strong>What is the task, exactly?</strong> Not <em>&ldquo;customer support.&rdquo;</em> That is a domain. What is the specific action the system performs, from what input to what output?</p>
+</li>
+<li>
+<p><strong>How many cognitive steps does it take?</strong> One? A variable number? Does the number depend on intermediate results?</p>
+</li>
+<li>
+<p><strong>What tools does it need?</strong> Listed in full. Lists longer than seven typically signal a bundled scope that should be unbundled.</p>
+</li>
+<li>
+<p><strong>What does <em>succeeded</em> look like?</strong> Verifiable programmatically, or only by human judgment?</p>
+</li>
+<li>
+<p><strong>What must it never do?</strong> The boundary defines the agent more than the goal does.</p>
+</li>
+</ol>
+<p>When these five answers are clear, the architecture tends to choose itself. When they are not, the project is not ready to build. It is ready to specify.</p>
+<p>The most dangerous sentence in agent engineering is not <em>&ldquo;build me an agent.&rdquo;</em> It is <em>&ldquo;sure, let me start coding.&rdquo;</em></p>
+<hr />
+<p><em>Next Tuesday: why context, not compute, is the bottleneck every agent team hits, and the premise underneath the framework being published this May. Subscribe.</em></p>
+<p><em><a href="https://hubs.la/Q04hCsrS0">Designing AI Agents</a> (Manning). The Chinese edition shipped 9,000+ copies in its first two months and is now in its 4th print run.</em></p>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

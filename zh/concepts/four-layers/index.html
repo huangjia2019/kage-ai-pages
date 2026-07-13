@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四层结构：这套工作每一层各自在做什么 · 黄佳 / 咖哥</title>
+    <meta name="description" content="案例是参考资料。概念是认知基础。模式是通用语言。双轴矩阵是容器。一篇关于这套工作内部结构的元叙述。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/four-layers/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/four-layers/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/four-layers/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/four-layers/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>四层结构
+            </p>
+
+            <h1>四层结构：这套工作每一层各自在做什么</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                案例是参考资料。概念是认知基础。模式是通用语言。双轴矩阵是容器。
+            </p>
+
+            <p>
+                有读者问我应该先读哪一篇文章，或者书里哪一章是"主章"。诚实的答案是：没有任何一篇能单独站住。这套工作是有四层的，每一层做的事，其他三层替代不了。
+            </p>
+            <p>
+                我把它写下来，是因为我自己在决定下一步写什么的时候，反复在用这四层做划分，但一直没有把它们放在同一处。
+            </p>
+
+            <h2>四层</h2>
+
+            <p>
+                <strong>案例是参考资料。</strong>当我写一支 RegTech 团队怎么在成本封顶下搭出 RAG 流水线，或者一个客服 Agent 在模型中途被弃用时自动改道，案例是<em>原始输入</em>。它是发生过的事，不是论断本身。案例回答的是一个问题：<em>工程师实际做了什么，什么超出了他们的预期？</em>案例老得快——去年的案例可能在今年的模型上跑不动——但它的职责是让每一条主张都落在某件发生过的事情上。
+            </p>
+
+            <p>
+                <strong>概念是认知基础。</strong>概念是一种五年后应该仍然成立的主张。<em>模型在花钱，Harness 在控预算。</em> <em>没有坐标的模式名，是一个标签，不是一次设计决策。</em> <em>当模型被锁死、成本是硬约束时，模式选型就是设计。</em>这些不是目录条目。它们是关于 Agent 系统<em>长什么样</em>的承重主张。一个概念如果被证伪，它上面的所有结构都要重新审视一遍。代价高，所以我写得少，改得慢。
+            </p>
+
+            <p>
+                <strong>模式是通用语言。</strong>Prompt Chaining、Reflection、层级委派、守卫三明治——这些是<em>词汇</em>。它们的职责是让两个不同公司的工程师在不画一小时白板的前提下，确认他们说的是同一个设计。模式不是发现。它们里大多数在我命名之前就存在，我做的工作是命名和归位，不是发明。没有被采纳的词汇会死，被采纳的词汇会成为后续所有对话的基础设施。
+            </p>
+
+            <p>
+                <strong>矩阵是容器。</strong>双轴框架——认知功能 × 执行拓扑——是把以上三层装在一起的结构。它是让案例可被检索、概念可被索引、模式可被消歧的目录。没有它，这套工作是一堆散文；有了它，这套工作是一个可被导航的结构，任何新的模式、案例或概念都能落到一个坐标上，而矩阵里的空格会告诉你下一步应该写什么。
+            </p>
+
+            <h2>为什么哪一层都不能少</h2>
+
+            <p>
+                我见过四种缺失：
+            </p>
+            <p>
+                只有案例没有概念的书是一本战场故事集——读着有意思，读完什么都带不走。
+            </p>
+            <p>
+                只有概念没有案例的书是一本设计哲学——结构漂亮但无法被证伪。读者合上书觉得自己被说服，但周一早上不知道该做什么。
+            </p>
+            <p>
+                只有模式没有矩阵的书是当前大多数 Agent 文献的样子——一长串命名过的名词，两个工程师都说自己用 "Plan-and-Execute"，三个月后才发现他们做的是不兼容的系统。
+            </p>
+            <p>
+                只有矩阵没有模式、概念和案例的，是一张图。它出现在 conference slide 上，翻一页就被忘记。
+            </p>
+            <p>
+                四层是<em>叠合</em>的。案例生出概念。概念逼出模式。模式需要坐标。坐标构成矩阵。矩阵反过来告诉你哪些案例缺失、哪些概念还没被命名、哪些模式还没归位。
+            </p>
+
+            <h2>怎么用这套工作</h2>
+
+            <p>
+                如果你是一个本季度要把系统上线的工程师，<strong>案例</strong>是入口。找一个约束匹配你的。
+            </p>
+            <p>
+                如果你是一个要做"在当前模型之后还要成立"的决策的架构师，<strong>概念</strong>是入口。它是这套工作里不被模型版本拖垮的那一层。
+            </p>
+            <p>
+                如果你是一个要跨角色或跨组织对齐的团队，<strong>模式</strong>是入口。先把词汇给到所有人，剩下的会跟上。
+            </p>
+            <p>
+                如果你想理解整个领域，或者想找出领域里还没有人填的格子，<strong>矩阵</strong>是入口。空白格里住着下一个十年的工作。
+            </p>
+
+            <h2>每一层各自住在哪里</h2>
+
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>案例</strong>——《Designing AI Agents》（Manning, 2026）的章节案例；本站案例区随后逐步充实。</li>
+                <li><strong>概念</strong>——本站 <a href="/zh/concepts/">/zh/concepts/</a>，每一篇都有一个固定 URL。</li>
+                <li><strong>模式</strong>——<a href="https://adpsagent.com/zh/patterns/">adpsagent.com/zh/patterns/</a> 的 33 篇白皮书，一格一篇；Manning 书一章一模式。</li>
+                <li><strong>矩阵</strong>——双轴框架，立场论文 <a href="https://arxiv.org/abs/2605.13850">arXiv:2605.13850</a>；交互版本见 <a href="/zh/research/">/zh/research/</a>。</li>
+            </ul>
+
+            <p style="margin-top: 2rem;">
+                我把这篇文章既当作给读者的导览，也当作给自己的备忘录。每次坐下来想下一个章节、下一次演讲、下一篇文章，我都在问自己一句：<em>这一篇在为哪一层服务？</em>如果答不出来，这一篇就还没到能写的时刻。
+            </p>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 四层结构：这套工作每一层各自在做什么.
+                <a href="https://kage-ai.com/zh/concepts/four-layers/">kage-ai.com/zh/concepts/four-layers/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choreography Is Not a Topology — Jia Huang</title>
+    <meta name="description" content="Choreography is a coordination mode that operates across topologies, not one column among six. Closer to the Teams pattern than to Orchestrate's opposite.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/choreography-is-not-a-topology/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/choreography-is-not-a-topology/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/choreography-is-not-a-topology/">
+    <meta property="og:title" content="Choreography Is Not a Topology">
+    <meta property="og:description" content="Choreography is a coordination mode across topologies, not a column among six.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/choreography-is-not-a-topology/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/choreography-is-not-a-topology/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Choreography Is Not a Topology
+            </p>
+
+            <h1>Choreography Is Not a Topology</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                Choreography is a coordination mode that operates across topologies, not one column among six. Closer to the Teams pattern than to Orchestrate's opposite.
+            </p>
+
+            <h2>Definition</h2>
+            <p>
+                In distributed systems, choreography names a way of coordinating agents
+                <em>without a central conductor</em>: events propagate, peers react. When applied
+                to AI agents, choreography can sit alongside chain / route / parallel / loop /
+                hierarchy / orchestrate — it is a coordination <em>mode</em>, not an execution
+                <em>shape</em>. Treating it as a seventh topology column would conflate two
+                different kinds of axis.
+            </p>
+
+            <h2>The problem it names</h2>
+            <p>
+                <em>[TODO: 咖哥 voice — 这一节最适合你写。
+                你在做双轴矩阵时,茹炳晟和姜宁都讨论过"编舞算不算独立拓扑"。
+                结论是"不算"——这件事值得在这里留个 record。
+                可以一句话讲清:编舞回答 "谁触发谁",拓扑回答 "工作长什么形状",问题层不同。]</em>
+            </p>
+
+            <h2>How it changes design decisions</h2>
+            <p>
+                Once choreography is recognized as a coordination mode rather than a shape, design
+                conversations get cleaner:
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>You can have a <strong>fan-out/gather (Parallel) under choreography</strong> — workers react to a published event, no orchestrator dispatches them</li>
+                <li>You can have a <strong>handoff chain (Chain) under choreography</strong> — each agent emits an event that the next subscribes to</li>
+                <li>The matrix stays 7×6; the choreography choice is a cross-cutting decision documented per-pattern, not a new column</li>
+            </ul>
+            <p>
+                This mirrors the older Teams pattern (PLOPD): teams describe how peers coordinate;
+                pipelines / hierarchies describe how work flows. Different axes.
+            </p>
+
+            <h2>Lineage</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Saga pattern</strong> (Garcia-Molina &amp; Salem, 1987) — distributed transactions via choreographed event flow</li>
+                <li><strong>Choreography vs orchestration debate</strong> in microservices (early 2010s) — same architectural question, agent era inherits it</li>
+                <li><strong>Event Sourcing / CQRS</strong> — choreography as the dominant coordination mode in event-driven systems</li>
+                <li><strong>Teams pattern</strong> (PLOPD vol. 3, 1995) — peer coordination as a distinct architectural concern</li>
+            </ul>
+
+            <h2>What it is NOT</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Not "Orchestrate's opposite."</strong> Treating them as a binary flattens the matrix.</li>
+                <li><strong>Not a sixth or seventh topology column.</strong> The matrix already names six shapes; choreography crosses all six.</li>
+                <li><strong>Not "leaderless multi-agent."</strong> Choreography is a coordination protocol; leaderless is one consequence among several.</li>
+                <li><strong>Not absent from the framework.</strong> The choice surfaces in the per-pattern text where it matters (e.g. Collaboration patterns), it just doesn't get its own column.</li>
+            </ul>
+
+            <h2>Where it's developed further</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>ADPS Collaboration module (C1-C5): each pattern's white paper notes when choreography is the right mode vs orchestration</li>
+                <li>Note appears below the matrix on both <a href="https://adpsagent.com/patterns/">adpsagent.com/patterns/</a> and the kage-ai dual-axis page</li>
+                <li>Position paper: <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a> — explicit treatment of why choreography sits outside the topology axis</li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Choreography Is Not a Topology.
+                <a href="https://kage-ai.com/concepts/choreography-is-not-a-topology/">kage-ai.com/concepts/choreography-is-not-a-topology/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

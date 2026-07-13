@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS 合规分析师 Agent — 金融 Agent 案例</title>
+    <meta name="description" content="一个更完整的合规经理工作台：产品合规分析、客户/产品检查、任务自动化和 MAS 知识库。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/finance/mas-compliance-analyst/">
+    <meta property="og:title" content="MAS 合规分析师 Agent — 金融 Agent 案例">
+    <meta property="og:description" content="一个更完整的合规经理工作台：产品合规分析、客户/产品检查、任务自动化和 MAS 知识库。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/finance/mas-compliance-analyst/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">金融 Demo</p><h1>MAS 合规分析师 Agent</h1><p class="lede">一个更完整的合规经理工作台：产品合规分析、客户/产品检查、任务自动化和 MAS 知识库。</p><p class="demo-meta">Streamlit 展示 demo · 仓库路径: <code>showcases/finance/demo-MAS-analyst</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/LSEG-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/finance/">返回金融案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/mas-compliance-analyst-blueprint.png" alt="MAS 合规分析师 Agent blueprint"></figure></section>
+
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>产品画像</h3><p>读取产品类型、渠道、客户分层和风险上下文。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>规则检索</h3><p>检索边界清楚的 MAS 要求和内部政策片段。</p><span class="pattern-chip">RAG 管道</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>工具分派</h3><p>运行产品检查、客户适当性检查和任务自动化。</p><span class="pattern-chip">工具分派</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>风险评分</h3><p>把规则和产品上下文转成阻断项、警告和复核需求。</p><span class="pattern-chip">护栏三明治</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>清单输出</h3><p>生成产品级检查清单、证据和下一步行动。</p><span class="pattern-chip">技能包</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>复核门</h3><p>高风险场景升级处理，并保留审计证据。</p><span class="pattern-chip">审批门控</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-01-home.png" alt="按产品配置合规自动化。"><figcaption>按产品配置合规自动化。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-02-pipeline-top.png" alt="流水线输出：法规和产品级检查清单。"><figcaption>流水线输出：法规和产品级检查清单。</figcaption></figure>
+<figure class="demo-shot"><img src="/images/training/screenshots/mas-compliance-agent-03-pipeline-report.png" alt="合规报告视图。"><figcaption>合规报告视图。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>工具分派</td><td>产品检查和适当性检查是明确工具。</td></tr>
+<tr><td>RAG 管道</td><td>规则先带来源检索，再进入判断。</td></tr>
+<tr><td>护栏三明治</td><td>检查包住生成，让风险警告改变行动。</td></tr>
+<tr><td>审批门控</td><td>高风险输出进入复核。</td></tr>
+<tr><td>可观测性 Harness</td><td>证据、规则、检查和复核状态持续可见。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>合规是产品敏感的</h3><p>同一条规则会因产品类型、客户分层和渠道而不同。</p></article>
+<article class="insight-card"><h3>风险警告必须改变行为</h3><p>警告只有改变自治程度、复核或文档要求才有意义。</p></article>
+<article class="insight-card"><h3>工作台优于聊天框</h3><p>这个形态更像合规路由器，而不是泛用对话界面。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd showcases/finance/demo-MAS-analyst
+streamlit run app.py</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>showcases/finance/demo-MAS-analyst/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/mas-compliance-analyst-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

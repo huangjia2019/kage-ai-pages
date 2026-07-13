@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能测试生成 Agent — 质量工程 Agent 案例</title>
+    <meta name="description" content="一个测试生成 Agent：根据 diff 制定测试计划，生成可运行测试，用 critic 检查稳定性，并记录进度。">
+    <meta name="author" content="黄佳">
+    <link rel="canonical" href="https://kage-ai.com/zh/cases/quality/test-generation-agent/">
+    <meta property="og:title" content="智能测试生成 Agent — 质量工程 Agent 案例">
+    <meta property="og:description" content="一个测试生成 Agent：根据 diff 制定测试计划，生成可运行测试，用 critic 检查稳定性，并记录进度。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kage-ai.com/zh/cases/quality/test-generation-agent/">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="page-training">
+<header class="site-header"><div class="container"><a href="/zh/" class="site-brand">黄&nbsp;佳</a><nav class="site-nav"><a href="/zh/cases/">案例</a><a href="/books/">书</a><a href="/about/">关于</a><a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a><a href="/training/" class="lang-switch">English</a></nav></div></header>
+<main class="container content">
+<section class="demo-detail-header"><p class="eyebrow">质量工程 Demo</p><h1>智能测试生成 Agent</h1><p class="lede">一个测试生成 Agent：根据 diff 制定测试计划，生成可运行测试，用 critic 检查稳定性，并记录进度。</p><p class="demo-meta">可运行 demo · 仓库路径: <code>workshops/workshop2-test-generation</code></p><div class="training-actions"><a class="btn" href="https://github.com/huangjia2019/QECon-Training-Demos" target="_blank" rel="noopener">打开 GitHub 仓库</a><a class="btn btn-secondary" href="/zh/cases/quality/">返回质量工程案例</a></div></section>
+<section class="block training-section"><h2>结构蓝图</h2><figure class="case-blueprint"><img src="/images/training/visual/workshop2-test-generation-blueprint.png" alt="智能测试生成 Agent blueprint"></figure></section>
+<section class="block training-section live-demo simulator"><div class="section-heading"><div><p class="eyebrow">可点、可跑、可观察</p><h2>交互式浏览器 Demo</h2></div><div class="sim-controls"><select id="scenario-select" aria-label="场景"></select><button id="run-demo" type="button">运行 Demo</button><button id="next-step" type="button">下一步</button><button id="reset-demo" type="button">重置</button></div></div><p class="sim-note">这个模拟器不替代命令行运行，但可以直接在网页里观察每一步的状态、执行日志、质量门和最终输出。</p><div class="sim-grid"><div><h3>实时流水线</h3><div id="interactive-steps" class="interactive-steps"></div></div><div><h3>状态检查器</h3><pre id="state-view" class="state-view"></pre></div></div><div class="sim-grid"><div><h3>执行日志</h3><div id="terminal-log" class="terminal-log"></div></div><div><h3>当前输出</h3><div id="output-view" class="output-view"></div></div></div><script id="demo-data" type="application/json">{"title": "Intelligent Test Generation Agent", "subtitle": "code change -> test plan -> generated tests -> critic -> progress log", "steps": [["Read change set", "Context Triage", "Separate touched code, existing tests, and coverage gaps."], ["Plan test cases", "Plan-and-Execute", "Turn the diff into boundary, regression, and negative cases."], ["Generate tests", "Tool Dispatch", "Create pytest-style test bodies from the plan."], ["Critic pass", "Generator-Critic", "Check determinism, assertions, and fixture style."], ["Run verification", "Self-Heal Loop", "If a test fails, repair once and re-run."], ["Persist progress", "Progress Tracking", "Record generated cases to avoid repeating work across PRs."]], "scenarios": [{"name": "Discount boundary change", "headline": "5 tests planned, 4 generated, 1 escalated for ambiguous business rule", "verdict": "PARTIAL_PASS", "cards": {"Coverage +": "8.4%", "Flaky risk": "Low", "Repair loops": "1", "Escalation": "1 rule"}, "log": ["plan: boundary cases for 0, 1, 99, 100, and invalid coupon", "generate: created pytest functions for four deterministic cases", "critic: one case lacks clear expected behavior", "progress: wrote test_generation_state.json"]}, {"name": "Pure refactor", "headline": "2 regression tests confirmed, no new generated tests needed", "verdict": "NO_NEW_TESTS", "cards": {"Coverage +": "0%", "Flaky risk": "None", "Repair loops": "0", "Escalation": "0"}, "log": ["plan: behavior-preserving refactor detected", "critic: existing regression tests cover touched paths", "verify: all selected tests pass", "progress: no duplicated test generation"]}]}</script><script src="/js/training-simulator.js"></script></section>
+<section class="block training-section"><h2>一步一步看设计</h2><div class="flow-steps"><article class="flow-step"><span class="step-num">01</span><h3>读取变更集</h3><p>区分被改代码、现有测试和覆盖缺口。</p><span class="pattern-chip">上下文分诊</span></article>
+<article class="flow-step"><span class="step-num">02</span><h3>规划用例</h3><p>把 diff 转成边界、回归和反例测试。</p><span class="pattern-chip">规划-执行</span></article>
+<article class="flow-step"><span class="step-num">03</span><h3>生成测试</h3><p>按计划生成 pytest 风格测试代码。</p><span class="pattern-chip">工具分派</span></article>
+<article class="flow-step"><span class="step-num">04</span><h3>Critic 评审</h3><p>检查确定性、断言和 fixture 风格。</p><span class="pattern-chip">生成器-评论家</span></article>
+<article class="flow-step"><span class="step-num">05</span><h3>运行验证</h3><p>机械失败时进行一次有界修复。</p><span class="pattern-chip">自愈循环</span></article>
+<article class="flow-step"><span class="step-num">06</span><h3>记录进度</h3><p>记录已生成用例，避免重复劳动。</p><span class="pattern-chip">进度跟踪</span></article></div></section>
+<section class="block training-section"><h2>截图</h2><div class="demo-shot-grid"><figure class="demo-shot"><img src="/images/training/screenshots/workshop2-test-generation-terminal.png" alt="命令行输出：测试计划、生成用例、评审通过和进度记录。"><figcaption>命令行输出：测试计划、生成用例、评审通过和进度记录。</figcaption></figure></div></section>
+<section class="block training-section"><h2>模式映射</h2><table class="pattern-table"><thead><tr><th>模式</th><th>设计作用</th></tr></thead><tbody><tr><td>规划-执行</td><td>生成测试前需要明确测试计划。</td></tr>
+<tr><td>生成器-评论家</td><td>测试代码必须由独立角色检查。</td></tr>
+<tr><td>自愈循环</td><td>有界修复处理机械失败，但不掩盖业务歧义。</td></tr>
+<tr><td>进度跟踪</td><td>Agent 要记住跨 PR 的覆盖进展。</td></tr></tbody></table></section>
+<section class="block training-section"><h2>设计洞察</h2><div class="insight-grid"><article class="insight-card"><h3>可运行优先于看起来合理</h3><p>不能运行的测试是负资产。</p></article>
+<article class="insight-card"><h3>Critic 要有确定性依据</h3><p>最好的 critic 绑定 import、断言、fixture 和测试结果。</p></article>
+<article class="insight-card"><h3>进度记录防止反复横跳</h3><p>没有 progress tracking，同一批用例会被一遍遍生成。</p></article></div></section>
+<section class="block training-section"><h2>运行路径</h2><div class="run-box"><code>cd workshops/workshop2-test-generation
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python src/main.py
+open visual/index.html</code></div><div class="artifact-grid"><article class="artifact-card"><strong>README</strong><code>workshops/workshop2-test-generation/README.md</code></article><article class="artifact-card"><strong>Blueprint</strong><code>images/training/visual/workshop2-test-generation-blueprint.png</code></article></div></section>
+</main>
+<footer class="site-footer"><div class="container"><p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">源代码</a></p></div></footer><script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

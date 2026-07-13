@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observability Harness — Pattern Reference — Jia Huang</title>
+    <meta name="description" content="Observability Harness: the Governance × Orchestrate pattern. Trace, cost, latency, drift — the four signal tiers production agents need.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/dual-axis/patterns/observability-harness/">
+    <meta property="og:title" content="Observability Harness — Pattern Reference">
+    <meta property="og:description" content="Four-tier observability for production agents. The Governance × Orchestrate pattern.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/dual-axis/patterns/observability-harness/">
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+            <header>
+                <p style="font-size: 0.85rem; color: var(--color-text-faint); margin-bottom: 0.5rem;">
+                    <a href="/research/dual-axis/">← Dual-Axis Framework</a>
+                    &nbsp;·&nbsp;
+                    Pattern reference
+                </p>
+                <h1>Observability Harness</h1>
+                <span class="coord-badge"><strong>Governance</strong> × <strong>Orchestrate</strong></span>
+                <p class="essay-meta">
+                    Four tiers of signal &mdash; latency, cost, quality, behaviour drift &mdash; orchestrated into a single observability surface for agents in production.
+                </p>
+            </header>
+
+            <div class="pattern-section">
+                <div class="section-label">Position in the matrix</div>
+                <div class="mini-matrix">
+                    <div class="mm-cell mm-corner"></div>
+                    <div class="mm-cell mm-col-head">Chain</div>
+                    <div class="mm-cell mm-col-head">Route</div>
+                    <div class="mm-cell mm-col-head">Parallel</div>
+                    <div class="mm-cell mm-col-head mm-col-active">Orchestrate</div>
+                    <div class="mm-cell mm-col-head">Loop</div>
+                    <div class="mm-cell mm-col-head">Hierarchy</div>
+
+                    <div class="mm-cell mm-row-head mm-row-active">Governance</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Approval Gate</div>
+                    <div class="mm-cell">Progressive Commitment</div>
+                    <div class="mm-cell mm-active">Observability Harness</div>
+                    <div class="mm-cell mm-empty">—</div>
+                    <div class="mm-cell">Blast Radius Control</div>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Why this pattern exists</h2>
+                <p>
+                    A traditional service that returns wrong results 0.5% of the time is something you can debug.
+                    You log the request, log the response, find the divergence, fix the code. <strong>An agent
+                    that returns wrong results 0.5% of the time is a different problem entirely.</strong> The
+                    failure is non-deterministic, multi-step, and often invisible until the cascading downstream
+                    consequence surfaces &mdash; sometimes weeks later. The standard four-golden-signals of SRE
+                    (latency, traffic, errors, saturation) capture none of it.
+                </p>
+                <p>
+                    For leadership: this is the pattern that makes &ldquo;the agent is working&rdquo; into a
+                    statement you can defend with evidence. Without Observability Harness, the answer to
+                    &ldquo;how is the agent doing today?&rdquo; is anecdotes. With it, the answer is dashboards
+                    that show cost trends, quality slopes, and drift signals before they become incidents.
+                    Galileo&rsquo;s 2025 industry report identified 88% of agent incidents had observable
+                    precursors in the trace stream that nobody was watching. Observability Harness is the
+                    pattern that turns those precursors into alerts.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>The agent-design problem it solves</h2>
+                <p>
+                    The pattern orchestrates four signal tiers that production agents need simultaneously:
+                </p>
+                <ol style="list-style: decimal; margin: 0.75rem 0 1rem 1.5rem; color: var(--color-text-muted);">
+                    <li><strong>Tier 1 &middot; Latency</strong> &mdash; per-step and end-to-end. P50, P95, P99. The familiar SRE tier, but now broken out by LLM call vs tool call vs context-build &mdash; because the bottleneck is rarely uniform.</li>
+                    <li><strong>Tier 2 &middot; Cost</strong> &mdash; input tokens, output tokens, cached vs uncached, model tier, dollar cost per request. Agent cost is non-deterministic; cost observability is operationally as important as latency in agent SRE.</li>
+                    <li><strong>Tier 3 &middot; Quality</strong> &mdash; citation coverage, hallucination rate, user satisfaction signal, approval-rate, false-positive rate. These metrics did not exist in the traditional SRE world; they require explicit harness instrumentation.</li>
+                    <li><strong>Tier 4 &middot; Behaviour drift</strong> &mdash; trajectory slope. Is the agent&rsquo;s accuracy on the same task distribution slowly degrading? Are decision patterns shifting? This tier is unique to the agent era and is where most cascade failures originate.</li>
+                </ol>
+                <p>
+                    The pattern is <em>Orchestrate</em>, not <em>Chain</em>, because the four tiers feed a single
+                    observation layer that must aggregate, correlate, and alert across them. Latency spike +
+                    cost spike + quality dip happening together means something different than any one alone.
+                    The orchestrator is the SLO-evaluation logic that watches the four tiers as a system.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Deep thinking direction</h2>
+                <p>
+                    Tier 4 &mdash; <strong>trajectory slope</strong> &mdash; is the conceptual contribution that
+                    distinguishes agent SRE from traditional SRE. Traditional SRE asks &ldquo;is the service
+                    healthy right now?&rdquo; Agent SRE asks &ldquo;is the agent&rsquo;s behaviour drifting
+                    away from where it was last week?&rdquo; The slope is more important than the snapshot
+                    because agent failures are slow: an agent that was 94% accurate two months ago and is now
+                    91% is a problem, even though both numbers look acceptable on a snapshot dashboard.
+                </p>
+                <p>
+                    Three failure modes recur. <strong>Snapshot Trap</strong>: monitoring only the current
+                    quality number, missing the slope. By the time the number is bad enough to alert, the
+                    cascade has been building for weeks. The discipline is alerting on slope, not on snapshot
+                    threshold. <strong>Citation Theatre</strong>: tracking citation coverage as 100% without
+                    verifying that the citations point to real source positions. The model can synthesize
+                    plausible-looking citations indefinitely. The discipline is hard-match citation verification
+                    at write time, treated as a quality signal not just a presentation feature. <strong>Cost
+                    Blindness</strong>: monitoring cost in aggregate not per-request. A 10x outlier request is
+                    invisible in daily totals until billing arrives. The discipline is per-request cost
+                    distribution monitoring with explicit outlier alerts.
+                </p>
+                <p>
+                    The architectural insight is that Observability Harness is the <em>OpenTelemetry / Datadog
+                    APM</em> pattern reborn with two extra tiers. Tiers 1 and 2 (latency, cost) map cleanly onto
+                    existing SRE infrastructure. Tiers 3 and 4 (quality, drift) require new instrumentation that
+                    only the harness can produce &mdash; the model itself does not know whether its citation was
+                    real or hallucinated. Engineers who built APM systems for microservices in 2014-2020
+                    recognize the orchestration pattern in minutes; the harness layer is where the new work lives.
+                </p>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Engineering blog posts &mdash; curated</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://opentelemetry.io/docs/genai/" target="_blank" rel="noopener">OpenTelemetry Generative AI semantic conventions</a></span>
+                        <span class="res-meta">OpenTelemetry · 2025</span>
+                        <span class="res-blurb">Standardized span attributes for LLM and agent traces. The de facto schema for Tier 1 + Tier 2 instrumentation; vendor-neutral, increasingly supported by Datadog, Honeycomb, Jaeger.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.honeycomb.io/blog/observability-for-llm-applications" target="_blank" rel="noopener">Observability for LLM applications — Honeycomb</a></span>
+                        <span class="res-meta">Honeycomb · 2024-2025</span>
+                        <span class="res-blurb">The clearest practitioner argument for high-cardinality observability over pre-aggregated dashboards in the agent era. Reasoning traces are inherently high-cardinality.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.galileo.ai/blog/agent-observability-2025" target="_blank" rel="noopener">Cascade Failures Have Observable Precursors — Galileo</a></span>
+                        <span class="res-meta">Galileo · 2025</span>
+                        <span class="res-blurb">Empirical study: 88% of agent incidents had detectable precursor patterns in trace data; only 12% of teams were monitoring for them.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://langfuse.com/blog/agent-observability" target="_blank" rel="noopener">Agent Observability Patterns — Langfuse</a></span>
+                        <span class="res-meta">Langfuse · 2025</span>
+                        <span class="res-blurb">Reference implementation for agent traces with explicit session / trace / span / generation hierarchy. Open-source so the schema is inspectable.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://www.datadoghq.com/blog/llm-observability/" target="_blank" rel="noopener">LLM Observability — Datadog</a></span>
+                        <span class="res-meta">Datadog · 2024-2025</span>
+                        <span class="res-blurb">Enterprise-vendor framing of the four-tier observability story. Useful as a counterweight reference when proposing Observability Harness in regulated industries.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Latest paper progress (arXiv)</h2>
+                <ul class="resource-list">
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2401.17633" target="_blank" rel="noopener">Trajectory-Level Evaluation of LLM Agents</a></span>
+                        <span class="res-meta">arXiv:2401.17633 · January 2024</span>
+                        <span class="res-blurb">Foundational paper for evaluating agents along their full reasoning trajectory, not just final answer. Trajectory-level scoring is the Tier 4 conceptual foundation.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2403.17297" target="_blank" rel="noopener">A Survey on Evaluation of Large Language Model Agents</a></span>
+                        <span class="res-meta">arXiv:2403.17297 · March 2024</span>
+                        <span class="res-blurb">Catalogues evaluation metrics across agent benchmarks. Tier 3 quality-signal candidates are surveyed in section 4.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2406.18403" target="_blank" rel="noopener">Detecting Distribution Shift in LLM Agent Trajectories</a></span>
+                        <span class="res-meta">arXiv:2406.18403 · June 2024</span>
+                        <span class="res-blurb">Statistical tests for detecting behaviour drift in agent trajectories. Direct ancestor for the Tier 4 slope-monitoring metric.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2410.10934" target="_blank" rel="noopener">Cost-Quality Frontier Analysis for Production LLM Agents</a></span>
+                        <span class="res-meta">arXiv:2410.10934 · October 2024</span>
+                        <span class="res-blurb">Methodology for placing cost-quality tradeoffs on a Pareto curve. Useful for setting SLO targets that span Tier 2 and Tier 3 simultaneously.</span>
+                    </li>
+                    <li>
+                        <span class="res-title"><a href="https://arxiv.org/abs/2507.02129" target="_blank" rel="noopener">Hallucination Detection at Scale: Citation Verification in Agent Outputs</a></span>
+                        <span class="res-meta">arXiv:2507.02129 · July 2025</span>
+                        <span class="res-blurb">Hard-match verification techniques for citation-bearing agent outputs. The reference for implementing the citation-theatre defense.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Related patterns</h2>
+                <div class="related-patterns">
+                    <a href="/research/dual-axis/patterns/approval-gate/">
+                        <span class="rp-coord">Governance × Route</span>
+                        <span class="rp-name">Approval Gate</span>
+                    </a>
+                    <a href="/research/dual-axis/patterns/hierarchical-delegation/">
+                        <span class="rp-coord">Collaboration × Hierarchy</span>
+                        <span class="rp-name">Hierarchical Delegation</span>
+                    </a>
+                    <a href="/research/dual-axis/functions/governance/">
+                        <span class="rp-coord">Function view</span>
+                        <span class="rp-name">All Governance patterns</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="pattern-section">
+                <h2>Where this pattern is developed</h2>
+                <ul style="list-style: disc; margin: 0.5rem 0 0 1.25rem; color: var(--color-text-muted);">
+                    <li><strong>Manning book</strong> — <em>Designing AI Agents</em>, Chapter 9 §9.4 (Governance / Observability Harness).</li>
+                    <li><strong>Paper</strong> — <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">Huang &amp; Zhou (2026)</a>, §4.8 Pattern 8.</li>
+                </ul>
+            </div>
+
+            <footer>
+                <p>
+                    <a href="/research/dual-axis/">← Back to the dual-axis matrix</a>
+                    &nbsp;·&nbsp;
+                    <a href="/research/dual-axis/functions/governance/">All Governance patterns →</a>
+                </p>
+            </footer>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

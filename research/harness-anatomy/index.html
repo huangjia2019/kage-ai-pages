@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harness Anatomy: cross-cutting analysis of 8 agent harnesses — Jia Huang</title>
+    <meta name="description" content="Eight major agent harnesses analyzed across seven cognitive functions, plus the five-step reverse-engineering method used to produce the heatmap. Frameworks: Claude Code, Codex CLI, Aider, OpenCode, OpenClaw, Hermes Agent, DeerFlow, OpenHands.">
+    <meta name="author" content="Jia Huang">
+    <link rel="canonical" href="https://kage-ai.com/research/harness-anatomy/">
+    <meta property="og:title" content="Harness Anatomy: 8 agent harnesses on one heatmap">
+    <meta property="og:description" content="Cross-cutting heatmap of 8 production agent harnesses across 7 cognitive functions, with the 5-step method that builds it.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/research/harness-anatomy/">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="harness.css">
+</head>
+<body class="page-research">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/research/harness-anatomy/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article>
+            <h1 class="ha-title">Harness Anatomy: a cross-cutting view of eight agent harnesses</h1>
+
+            <p class="lede">
+                Eight production-scale agent harnesses, looked at side by side. Not as
+                frameworks to learn, but as <em>specimens</em>. The point of the page is the
+                heatmap — what each harness chose to build deep, what it chose to leave thin,
+                and what the cross-cuts say about the field as a whole.
+            </p>
+
+            <p>
+                This page sits beside the
+                <a href="/research/dual-axis/">Dual-Axis Framework</a>,
+                the <a href="/research/pattern-evolution/">Pattern Evolution</a> map,
+                and the <a href="/research/paradigm-evolution/">Paradigm Evolution</a> timeline.
+                Together they ask one question at four scales — <strong>paradigms</strong>
+                (how engineers think), <strong>patterns</strong> (named solutions inside a paradigm),
+                <strong>the matrix</strong> (the structural anatomy of the agent paradigm), and now
+                <strong>harnesses</strong> (specific implementations of that anatomy in 2026).
+                The matrix is the map; the harnesses are the territory.
+            </p>
+
+            <p class="ha-meta">
+                <strong>How to read this page</strong>: the heatmap below is the centerpiece.
+                Rows are harnesses, columns are cognitive functions, cells are coverage strength
+                on a 0–3 scale. Click any framework name or any cell to open a side panel
+                with the framework's main-loop location, positioning, and where it goes deep.
+                The list is not closed — the same method extends to any new harness.
+            </p>
+
+            <!-- =====================================================
+                 Section: Heatmap (8 frameworks × 7 cognitive functions)
+                 ===================================================== -->
+            <h2 class="ha-section-h">Coverage heatmap — 8 harnesses × 7 cognitive functions</h2>
+            <p class="ha-section-sub">
+                Read a row to see one harness's profile. Read a column to see which capabilities
+                the field has matured (Action is universal) and which are still being built out
+                (Governance is the 2026 investment frontier). Cell shade encodes engineering depth,
+                not feature checkbox.
+            </p>
+            <div id="ha-heatmap"></div>
+
+            <!-- =====================================================
+                 Section: Five-step methodology
+                 ===================================================== -->
+            <h2 class="ha-section-h">The five-step method that builds the heatmap</h2>
+            <p class="ha-section-sub">
+                The heatmap above is not opinion — it is the output of a fixed procedure
+                applied to each harness's source. Five steps. Roughly two to three days per
+                framework, reliably reproducible. Every cell in the matrix is anchored to a
+                file path and a line range; the depth shade comes from how that code is shaped,
+                not from how the framework markets itself.
+            </p>
+            <div id="ha-steps"></div>
+            <p class="ha-section-sub" style="border-left: 3px solid #a85a1e; padding: 0.6rem 0.9rem; margin-top: 1.2rem; background: rgba(168, 90, 30, 0.04); font-size: 0.92rem;">
+                The five steps are the method. The walk-throughs — actually applying these five steps to
+                Claude Code's tool registry, Aider's git loop, DeerFlow's planner-researcher-writer split,
+                Codex CLI's seatbelt sandbox, and four more frameworks, with file paths, line numbers,
+                and the reasoning behind every classification call — are the substance of the
+                <a href="/training/">Harness Anatomy training course</a>. The web page tells you what to do;
+                the course is the on-site reverse engineering done together.
+            </p>
+
+            <!-- =====================================================
+                 Section: Five common ancestors
+                 ===================================================== -->
+            <h2 class="ha-section-h">Five shared engineering ancestors</h2>
+            <p class="ha-section-sub">
+                Look across the eight harnesses and the same five engineering ideas keep
+                surfacing. None of them are new. None of them are agent-specific. They are
+                what software engineering accumulated across fifty years for problems that
+                only look new from inside the agent bubble.
+            </p>
+            <ul id="ha-ancestors" class="ha-ancestors"></ul>
+
+            <!-- =====================================================
+                 Closing
+                 ===================================================== -->
+            <h2 class="ha-section-h">Three takeaways the heatmap makes visible</h2>
+            <p class="ha-section-sub" style="max-width: 50rem;">
+                First: every harness has a main loop, and they are structurally the same — a
+                probabilistic version of a reconciliation loop. Second: the field has standardized
+                on Action; the variance is everywhere else. Third: the harnesses with the widest
+                coverage are not the dev-tool ones — they are the personal-AI and multi-agent ones,
+                where the requirements force every cognitive function to be present.
+            </p>
+
+            <aside id="ha-detail" class="ha-detail" data-open="false">
+                <button class="ha-detail-close" aria-label="Close">×</button>
+                <div class="ha-detail-body"></div>
+            </aside>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a> &middot; <a href="https://github.com/huangjia2019/kage-ai-site">Source</a></p>
+        </div>
+    </footer>
+
+    <script src="harness.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            window.HarnessAnatomy.init({ lang: 'en', dataUrl: 'data.json' });
+        });
+    </script>
+    <!-- GoatCounter analytics -->
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

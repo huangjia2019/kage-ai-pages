@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Function × Execution Topology — Jia Huang</title>
+    <meta name="description" content="The two orthogonal axes of agent design: what the agent is doing × what shape the work takes. Crossed, they form the matrix from which 28 named patterns are read.">
+    <link rel="canonical" href="https://kage-ai.com/concepts/cognitive-function-x-execution-topology/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/cognitive-function-x-execution-topology/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/cognitive-function-x-execution-topology/">
+    <meta property="og:title" content="Cognitive Function × Execution Topology">
+    <meta property="og:description" content="Two orthogonal axes of agent design. The framework from which the 28-pattern matrix is read.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kage-ai.com/concepts/cognitive-function-x-execution-topology/">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/writing/">Writing</a>
+                <a href="/concepts/">Concepts</a>
+                <a href="/research/">Research</a>
+                <a href="/books/">Books</a>
+                <a href="/about/">About</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/zh/concepts/cognitive-function-x-execution-topology/" class="lang-switch">中文</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/" style="color: var(--color-text-muted);">Home</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/concepts/" style="color: var(--color-text-muted);">Concepts</a>
+                <span style="margin: 0 0.45rem;">/</span>Cognitive Function × Execution Topology
+            </p>
+
+            <h1>Cognitive Function × Execution Topology</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                Two orthogonal axes. What the agent is doing, and what shape the work takes. Crossed, they form a coordinate system from which 28 named patterns are read.
+            </p>
+
+            <h2>Definition</h2>
+            <p>
+                An agent design is the intersection of two axes. <strong>Cognitive function</strong>
+                names what the agent is trying to do — perception, memory, reasoning, action,
+                reflection, collaboration, governance (7 categories). <strong>Execution
+                topology</strong> names what shape the work takes — chain, route, parallel, loop,
+                hierarchy, orchestrate (6 archetypes). Crossed, they form a 7×6 = 42-cell matrix;
+                28 cells are populated with named patterns, 14 are intentionally empty.
+            </p>
+
+            <h2>The problem it names</h2>
+            <p>
+                <em>[TODO: 咖哥 voice — 为什么 "flat list of patterns" 不够。
+                工程团队拿到 ReAct / Reflection / Multi-Agent / Tree of Thoughts 一长串名字之后,
+                还是不知道自己问题在哪一格。坐标系给的是"我的失败属于哪条轴"这个能问出的问题。]</em>
+            </p>
+
+            <h2>How it changes design decisions</h2>
+            <p>
+                Pattern selection becomes coordinate selection. "We need a Reflection pattern" is
+                under-specified; "we need Reflection × Loop with a deterministic exit signal" is a
+                design. Two engineers saying "we use Plan-and-Execute" can mean two different
+                cells — Action × Chain (linear plan) or Action × Orchestrate (dynamic
+                replanning) — and the choice carries real architectural consequences. The
+                coordinates make those choices visible <em>before</em> they show up as production
+                bugs.
+            </p>
+
+            <h2>Lineage</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Christopher Alexander</strong> — patterns as orthogonal generative axes, not as a list</li>
+                <li><strong>GoF (1994)</strong> — pattern matrix structure with creational / structural / behavioral × class / object</li>
+                <li><strong>Cloud architecture catalogs</strong> — Microsoft / AWS reference architectures organized by scenario × topology</li>
+            </ul>
+
+            <h2>What it is NOT</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Not a taxonomy of frameworks.</strong> LangChain / AutoGen / CrewAI are mechanisms; the matrix is about designs you compose <em>using</em> those mechanisms.</li>
+                <li><strong>Not a flat list of 28 patterns.</strong> The list is a flattening of the matrix; the matrix is the source.</li>
+                <li><strong>Not a maturity scoreboard.</strong> Cells are not ranked. A simpler cell is not less serious than a harder one.</li>
+            </ul>
+
+            <h2>Where it's developed further</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>Position paper: <a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a> — full formal treatment with the empirical pattern-selection laws</li>
+                <li>Book treatment: <em>Designing AI Agents</em> (Manning, 2026) — the matrix is the spine of the entire book</li>
+                <li>Full catalog: <a href="https://adpsagent.com/patterns/">adpsagent.com/patterns/</a> — 33 enterprise white papers, one per cell</li>
+                <li>Interactive matrix: <a href="/research/dual-axis/">/research/dual-axis/</a></li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>Cite as:</strong> Huang, J. (2026). Cognitive Function × Execution Topology.
+                <a href="https://kage-ai.com/concepts/cognitive-function-x-execution-topology/">kage-ai.com/concepts/cognitive-function-x-execution-topology/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Jia Huang &middot; <a href="/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

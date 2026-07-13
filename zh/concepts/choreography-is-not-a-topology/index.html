@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编舞不是一种拓扑 · 黄佳 / 咖哥</title>
+    <meta name="description" content="编舞是跨拓扑的协调模式，不是六列里的第七列。精神上更接近 Teams 模式，而不是 Orchestrate 的反面。">
+    <link rel="canonical" href="https://kage-ai.com/zh/concepts/choreography-is-not-a-topology/">
+    <link rel="alternate" hreflang="en" href="https://kage-ai.com/concepts/choreography-is-not-a-topology/">
+    <link rel="alternate" hreflang="zh" href="https://kage-ai.com/zh/concepts/choreography-is-not-a-topology/">
+    <link rel="stylesheet" href="../../../css/style.css">
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/zh/" class="site-brand">黄&nbsp;佳</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/concepts/">概念</a>
+                <a href="/zh/research/">研究</a>
+                <a href="/zh/cases/">案例</a>
+                <a href="https://github.com/huangjia2019" target="_blank" rel="noopener">GitHub</a>
+                <a href="/concepts/choreography-is-not-a-topology/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+
+        <article class="essay">
+            <p style="font-size: 0.88rem; color: var(--color-text-faint); margin-bottom: 1.5rem;">
+                <a href="/zh/" style="color: var(--color-text-muted);">首页</a>
+                <span style="margin: 0 0.45rem;">/</span>
+                <a href="/zh/concepts/" style="color: var(--color-text-muted);">签名概念</a>
+                <span style="margin: 0 0.45rem;">/</span>编舞不是一种拓扑
+            </p>
+
+            <h1>编舞不是一种拓扑</h1>
+            <p style="font-size: 1.15rem; color: var(--color-text-muted); font-style: italic; border-left: 3px solid var(--color-link); padding-left: 1rem; margin: 1.5rem 0 2.5rem;">
+                编舞是跨拓扑的协调模式，不是六列里的第七列。精神上更接近 Teams 模式，而不是 Orchestrate 的反面。
+            </p>
+
+            <h2>定义</h2>
+            <p>
+                在分布式系统里，编舞（choreography）指的是<em>没有中央指挥</em>的协调方式——
+                事件传播，对端反应。把它放到 AI Agent 上来看，编舞可以与链式 / 路由 / 并行 /
+                循环 / 层级 / 编排<em>并存</em>。它是一种协调<em>模式</em>，不是一种执行<em>形态</em>。
+                把它当成第七种拓扑列，会把两种不同性质的轴搅到一起。
+            </p>
+
+            <h2>它命名了什么问题</h2>
+            <p style="color: var(--color-text-muted); font-style: italic;">
+                [TODO · 咖哥本人填这段：这一节最适合你写。
+                你在做双轴矩阵时，茹炳晟和姜宁都讨论过"编舞算不算独立拓扑"。
+                结论是"不算"—— 这件事值得在这里留个 record。
+                可以一句话讲清：编舞回答 "谁触发谁"，拓扑回答 "工作长什么形状"，问题层不同。]
+            </p>
+
+            <h2>它如何改变设计决策</h2>
+            <p>一旦把编舞理解为协调模式而不是形态，设计对话就会更干净：</p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>可以有<strong>"扇出聚合（并行）× 编舞"</strong>—— worker 订阅事件后反应，没有 orchestrator 派工</li>
+                <li>可以有<strong>"交接链（链式）× 编舞"</strong>—— 每个 agent 抛出事件，下一个订阅</li>
+                <li>矩阵保持 7×6；编舞的选择是每个模式里横切的设计决策，不是新加一列</li>
+            </ul>
+            <p>
+                这呼应了老的 Teams 模式（PLOPD）：Teams 讲对等者怎么协调；管道 / 层级讲工作怎么流动。
+                两条不同的轴。
+            </p>
+
+            <h2>谱系</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>Saga 模式</strong>（Garcia-Molina &amp; Salem, 1987）——通过编舞式事件流做分布式事务</li>
+                <li><strong>编舞 vs 编排</strong>在微服务里的辩论（2010s 早期）—— 同一个架构问题，Agent 时代继承</li>
+                <li><strong>Event Sourcing / CQRS</strong>—— 编舞作为事件驱动系统里的主协调模式</li>
+                <li><strong>Teams 模式</strong>（PLOPD vol. 3, 1995）—— 对等协调作为独立的架构关切</li>
+            </ul>
+
+            <h2>它<em>不</em>是什么</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li><strong>不是"编排的反面"。</strong>把两者当二元对立会把矩阵压扁。</li>
+                <li><strong>不是第六或第七种拓扑列。</strong>矩阵已经命名了六种形态；编舞横跨这六种。</li>
+                <li><strong>不是"无 leader 多 Agent"。</strong>编舞是一种协调协议，"无 leader"只是它的若干后果之一。</li>
+                <li><strong>不是在框架里被忽略。</strong>它在每个相关模式的正文里讨论（比如协作模块），只是不单独占一列。</li>
+            </ul>
+
+            <h2>在哪里展开</h2>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; list-style: disc;">
+                <li>ADPS 协作模块（C1-C5）：每个模式的白皮书都说明何时编舞合适、何时编排合适</li>
+                <li>说明语在 <a href="https://adpsagent.com/zh/patterns/">adpsagent.com/zh/patterns/</a> 和 kage-ai 双轴页矩阵下方都出现</li>
+                <li>立场论文：<a href="https://arxiv.org/abs/2605.13850" target="_blank" rel="noopener">arXiv:2605.13850</a>——显式说明为什么编舞坐在拓扑轴之外</li>
+            </ul>
+
+            <hr style="margin: 2.5rem 0 1.5rem;">
+            <p style="background: #faf4ec; border: 1px solid #ead4b8; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.9rem; line-height: 1.6;">
+                <strong>引用格式：</strong>黄佳 (2026). 编舞不是一种拓扑.
+                <a href="https://kage-ai.com/zh/concepts/choreography-is-not-a-topology/">kage-ai.com/zh/concepts/choreography-is-not-a-topology/</a>
+            </p>
+        </article>
+
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a></p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
