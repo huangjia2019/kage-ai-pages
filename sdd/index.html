@@ -60,6 +60,7 @@
         padding: .85rem 1.1rem; border-radius: 4px;
         margin: 1.1rem 0; font-size: .95rem;
       }
+      .sdd-dim { color: #8a8378; font-size: .85em; }
       .sdd-table-wrap { overflow-x: auto; margin: 1.1rem 0; }
       table.sdd { border-collapse: collapse; width: 100%; font-size: .9rem; }
       table.sdd th, table.sdd td {
@@ -226,7 +227,35 @@
             <section class="sdd-block" id="errata">
                 <span class="sdd-anchor">勘误</span>
                 <h3>勘误</h3>
-                <p class="sdd-kicker">截至本页最近更新，暂无条目。</p>
+                <p class="sdd-kicker">以下条目均已核对原稿确认，将在第二次印刷中改正。</p>
+
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead><tr><th>位置</th><th>印刷版</th><th>应为</th><th>状态</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>第 163 页<br>图 8-11<br><span class="sdd-dim">路由规则</span></td>
+                            <td>
+                                加一个 Jira 数据源 → <b>scheduler</b><br>
+                                改成每天 9 点生成 → <b>collector</b>
+                            </td>
+                            <td>
+                                加一个 Jira 数据源 → <b>collector</b><br>
+                                改成每天 9 点生成 → <b>scheduler</b>
+                            </td>
+                            <td>第一印错<br>第二印改</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <p class="sdd-note">
+                    图中四条路由规则，第一条与第四条的目标模块在绘图环节被对调了。
+                    正确的对应关系是：新增数据源属于数据采集，归 <code>collector</code>；
+                    修改生成时间属于定时调度，归 <code>scheduler</code>。
+                    这正是该图想说明的那句话——design.md 的模块边界就是路由器的分类规则。
+                    感谢读者指出。
+                </p>
+
                 <p>
                     如果你在阅读中发现错误，欢迎通过异步社区本书页面提交勘误，
                     或在配套代码仓库
