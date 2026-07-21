@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《SDD 实战》配套资源 — 增强内容与代码 · 黄佳</title>
+    <meta name="description" content="《SDD 实战：规范驱动开发之道》官方配套页。配套代码、内容增强（Superpowers、工具对照、模式落地映射）、工具时效说明与勘误。">
+    <link rel="canonical" href="https://kage-ai.com/sdd/">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+      .sdd-toc {
+        background: var(--color-quote-bg, #f3f0eb);
+        border-left: 3px solid #a85a1e;
+        padding: 1.1rem 1.3rem;
+        margin: 1.8rem 0;
+        border-radius: 3px;
+      }
+      .sdd-toc h2 { margin: 0 0 .6rem; font-size: 1.02rem; }
+      .sdd-toc ol { margin: 0; padding-left: 1.3rem; }
+      .sdd-toc li { margin: .3rem 0; line-height: 1.6; }
+      .sdd-toc .ch { color: #a85a1e; font-weight: 600; }
+      .sdd-block {
+        border-top: 1px solid var(--color-rule, #e5e0d8);
+        padding-top: 1.6rem;
+        margin-top: 2.4rem;
+      }
+      .sdd-block > h3 { margin-bottom: .3rem; }
+      .sdd-anchor {
+        display: inline-block;
+        font-size: .8rem; color: #a85a1e;
+        background: #f5e6d3;
+        padding: .12rem .55rem; border-radius: 3px;
+        margin-bottom: .7rem; font-weight: 600;
+      }
+      .sdd-note {
+        background: #fff8f0;
+        border: 1px solid #f0dcc4;
+        padding: .85rem 1.1rem;
+        border-radius: 4px;
+        margin: 1.1rem 0;
+        font-size: .95rem;
+      }
+      .sdd-table-wrap { overflow-x: auto; margin: 1.1rem 0; }
+      table.sdd { border-collapse: collapse; width: 100%; font-size: .9rem; }
+      table.sdd th, table.sdd td {
+        border: 1px solid var(--color-rule, #e5e0d8);
+        padding: .5rem .65rem; text-align: left; vertical-align: top;
+      }
+      table.sdd th { background: #f5e6d3; font-weight: 600; }
+      pre.sdd-code {
+        background: #f7f6f3; border: 1px solid #e8e4dc;
+        padding: .85rem 1rem; border-radius: 4px;
+        overflow-x: auto; font-size: .85rem; line-height: 1.55;
+      }
+      .sdd-kicker { color: #666; font-size: .93rem; }
+    </style>
+</head>
+<body class="page-essay">
+
+    <header class="site-header">
+        <div class="container">
+            <a href="/" class="site-brand">Jia&nbsp;Huang</a>
+            <nav class="site-nav">
+                <a href="/zh/writing/sdd/">SDD 系列</a>
+                <a href="/zh/writing/">文章</a>
+                <a href="/zh/">中文首页</a>
+                <a href="https://github.com/huangjia2019/sdd-in-action" target="_blank" rel="noopener">配套代码</a>
+                <a href="/" class="lang-switch">EN</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content">
+        <article class="essay">
+
+            <h1>《SDD 实战》配套资源</h1>
+            <p class="sdd-kicker">《SDD 实战：规范驱动开发之道》· 人民邮电出版社 · 异步图书</p>
+
+            <p class="lede">
+                这一页是本书的官方配套资源，收录配套代码、内容增强与工具时效说明。
+            </p>
+
+            <div class="sdd-note">
+                <strong>关于这一页的定位：</strong>下面列出的内容<strong>大多不是勘误，而是增强</strong>。
+                书中的方法论与结构是完整的，这里补充的是两类东西：一是成书之后开源工具发生变化而需要更新的部分，
+                二是篇幅所限没有展开、但读者会用得上的延伸材料。真正的文字勘误单独列在最后一节。
+            </div>
+
+            <p>
+                之所以把这些内容放在线上而不是改进正文，是因为它们的更新频率和纸质书不同。
+                SDD 的方法论——三份规范、六阶段工作流、五大核心原则——是稳定的；
+                承载它的工具在过去一年里已经改过名字、换过命令、调整过产出格式。
+                把工具细节放在可持续更新的线上材料里，把方法论留在书里，是本书从一开始就做的内容分层决策。
+            </p>
+
+            <div class="sdd-toc">
+                <h2>本页内容</h2>
+                <ol>
+                    <li><a href="#code">配套代码仓库</a></li>
+                    <li><span class="ch">第 3 章</span> · <a href="#ch3-superpowers">Superpowers：TDD 强制的纪律工具</a></li>
+                    <li><span class="ch">第 3 章</span> · <a href="#ch3-table">五大 SDD 框架对比</a></li>
+                    <li><span class="ch">第 3 章</span> · <a href="#ch3-tree">工具组合决策树</a></li>
+                    <li><span class="ch">第 4 章</span> · <a href="#ch4-proposal">四种工具如何写同一份 proposal</a></li>
+                    <li><span class="ch">第 7 章</span> · <a href="#ch7-tdd">工具层如何强制“测试先于代码”</a></li>
+                    <li><span class="ch">第 8 章</span> · <a href="#ch8-mapping">5 种 Agent 模式在 4 种工具中的落地</a></li>
+                    <li><span class="ch">第 10 章</span> · <a href="#ch10-stability">工具会消失，方法论是稳定的</a></li>
+                    <li><a href="#tooling">工具时效说明</a>（成书后的工具变更）</li>
+                    <li><a href="#errata">勘误</a></li>
+                </ol>
+            </div>
+
+            <!-- ================= 配套代码 ================= -->
+            <section class="sdd-block" id="code">
+                <span class="sdd-anchor">配套代码</span>
+                <h3>配套代码仓库</h3>
+                <p>
+                    本书配套代码在 GitHub 仓库
+                    <a href="https://github.com/huangjia2019/sdd-in-action" target="_blank" rel="noopener">huangjia2019/sdd-in-action</a>。
+                    其中 <code>book-code/</code> 是章节锚定的配套实战项目——智能日报生成器，贯穿全书第 4 至第 8 章。
+                </p>
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead><tr><th>章节</th><th>配套内容</th><th>SDD 阶段</th></tr></thead>
+                    <tbody>
+                        <tr><td>第 1 章</td><td><code>book-code/examples/ch01-vibe-coding-audit/</code></td><td>问题诊断</td></tr>
+                        <tr><td>第 3 章</td><td><code>book-code/examples/ch03-framework-comparison/</code></td><td>工具链对比</td></tr>
+                        <tr><td>第 4 章</td><td><code>book-code/specs/proposal.md</code></td><td>需求规范</td></tr>
+                        <tr><td>第 5 章</td><td><code>book-code/specs/design.md</code> + <code>contracts/</code> + <code>adrs/</code></td><td>架构设计 + ADR</td></tr>
+                        <tr><td>第 6 章</td><td><code>book-code/specs/tasks.md</code></td><td>任务拆解</td></tr>
+                        <tr><td>第 7 章</td><td><code>book-code/src/</code> + <code>tests/</code></td><td>执行验证</td></tr>
+                        <tr><td>第 8 章</td><td>Agent 自动化流水线</td><td>模式应用</td></tr>
+                    </tbody>
+                </table>
+                </div>
+                <p>
+                    同一仓库里还有 SDD 行动营四周的公开实操材料（<code>week1/</code> 至 <code>week4/</code>），
+                    可作为第 3 章工具链全景与第 7、8 章实战路径的延伸演练。
+                </p>
+            </section>
+
+            <!-- ================= Ch3 Superpowers ================= -->
+            <section class="sdd-block" id="ch3-superpowers">
+                <span class="sdd-anchor">第 3 章 增强</span>
+                <h3>Superpowers：TDD 强制的纪律工具</h3>
+                <p>
+                    书中第 3 章把 Superpowers 归在“四层工具生态”的第一层（原子技能）里。
+                    考虑到它在 SDD 实践中的分量，这里把它作为一个独立框架展开，与 OpenSpec、Spec-Kit、BMAD 并列讨论。
+                </p>
+                <p>
+                    Superpowers 是 Jesse Vincent（GitHub 上的 obra）在 Claude Code 之上构建的插件式 Skills 框架，
+                    核心心法可概括为：<strong>纪律先于灵感</strong>——每一次代码改动都从一个失败的测试开始。
+                </p>
+                <p>
+                    与前三家不同，Superpowers 不试图重新定义“规范怎么写”，而是把注意力放在“规范怎么落地”。
+                    它用一组原子化的 Skill 把工作流拆成可强制执行的步骤，通过框架本身的约束让规范无法被绕过。
+                </p>
+
+                <h4>六个核心 Skill</h4>
+                <ul>
+                    <li><strong>brainstorm</strong>：模糊需求阶段。用结构化追问把模糊点钉死，在写 proposal 之前先理清边界。</li>
+                    <li><strong>design</strong>：把澄清后的需求转成结构化设计，等价于 SDD 的 design.md 阶段。</li>
+                    <li><strong>test-driven-development</strong>：整套体系的强制核心。在没有一个失败的测试存在的情况下，Skill 不允许进入代码生成阶段。</li>
+                    <li><strong>debugging</strong>：结构化定位 bug。先复现、再二分定位、再形成最小修复假设，最后写测试验证。</li>
+                    <li><strong>refactor</strong>：安全重构。任何重构必须保持测试绿色，不能借重构夹带行为变更。</li>
+                    <li><strong>document</strong>：把决策与权衡固化为文档，把 ADR、CHANGELOG 纳入流水线的一部分。</li>
+                </ul>
+
+                <h4>设计哲学</h4>
+                <p>
+                    OpenSpec 关心“规范怎么写”，Spec-Kit 关心“规范怎么治理”，BMAD 关心“角色如何协作”，
+                    Superpowers 关心的是“规范如何被强制执行”。
+                </p>
+                <p>
+                    前三家解决的是“先写规范”的问题——规范应该长什么样、谁写、放哪。
+                    Superpowers 解决的是更靠下游的一层：已经写了规范，有没有真的按规范执行。
+                    具体到六阶段工作流，它通过 test-driven-development 强制第五阶段“代码生成”——
+                    没有覆盖需求的测试，代码不能生成。这一约束机制是其他 SDD 框架普遍缺失的环节。
+                </p>
+
+                <h4>最大优势在于强制性</h4>
+                <p>
+                    OpenSpec 写好的规范可以被忽略，Spec-Kit 的 constitution 可以被绕过，BMAD 的角色边界可以被人破坏。
+                    Superpowers 把测试前置做成 Skill 的强制条件，让“规范被执行”不再依赖人的自律。
+                </p>
+
+                <h4>与其他三家的关系</h4>
+                <p>
+                    Superpowers 不与 OpenSpec、Spec-Kit、BMAD 互斥，而是补位关系。
+                    你可以用 OpenSpec 写 proposal.md，再让代码在 Superpowers 的 TDD 强制下生成。
+                    前者管“规范怎么写”，后者管“规范怎么执行”。
+                    与 BMAD 也不冲突：BMAD 通过角色边界保证“写代码的 Agent 不能改规范”，
+                    Superpowers 通过测试前置保证“写代码的 Agent 不能跳过验证”。前者管空间隔离，后者管时间顺序。
+                </p>
+            </section>
+
+            <!-- ================= Ch3 table ================= -->
+            <section class="sdd-block" id="ch3-table">
+                <span class="sdd-anchor">第 3 章 增强</span>
+                <h3>五大 SDD 框架对比</h3>
+                <p>
+                    书中表 3-1 对比了三大开源框架。这里补上 Superpowers 与 Kiro 两行，构成更完整的对照。
+                </p>
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead>
+                        <tr><th>框架</th><th>核心哲学</th><th>切入角度</th><th>执行强度</th><th>学习成本</th><th>适合场景</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>OpenSpec</strong></td>
+                            <td>轻量迭代，工具无关</td><td>变更箱（change-based）</td>
+                            <td>弱（规范可被忽略）</td><td>低</td><td>个人 / 小团队 / 单仓项目</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Spec-Kit</strong></td>
+                            <td>规范即主工件，治理优先</td><td>CLI + 斜杠命令 + constitution</td>
+                            <td>中（constitution 强约束）</td><td>中</td><td>已用 GitHub 全家桶的团队</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BMAD</strong></td>
+                            <td>多 AI 角色模拟真实产品团队</td><td>多智能体编排</td>
+                            <td>中（角色边界约束）</td><td>中高</td><td>老项目 brownfield / 多角色协作</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Superpowers</strong></td>
+                            <td>纪律先于灵感，TDD 强制</td><td>Skill 组合 + 强制前置测试</td>
+                            <td><strong>强</strong>（无失败测试不让写码）</td><td>低</td><td>个人 / 小团队 / 严格 TDD 派</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kiro</strong></td>
+                            <td>IDE 原生，Spec 到代码端到端</td><td>IDE 内置 spec 流水线</td>
+                            <td>取决于 IDE 配置</td><td>高（需换 IDE）</td><td>中大型企业级落地</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <p class="sdd-kicker">
+                    这五者不是一个连续光谱，而是五种不同的定位。选型时要问的不是“哪个最先进”，而是“我团队当前的瓶颈在哪一层”。
+                </p>
+            </section>
+
+            <!-- ================= Ch3 decision tree ================= -->
+            <section class="sdd-block" id="ch3-tree">
+                <span class="sdd-anchor">第 3 章 增强</span>
+                <h3>工具组合决策树</h3>
+                <p>书中 3.5 节以文字论述工具选型。这里给出一份可以在五分钟内定位初始组合的速查决策树。</p>
+
+                <h4>问题一：团队规模</h4>
+                <ul>
+                    <li><strong>1-3 人</strong>：OpenSpec（轻量起步）+ Superpowers（强制 TDD）。两者学习成本都低，合起来覆盖“写规范”和“执行规范”两端。</li>
+                    <li><strong>3-10 人</strong>：团队是 GitHub-native 则 Spec-Kit + Superpowers；否则 OpenSpec + Superpowers + 团队 wiki。</li>
+                    <li><strong>10 人以上</strong>：Spec-Kit + BMAD，前者管治理，后者管角色协作；或直接用 Kiro 把流程内置到 IDE。</li>
+                </ul>
+
+                <h4>问题二：greenfield 还是 brownfield</h4>
+                <ul>
+                    <li><strong>全新项目</strong>：优先 Spec-Kit，从一开始建立 constitution 治理基线。</li>
+                    <li><strong>存量改造</strong>：优先 BMAD（多角色防止改坏老代码）+ Superpowers（强制 TDD 保护既有行为）。</li>
+                </ul>
+
+                <h4>问题三：当前最痛的工程缺陷</h4>
+                <ul>
+                    <li>测试覆盖低 → Superpowers</li>
+                    <li>规范不清晰 → OpenSpec 或 Spec-Kit</li>
+                    <li>角色责任混乱 → BMAD</li>
+                    <li>IDE 体验割裂 → Kiro</li>
+                </ul>
+
+                <p>
+                    三问三答得到的是初始版本，不是最终版本。SDD 实践会随团队成熟度演化，工具组合也会随之调整。
+                    比“选哪个最对”更重要的是知道“在什么时候该重新评估自己的选择”。
+                </p>
+            </section>
+
+            <!-- ================= Ch4 proposal comparison ================= -->
+            <section class="sdd-block" id="ch4-proposal">
+                <span class="sdd-anchor">第 4 章 增强</span>
+                <h3>四种工具如何写同一份 proposal</h3>
+                <p>
+                    书中第 4 章展示了一份 proposal.md 模板。这里补一个横向对照：
+                    同样是“给智能日报生成器加一个 retry 机制”这个需求，在四种工具下的写法差异。
+                </p>
+
+                <h4>OpenSpec（轻量、Markdown）</h4>
+                <p>
+                    在 <code>openspec/changes/add-retry/proposal.md</code> 写自由格式 Markdown：
+                    目标、背景、范围、成功标准、技术约束。强调“人能读懂、AI 能执行”。
+                </p>
+
+                <h4>Spec-Kit（结构化、CLI）</h4>
+                <p>
+                    调用 <code>/speckit.specify</code>，按内置模板填写。
+                    必含字段：Title / Why / What / Acceptance / Non-Goals / Constraints。
+                    如果有模糊之处，<code>/speckit.clarify</code> 会自动追问。
+                </p>
+
+                <h4>BMAD（角色分工）</h4>
+                <p>
+                    由 Product Manager Agent 撰写 PRD，由 Architect Agent 审阅技术可行性。
+                    强调“谁写谁担责”——proposal 不再是一个人脑里的全部假设，而是多个 AI 角色协作的产物。
+                </p>
+
+                <h4>Superpowers（TDD 锚定）</h4>
+                <p>
+                    先用 brainstorm 把需求的模糊点钉死：哪些异常要重试？max_attempts 是多少？
+                    429 状态码怎么处理？输出一份“需求理解纪要”。这份纪要不长，但每一条都对应后续一个测试用例。
+                </p>
+
+                <div class="sdd-note">
+                    <strong>核心差异在切入点：</strong>
+                    OpenSpec 切入“规范的载体”，Spec-Kit 切入“规范的结构”，
+                    BMAD 切入“规范的撰写者”，Superpowers 切入“规范的可测试性”。
+                    四种切入都是有效路径，选择取决于团队的工程文化基线。
+                </div>
+            </section>
+
+            <!-- ================= Ch7 TDD ================= -->
+            <section class="sdd-block" id="ch7-tdd">
+                <span class="sdd-anchor">第 7 章 增强</span>
+                <h3>工具层如何强制“测试先于代码”</h3>
+                <p>
+                    第 7 章讲规范驱动的测试策略，讲的是方法论层面“测试应该从规范派生”。
+                    这里补一个工具层的落地样本。
+                </p>
+                <p>
+                    在 Superpowers 框架下，想生成代码，必须先有一个对应需求的失败测试存在。
+                    没有失败测试，代码生成阶段不启动。
+                </p>
+                <p>
+                    这是 SDD 方法论与工具层结合的典型形态：方法论说“测试先于代码”，
+                    工具层把这句话写进 Skill 的前置条件。规范没有被绕过的可能性，而不是依赖人的自律。
+                </p>
+                <div class="sdd-note">
+                    <strong>需要区分的一点：</strong>
+                    强制 TDD 解决的是“测试有没有写”，不解决“测试写得好不好”。
+                    从验收标准派生测试用例的质量，仍然取决于第 7 章讲的规范本身写得够不够清楚。
+                    工具能保证流程，不能替代判断。
+                </div>
+            </section>
+
+            <!-- ================= Ch8 mapping ================= -->
+            <section class="sdd-block" id="ch8-mapping">
+                <span class="sdd-anchor">第 8 章 增强</span>
+                <h3>5 种 Agent 模式在 4 种工具中的落地</h3>
+                <p>
+                    第 8 章把 SDD 与五种 Agent 设计模式的对应关系讲到概念层。
+                    实际工程中读者还会问一个更具体的问题：我手上这个工具，操作层面怎么实现“护栏三明治”“层级委托”？
+                    这里给出映射与四个落地示例。
+                </p>
+
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead>
+                        <tr><th>Agent 模式</th><th>OpenSpec</th><th>Spec-Kit</th><th>BMAD</th><th>Superpowers</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>规划与执行</strong></td>
+                            <td>propose + apply</td><td>plan + tasks</td><td>Architect → Dev</td><td>design → TDD</td>
+                        </tr>
+                        <tr>
+                            <td><strong>生成-评审</strong></td>
+                            <td>手动 review</td><td>analyze + clarify</td><td>QA Agent</td><td>refactor skill</td>
+                        </tr>
+                        <tr>
+                            <td><strong>层级委托</strong></td>
+                            <td>单一 Agent</td><td>单一 Agent</td><td><strong>多 Agent（天然契合）</strong></td><td>Skill 切换</td>
+                        </tr>
+                        <tr>
+                            <td><strong>护栏三明治</strong></td>
+                            <td>spec 前置 + 手动后验</td><td><strong>constitution（强约束）</strong></td><td>角色边界</td><td><strong>test-first（强约束）</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>条件路由</strong></td>
+                            <td>change-based 分发</td><td>clarify 分支</td><td>角色路由</td><td>brainstorm 分支</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <h4>落地示例一：护栏三明治 in Spec-Kit</h4>
+                <p>核心是 <code>constitution.md</code>，它被 Spec-Kit 视为项目级不可变约束。</p>
+                <ul>
+                    <li><strong>前置护栏</strong>：在 constitution.md 写入项目级约束，例如“禁止直接调用第三方 API，必须经过 adapter 层”。每一轮生成规范时都会读它。</li>
+                    <li><strong>中间执行</strong>：生成执行计划时自检是否违反 constitution，违反则拒绝生成。</li>
+                    <li><strong>后置护栏</strong>：analyze 命令做跨文档一致性检查，验证代码确实落实了约束。</li>
+                </ul>
+
+                <h4>落地示例二：层级委托 in BMAD</h4>
+                <p>
+                    BMAD 的多角色架构本身就是层级委托的实现。
+                    Architect Agent 读完 proposal，把任务拆成子任务，分别委派给前端、后端、QA、DevOps 各 Agent。
+                    每个子 Agent 在自己的上下文里工作，互不污染；主 Agent 只看汇总结果。
+                    优势是上下文隔离自然——每个子 Agent 的 prompt 只包含自己的职责范围。
+                </p>
+
+                <h4>落地示例三：生成-评审 in Superpowers</h4>
+                <p>
+                    生成阶段由 test-driven-development 产出“能通过测试但未必优雅”的最小实现；
+                    评审阶段由 refactor skill 进入“评审者”角色，审视命名清晰度、模块边界、可测试性、是否过度抽象，
+                    并且必须在测试保持绿色的前提下才能应用建议。
+                    两个 Skill 用同一个进程，但通过不同的 system prompt 扮演两个独立角色。
+                </p>
+
+                <h4>落地示例四：条件路由 in OpenSpec</h4>
+                <p>
+                    OpenSpec 的 change-based 架构原生支持条件路由。
+                    每个 change 是一个独立目录，有自己的 proposal/design/tasks，多个 change 可以并行存在。
+                    “change 即路由单元”的设计，让它在多场景分支需求（企业版与个人版、Web 与移动端）下有天然的分发能力。
+                </p>
+
+                <div class="sdd-note">
+                    <strong>工具选择与模式选择的关系：</strong>
+                    上面的映射不是一对一最优——一种模式在多种工具下都能实现，只是难度和强制力不同。
+                    选工具时先问“我团队最需要哪种模式的强约束”，再选最适合那种模式的工具。
+                    缺测试纪律选 Superpowers，缺约束治理选 Spec-Kit，缺角色清晰选 BMAD，缺轻量上手选 OpenSpec。
+                </div>
+            </section>
+
+            <!-- ================= Ch10 stability ================= -->
+            <section class="sdd-block" id="ch10-stability">
+                <span class="sdd-anchor">第 10 章 增强</span>
+                <h3>工具会消失，方法论是稳定的</h3>
+                <p>
+                    这一节回应读者最常问的一个问题：我现在学的这些工具，18 个月后还有用吗？
+                </p>
+                <p>
+                    答案是：具体工具大概率会消失或被取代，但方法论会稳定下来。
+                    过去三十多年，“规范驱动”这个思想已经历过三次工业复兴，每一次的规律都相同。
+                </p>
+                <p>
+                    <strong>第一次复兴在 1988 年。</strong>
+                    Bertrand Meyer 提出契约式设计，核心是“模块之间的接口必须有明确的契约，违反契约的代码不能编译”。
+                    当时的载体是 Eiffel 语言。Eiffel 后来退出主流市场，但契约式设计被吸收进 Java 的 assert、
+                    Python 的 typing、Rust 的所有权系统。工具消失了，方法论留下来了。
+                </p>
+                <p>
+                    <strong>第二次复兴在 2015 年。</strong>
+                    OpenAPI 推动 API-First Design 成为微服务时代的工程纪律。
+                    具体工具在十年里换过几代，但“先写 API spec，再写代码”这个方法论从未动摇。
+                </p>
+                <p>
+                    <strong>第三次复兴是当下。</strong>
+                    OpenSpec、Spec-Kit、BMAD、Superpowers、Kiro 几乎同时出现，
+                    回应的是同一个工业现实——AI 写代码的成本越来越低，真正稀缺的是清晰、可执行、可验证的意图。
+                </p>
+                <p>
+                    把前两次的规律套用到这一次：具体工具会更迭，但“规范是第一手工件，代码是规范的衍生物”
+                    这个核心命题会稳定下来。工具可能换名字、换接口、换实现，
+                    而三层规范、六阶段工作流、五大核心原则会作为方法论留下来。
+                </p>
+                <p>
+                    这也是本书选择不写工具按钮和命令的原因。
+                    如果 18 个月后回看本书，工具章节会显得过时，这是符合预期的；
+                    但方法论核心与第 8 章的模式综合应该仍然成立。
+                    这是本书设计上的赌注：把方法论与工具分层，赌方法论不被颠覆，赌工具会变。
+                    三次复兴史都站在这个赌注的方向上——而这一页的存在，正是这个分层决策的另一半。
+                </p>
+            </section>
+
+            <!-- ================= Tooling updates ================= -->
+            <section class="sdd-block" id="tooling">
+                <span class="sdd-anchor">时效说明</span>
+                <h3>工具时效说明（成书后的工具变更）</h3>
+                <p>
+                    本书成书于 2026 年上半年。此后开源工具发生了以下变更，读者在跟随实操时请以此处为准。
+                    这些不是书中的错误，而是工具在成书之后的迭代。
+                </p>
+
+                <h4>Matt Pocock 的 skills 集合（2026 年 7 月核实）</h4>
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead><tr><th>项目</th><th>成书时</th><th>当前</th></tr></thead>
+                    <tbody>
+                        <tr><td>拆任务票的 skill</td><td><code>to-issues</code></td><td>已更名为 <code>to-tickets</code></td></tr>
+                        <tr><td>写 skill 的 skill</td><td><code>write-a-skill</code></td><td>已移除，由 <code>writing-great-skills</code>（参考/原则文档）取代</td></tr>
+                        <tr><td>安装方式</td><td><code>npx skills@latest add mattpocock/skills/&lt;skill&gt; -a &lt;agent&gt;</code></td><td><code>npx skills@latest add mattpocock/skills</code>（交互式选择），并需运行一次 <code>/setup-matt-pocock-skills</code></td></tr>
+                        <tr><td>任务票产出路径</td><td><code>specs/issues/*.md</code></td><td><code>.scratch/&lt;feature&gt;/issues/&lt;NN&gt;-&lt;slug&gt;.md</code>（tracker 可配置）</td></tr>
+                        <tr><td>依赖字段</td><td><code>depends_on</code></td><td><code>Blocked by</code></td></tr>
+                        <tr><td>验收字段</td><td><code>acceptance</code></td><td><code>Acceptance criteria</code>（勾选框）</td></tr>
+                        <tr><td><code>grill-me</code></td><td>—</td><td>名称未变，仍可用</td></tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <div class="sdd-note">
+                    <strong>一个容易混淆的点：</strong>
+                    <code>to-tickets</code> 产出的是任务票，不产出 JSON Schema 文件。
+                    任务票里的验收标准是自然语言；
+                    把验收里的数据契约固化成可执行的 JSON Schema，是独立的一步。
+                    只有当你事先用 <code>prototype</code> 做过原型、把 schema 片段内联进票时，票里才会出现 schema。
+                </div>
+
+                <p class="sdd-kicker">
+                    开源工具迭代很快，本页会持续更新。以工具各自仓库的 README 为最终依据。
+                </p>
+            </section>
+
+            <!-- ================= Errata ================= -->
+            <section class="sdd-block" id="errata">
+                <span class="sdd-anchor">勘误</span>
+                <h3>勘误</h3>
+                <p>
+                    这一节只收录书中确实需要更正的文字或技术错误，与上面的增强内容分开列出。
+                </p>
+                <p class="sdd-kicker">
+                    截至本页最近更新，暂无需要更正的条目。
+                </p>
+                <p>
+                    如果你在阅读中发现错误，欢迎通过异步社区本书页面提交勘误，
+                    或在配套代码仓库
+                    <a href="https://github.com/huangjia2019/sdd-in-action/issues" target="_blank" rel="noopener">提 issue</a>。
+                    经确认的勘误会补充到这里。
+                </p>
+            </section>
+
+            <!-- ================= Related ================= -->
+            <section class="sdd-block">
+                <h3>延伸阅读</h3>
+                <ul>
+                    <li><a href="/zh/writing/sdd/">SDD 实战系列</a>——七篇实操长文，从手写第一份 spec 到 OpenSpec、BMAD、Superpowers 协同实操。</li>
+                    <li><a href="https://github.com/huangjia2019/sdd-in-action" target="_blank" rel="noopener">sdd-in-action</a>——本书配套代码与四周行动营材料。</li>
+                    <li><a href="/zh/">咖哥 AI 中文首页</a>——其他书籍与专栏。</li>
+                </ul>
+            </section>
+
+            <p class="sdd-kicker" style="margin-top:2.2rem;">
+                本页最近更新：2026 年 7 月
+            </p>
+
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 黄佳 &middot; <a href="/zh/">kage-ai.com</a> &middot; 《SDD 实战》配套资源</p>
+        </div>
+    </footer>
+
+    <script data-goatcounter="https://huangjia.goatcounter.com/count"
+            async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
