@@ -197,7 +197,7 @@
             ["计划并执行", "行动×层级", "项目管理 · 甘特图", "WBS / Saga", "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"],
             ["提示链", "行动×串行", "Unix pipe · ETL", "Pipeline 工程", "https://learn.microsoft.com/en-us/azure/architecture/patterns/pipes-and-filters"],
             ["护栏夹心", "行动×层级", "AOP · 切面编程", "Interceptor / Filter Chain", "https://docs.spring.io/spring-framework/reference/core/aop.html"],
-            ["生成器-批评者", "反思×循环", "金丝雀部署 · 编辑回路", "代码 review / PR 工作流", "https://opentelemetry.io/docs/"],
+            ["生成器-评审者", "反思×循环", "金丝雀部署 · 编辑回路", "代码 review / PR 工作流", "https://opentelemetry.io/docs/"],
             ["技能包", "反思×层级", "标准化操作 SOP", "ISO 9001 / 教学知识库", "https://www.iso.org/standard/62085.html"],
             ["经验回放", "反思×循环", "强化学习 ER · WAL", "案例库 / 复盘", "https://www.martinfowler.com/eaaDev/EventSourcing.html"],
             ["自愈循环", "反思×循环", "TDD · CI/CD 自愈", "测试驱动 / k8s self-heal", "https://kubernetes.io/docs/concepts/architecture/self-healing/"],
@@ -387,12 +387,12 @@
                 tags: ["校验", "沙箱", "策略"]
             },
             {
-                name: "生成器-批评者",
+                name: "生成器-评审者",
                 meta: "反思 · 链式",
                 ancestor: "同行评审、编译器诊断、lint-test 反馈",
-                intro: "把生成和批评拆成两个角色：一个产出，一个检查质量、缺口和违规点。",
+                intro: "把生成和评审拆成两个角色：一个产出，一个检查质量、缺口和违规点。",
                 ancestorIntro: "工程评审系统把反馈变成一等阶段，而不是事后补一句意见。",
-                insight: "批评者必须有标准和权力；否则它只是另一个语气更挑剔的生成器。",
+                insight: "评审者必须有标准和权力；否则它只是另一个语气更挑剔的生成器。",
                 tags: ["评审", "诊断", "质量门"]
             },
             {
@@ -515,7 +515,7 @@
             ["ETL", "从多个来源抽取、转换、加载数据。多模态融合把这个纪律迁移到模型输入面。"],
             ["信息觅食", "把搜索看成成本约束下的信息价值最大化。渐进式发现用它决定下一步看什么。"],
             ["复盘 / Runbook", "把运维经验变成可复用过程。失败日志和技能包是 Agent 时代的对应物。"],
-            ["编译器 / Linter 反馈", "把生成与诊断反馈拆开。生成器-批评者继承了这个生产/批评分离。"],
+            ["编译器 / Linter 反馈", "把生成与诊断反馈拆开。生成器-评审者继承了这个生成/评审分离。"],
             ["沙箱 / 策略执行点", "用检查和限制包裹不可信执行。护栏夹心把这些检查做成可见架构层。"]
         ];
 
