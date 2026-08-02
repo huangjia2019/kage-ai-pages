@@ -185,6 +185,41 @@
                     同一仓库里还有 SDD 行动营四周的公开实操材料（<code>week1/</code> 至 <code>week4/</code>），
                     可作为第 3 章工具链全景与第 7、8 章实战路径的延伸演练。
                 </p>
+
+                <h4>跟着实操材料动手时，代码在哪</h4>
+                <p>
+                    实操文档是流水账，里面的代码块给的是命令与关键片段，不是完整源码。
+                    完整可运行代码一律以仓库为准。第三周还有一个单独的完成态分支。
+                </p>
+                <div class="sdd-table-wrap">
+                <table class="sdd">
+                    <thead><tr><th>你要找的</th><th>在仓库的哪里</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>动手的起点</td>
+                            <td><code>master</code> 分支。第三周的 <code>week3/code/</code> 是基线，7 个 Agent 已就位，没有 metrics 相关代码</td>
+                        </tr>
+                        <tr>
+                            <td>第三周的参考答案</td>
+                            <td><code>feature/add-metrics-collector-local</code> 分支，含 <code>workflows/metrics_collector.py</code>、<code>openspec/changes/add-metrics-collector/</code> 四件套、<code>_bmad-output/</code> 里 BMAD 产出的 PRD 与架构文档</td>
+                        </tr>
+                        <tr>
+                            <td>第二周的 change 产物</td>
+                            <td><code>week2/code/openspec/changes/archive/2026-04-20-add-analyzer-retry-policy/</code>。走完 <code>/opsx:archive</code> 之后 change 目录会搬进 <code>archive/</code>，这是 OpenSpec 的正常生命周期，不是文件丢了</td>
+                        </tr>
+                        <tr>
+                            <td>第二周的 retry 实现</td>
+                            <td><code>week2/code/pipeline/model_client.py</code> 的 <code>with_retry()</code> 装饰器</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="sdd-note">
+                    <strong>2026-08-02 更新：</strong>
+                    有学员反馈实操文档里的代码与仓库对不上，核查后确认属实——第三周的完成态代码此前没有推上仓库，
+                    另有若干文件名与路径在文档和代码之间不一致。现已补齐分支、修正文档，
+                    每一周的 README 也都加了「代码在哪」一节。感谢反馈。
+                </div>
             </section>
 
             <!-- ================= 工具演进 ================= -->
